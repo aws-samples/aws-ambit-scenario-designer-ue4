@@ -147,7 +147,7 @@ For more info on working with automated tests in UE see ["Automation Spec Overvi
 
 ## User Guide
 
-To learn how to use the Ambit plugin, you can take a look at the [User Guide](https://glowing-spoon-56ce5eb7.pages.github.io/). This guide will help you learn how to use the various aspects of the Ambit plugin such as the AWS Ambit Scenario Mode, its weather and scenario generation options, along with the Ambit Spawner and Ambit Path Generation tools.
+To learn how to use the Ambit plugin, you can take a look at the [User Guide](https://aws-samples.github.io/aws-ambit-scenario-designer-ue4/). This guide will help you learn how to use the various aspects of the Ambit plugin such as the AWS Ambit Scenario Mode, its weather and scenario generation options, along with the Ambit Spawner and Ambit Path Generation tools.
 
 To contribute to the User Guide, follow the instructions listed [here](./docs/user-guide/README.md).
 
