@@ -1,0 +1,22 @@
+docs_dir: docs-source
+site_name: AWS Ambit Scenario Designer for Unreal Engine 4 User Guide
+nav:
+    - Home: index.md
+    - Ambit Weather: weather.md
+    - Working with AWS in Ambit: aws-setup.md
+    - Individual Scenario Generation: individual-scenario-generation.md
+    - Bulk Scenario Generation: bulk-senario-generation.md
+    - Export Map Options: map-export.md
+    - Ambit Spawner Tools:
+        - Overview: spawner-parent.md
+        - Spawn on Surface: spawn-on-surface.md
+        - Spawn in Volume: spawn-in-volume.md
+        - Spawn with Houdini Digital Assets: spawn-with-houdini.md
+        - Spawn on Path: spawn-on-path.md
+        - Ambit Spawner Examples: spawner-examples.md
+    - Ambit Path Generation Tools:
+        - Overview: spawn-vehicle-path-parent.md
+        - Spawn Vehicle Path: spawn-vehicle-path.md
+theme: readthedocs
+extra_css:
+    - css/extra.css
