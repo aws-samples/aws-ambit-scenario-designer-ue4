@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Bulk Scenario Generation - AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link href="../css/extra.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Bulk Scenario Generation";
+    var mkdocs_page_input_path = "bulk-senario-generation.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../weather/">Ambit Weather</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../aws-setup/">Working with AWS in Ambit</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../individual-scenario-generation/">Individual Scenario Generation</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Bulk Scenario Generation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#customize-permutation-settings">Customize Permutation Settings</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#generate-permutations">Generate Permutations</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#locating-export-in-amazon-s3">Locating Export in Amazon S3</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#import-permutation-settings">Import Permutation Settings</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#utilizing-bulk-scenario-generation-file">Utilizing Bulk Scenario Generation File</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../map-export/">Export Map Options</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Ambit Spawner Tools</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawner-parent/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-surface/">Spawn on Surface</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-in-volume/">Spawn in Volume</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-with-houdini/">Spawn with Houdini Digital Assets</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-path/">Spawn on Path</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawner-examples/">Ambit Spawner Examples</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Ambit Path Generation Tools</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path-parent/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path/">Spawn Vehicle Path</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Bulk Scenario Generation</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="bulk-scenario-generation">Bulk Scenario Generation</h1>
+<p>Ambit provides bulk scenario generation functionality. It does this by creating a batch of <a href="./individual-scenario-generation/">individual SDFs</a> based on making permutations from each setting specified. Alongside those it also has a standalone file called a <a href="#utilizing-bulk-scenario-generation-file">Bulk Scenario Configuration (BSC)</a> file that indicates how the batch was created. </p>
+<p>Before getting started, make sure to have properly set up your <a href="/aws-setup#setup">AWS Account</a>.</p>
+<h2 id="customize-permutation-settings">Customize Permutation Settings</h2>
+<p>The <strong>Permutation Settings</strong> menu can be found in <strong>AWS Ambit Scenario Mode</strong>, which allows for the settings of the permutations generated to be specified.</p>
+<p><img alt="Locating the Permutation Settings menu" src="../images/bulk-scenario-generation/PermutationSettingsMenu.png" /></p>
+<p>First select the <strong>Time of Day Types</strong> and <strong>Weather Types</strong> options as appropriate for creating permutations based on these settings. Refer to the Scenario Settings for how these will look as defaults when the generation happens.</p>
+<p>Set the range of <strong>Bulk Pedestrian Traffic</strong> and <strong>Bulk Vehicle Traffic</strong>. These are both a percent value of 0 to 1, where 1 is representative of 100%. </p>
+<blockquote>
+<p><strong>Note:</strong> The current increment is 0.1.</p>
+</blockquote>
+<p>The <strong>Number of Permutations</strong> represents how many scenarios will be generated. This value cannot be directly changed, and is for informative purposes only. </p>
+<h2 id="generate-permutations">Generate Permutations</h2>
+<p>To generate the bulk permutations, set the <strong>Configuration name</strong> and <strong>Batch Name</strong> first in the <strong>Permutation Settings</strong> menu.</p>
+<p>The Configuration name is the file name of BSC file. This also serves as the suffix for the folder where the batch SDFs are located.</p>
+<p><img alt="Locating the Configuration Name" src="../images/bulk-scenario-generation/ConfigurationName.png" /></p>
+<p>The Batch name is the prefix of the SDFs. Ambit will automatically increment these based on the number of permutations.</p>
+<p><img alt="Locating the Batch Name" src="../images/bulk-scenario-generation/BatchName.png" /></p>
+<p>Clicking <strong>Generate Permutation</strong> at the bottom of the <strong>Permutation Settings</strong> menu will export your batch to Amazon S3.</p>
+<p><img alt="Locating the Generation Button" src="../images/bulk-scenario-generation/GeneratePermutationButton.png" /></p>
+<h2 id="locating-export-in-amazon-s3">Locating Export in Amazon S3</h2>
+<p>You can locate these files in Amazon S3 by going to your account and searching for the S3 bucket created.</p>
+<p>Inside that bucket, there will be a file and a folder corresponding to the Configuration and Batch name specified above.
+The file with the name of the Configuration will be the BSC that is used to control the Permutation Settings on import, as well as retain information for the Ambit Spawners to allow for re-importing.</p>
+<p><img alt="Location of BSC" src="../images/bulk-scenario-generation/LocationBSC.png" /></p>
+<p>The folder will contain all of the permutations that were made as SDFs. 
+<img alt="Location of BSC" src="../images/bulk-scenario-generation/LocationPermutations.png" /></p>
+<h2 id="import-permutation-settings">Import Permutation Settings</h2>
+<p>If you would like to import your BSC from S3 bucket, you can input the configuration name, choose the AWS Region of S3 bucket where you store that file and input the bucket name, then click the "..." next to the <strong>Configuration Name</strong> field.</p>
+<p><img alt="Locating the Import" src="../images/bulk-scenario-generation/Import.png" /></p>
+<p>Once imported, all of the settings from the bulk configuration alongside the spawners will be placed back into the scene. </p>
+<blockquote>
+<p><strong>Note:</strong> <strong>Spawn With Houdini</strong> will not re-import the original HDA selected.</p>
+</blockquote>
+<h2 id="utilizing-bulk-scenario-generation-file">Utilizing Bulk Scenario Generation File</h2>
+<p>The output file will be a <code>*.bsc.json</code> file, which follows JSON formatting. The specifications for this file are as follows: </p>
+<pre><code class="language-yaml">Version: This is the version of BSC when it was initially uploaded. 
+ConfigurationName: Refers to the Configuration Name field on screen. 
+BulkScenarioName: Refers to the Batch Name screen on screen. 
+TimeOfDayTypes: Refers to the permutation settings specified on screen relating to the time of day. For the individual values of these, refer to the Preset Time of Day field in the Scenario Settings. 
+  Morning: Determines if the morning setting is a valid option for the permutations.
+  Noon: Determines if the noon setting is a valid option for the permutations.
+  Evening: Determines if the evening setting is a valid option for the permutations. 
+  Night: Determines if the night setting is a valid option for the permutations.
+
+WeatherTypes: Refers to the permutation setting specified on screen relating to the weather. For individual values of these, refer to the Weather Types and Weather Parameter fields in the Scenario Settings.
+  Sunny: Determines if the preset Weather Type sunny is a valid option for the permutations.
+  Rainy: Determines if the preset Weather Type rainy is a valid option for the permutations.
+  Foggy: Determines if the preset Weather Type foggy is a valid option for the permutations.
+
+PedestrianDensity: Determines the settings for the pedestrian density fields. 
+  Min: The permutated value to begin with for the density of pedestrians. Represented as a percent [0,1]. 
+  Max: The permutated value to end with for the density of pedestrians. Represented as a percent [0,1].
+  Increment: The value that will increment for the permutation settings.
+
+TrafficDensity: Determines the settings for the traffic density fields. 
+  Min: The value to begin with for the permutations of the density of traffic. Represented as a percent [0,1]. 
+  Max: The value to end with for the permutations of the density of traffic. Represented as a percent [0,1].
+  Increment: The value that will increment for the permutation increment. 
+
+NumberOfPermutations: The total number of permutations the settings generate. 
+AllSpawnerConfigs: A list of spawner configurations by type. 
+  AmbitSpawner*: An individual type of spawner that has specified values for it. Each spawner has its own settings.
+</code></pre>
+<p>To find the specification for the SDF, please refer to <a href="../individual-scenario-generation/#utilizing-scenario-definition-file">this</a> section.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../map-export/" class="btn btn-neutral float-right" title="Export Map Options">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../individual-scenario-generation/" class="btn btn-neutral" title="Individual Scenario Generation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../individual-scenario-generation/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../map-export/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Export Map Options - AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link href="../css/extra.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Export Map Options";
+    var mkdocs_page_input_path = "map-export.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../weather/">Ambit Weather</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../aws-setup/">Working with AWS in Ambit</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../individual-scenario-generation/">Individual Scenario Generation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bulk-senario-generation/">Bulk Scenario Generation</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Export Map Options</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#select-targetplatforms-and-export-map">Select TargetPlatforms And Export Map</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#export-as-gltf">Export as glTF</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Ambit Spawner Tools</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawner-parent/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-surface/">Spawn on Surface</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-in-volume/">Spawn in Volume</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-with-houdini/">Spawn with Houdini Digital Assets</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-path/">Spawn on Path</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawner-examples/">Ambit Spawner Examples</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Ambit Path Generation Tools</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path-parent/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path/">Spawn Vehicle Path</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Export Map Options</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="export-options">Export Options</h1>
+<p>Ambit provides two export options:</p>
+<ol>
+<li>To cook and export the current map: This option will contain all the files and folders required by Unreal Engine including Icons, Materials, Textures, etc.</li>
+<li>To convert the map to glTF (glTF or GLB): This option exports either a single binary file (GLB) that contains all the associated texture and material information, or a glTF file along with all the texture files.</li>
+</ol>
+<p>Both options export the map for a target platform and upload the contents to Amazon S3.</p>
+<p>Before getting started, make sure to have properly set up your <a href="/aws-setup#setup">AWS Account</a>.</p>
+<h2 id="select-targetplatforms-and-export-map">Select TargetPlatforms And Export Map</h2>
+<p>You can find the <strong>Map Export Settings</strong> menu in <strong>AWS Ambit Scenario Mode</strong>.</p>
+<p><img alt="Locating the Map Export Settings menu" src="../images/map-export/MapExport.png" /></p>
+<p>First you can select the <strong>Export Platforms</strong> of your permutation via the checkboxes. <strong>Note</strong>: Platforms here mean standalone runtime platform.</p>
+<p>Next you can click <strong>Export Map</strong> at the bottom of the <strong>Map Export Settings</strong> menu. The exported content with name ${MapName}_${Platform} will be uploaded to S3 bucket.</p>
+<h2 id="export-as-gltf">Export as glTF</h2>
+<p>The second option to export the map is as glTF. After configuring the <strong>AWS Settings</strong> and selecting an <strong>Export Platform</strong>, you can select the target file type using the dropdown menu.</p>
+<p><img alt="Exporting glTF Menu" src="../images/map-export/GltfExport.png" /></p>
+<p>Once you click the <strong>Export glTF</strong> button, the converted map along with all other metadata (textures, materials, etc.) will be uploaded to the configured S3 bucket as a zipped folder in the format ${MapName}_${GltfFileType}.</p>
+<blockquote>
+<p><strong>Note:</strong> This option only works if there is <em>at least</em> one static mesh available for export. Any actors that aren't static mesh actors will not be exported, such as lighting, Ambit Spawners, etc.</p>
+</blockquote>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../spawner-parent/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../bulk-senario-generation/" class="btn btn-neutral" title="Bulk Scenario Generation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../bulk-senario-generation/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../spawner-parent/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
