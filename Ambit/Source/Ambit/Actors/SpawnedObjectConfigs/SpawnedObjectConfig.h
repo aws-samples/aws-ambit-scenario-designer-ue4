@@ -1,0 +1,59 @@
+//   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//   
+//   Licensed under the Apache License, Version 2.0 (the "License").
+//   You may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//   
+//       http://www.apache.org/licenses/LICENSE-2.0
+//   
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+#pragma once
+
+#include "CoreMinimal.h"
+
+#include <AmbitUtils/ConfigJsonSerializer.h>
+
+#include "SpawnedObjectConfig.generated.h"
+
+class FJsonObject;
+
+/**
+ * This class describes the configuration of what to spawn through 
+ */
+UCLASS()
+class AMBIT_API USpawnedObjectConfig : public UObject, public IConfigJsonSerializer
+{
+    GENERATED_BODY()
+public:
+    /**
+     * The path, location and rotation of spawned objects
+     */
+    TMap<FString, TArray<FTransform>> SpawnedObjects;
+
+    /**
+     * Destructor for USpawnedObjectConfig
+     */
+    ~USpawnedObjectConfig()
+    {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    TSharedPtr<FJsonObject> SerializeToJson() const override;
+
+    /**
+     * @inheritDoc
+     */
+    void DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject) override;
+
+    FString GetOutputConfigurationName() const override
+    {
+        return JsonConstants::KAmbitSpawnerKey;
+    }
+};

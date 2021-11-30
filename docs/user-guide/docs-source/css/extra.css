@@ -1,0 +1,10 @@
+number-badge {
+  display: inline-block;
+  background: #FF61AF;
+  color: #fff;
+  font-weight: bold;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 100px;
+  text-align: center;
+}

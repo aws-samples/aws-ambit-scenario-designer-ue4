@@ -1,0 +1,52 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "AWS Ambit Scenario Designer for Unreal Engine 4",
+  "Description": "AWS Ambit Scenario Designer for Unreal Engine 4 (Ambit) is a suite of tools to streamline content creation at scale for autonomous vehicle and robotics simulation applications.",
+  "Category": "Other",
+  "CreatedBy": "",
+  "CreatedByURL": "",
+  "DocsURL": "http://ec2-54-70-25-169.us-west-2.compute.amazonaws.com/",
+  "MarketplaceURL": "",
+  "SupportURL": "",
+  "EngineVersion": "4.27.0",
+  "CanContainContent": true,
+  "IsBetaVersion": true,
+  "IsExperimentalVersion": true,
+  "Installed": true,
+  "Modules": [
+    {
+      "Name": "Ambit",
+      "Type": "Editor",
+      "LoadingPhase": "PostEngineInit"
+    },
+    {
+      "Name": "AmbitUtils",
+      "Type": "Editor",
+      "LoadingPhase": "Default"
+    },
+    {
+      "Name": "AWSUE4Module",
+      "Type": "UncookedOnly",
+      "LoadingPhase": "PreDefault",
+      "WhitelistPlatforms": [
+        "Win64"
+      ]
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "HoudiniEngine",
+      "Enabled": true
+    },
+    {
+      "Name": "PhysXVehicles",
+      "Enabled": true
+    },
+    {
+      "Name": "GLTFExporter",
+      "Enabled": true
+    }
+  ]
+}

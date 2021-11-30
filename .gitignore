@@ -1,0 +1,6 @@
+Binaries
+Intermediate
+docs/user-guide/site
+.vs
+.vscode
+.DS_Store
