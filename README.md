@@ -143,11 +143,11 @@ Automated test files - called "specs" - end with a ".spec.cpp" file extension an
 3. Tick the box next to the **Ambit** group of tests.
 4. Click the **Start Tests** button.
 
-For more info on working with automated tests in UE see ["Quick Start: UE4 Automated Testing Using Specs" (Quip)](https://quip-amazon.com/41KNAbjwVass/Quick-Start-UE4-Automated-Testing-Using-Specs)
+For more info on working with automated tests in UE see ["Automation Spec Overview"](https://docs.unrealengine.com/en-US/Programming/Automation/AutomationSpec/index.html)
 
 ## User Guide
 
-To learn how to use the Ambit plugin, you can take a look at the [User Guide](https://ec2-54-70-25-169.us-west-2.compute.amazonaws.com/). This guide will help you learn how to use the various aspects of the Ambit plugin such as the AWS Ambit Scenario Mode, its weather and scenario generation options, along with the Ambit Spawner and Ambit Path Generation tools.
+To learn how to use the Ambit plugin, you can take a look at the [User Guide](https://glowing-spoon-56ce5eb7.pages.github.io/). This guide will help you learn how to use the various aspects of the Ambit plugin such as the AWS Ambit Scenario Mode, its weather and scenario generation options, along with the Ambit Spawner and Ambit Path Generation tools.
 
 To contribute to the User Guide, follow the instructions listed [here](./docs/user-guide/README.md).
 
