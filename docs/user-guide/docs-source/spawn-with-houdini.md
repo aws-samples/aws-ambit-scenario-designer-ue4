@@ -2,6 +2,8 @@
 
 Ambit provides a tool to enable easy placement and randomization of your Houdini Obstacles. This tool is called **Spawn with Houdini** actor and operates very similarly to the [Spawn on Surface](/spawn-on-surface/) Ambit Spawner.
 
+> ⚠️ **Important:** This spawner type leverages the Houdini Engine. Be sure you have installed both the Houdini Engine and the Houdini plugin for Unreal before using this tool. See the [Setup](../setup) section of this user guide for instructions.
+
 ## Using Spawn with Houdini
 
 The **Spawn with Houdini** works very similarly to the [Spawn on Surface](/spawn-on-surface/). The main difference being that you can trigger the generate by the *Generate Obstacles* button while in the editor, and can specify Houdini Digital Assets to be selected as what to spawn.

@@ -1,9 +1,8 @@
 docs_dir: docs-source
 site_name: AWS Ambit Scenario Designer for Unreal Engine 4 User Guide
 nav:
-    - Welcome:
-        - Overview: index.md
     - Getting Started: 
+        - Welcome: index.md
         - Setup: setup.md
     - Static Obstacles:
         - Overview: spawner-parent.md

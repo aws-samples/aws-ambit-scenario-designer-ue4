@@ -8,6 +8,8 @@ Complete the following setup before using Ambit for the first time.
 
 >  ⏱ Initial setup takes about 20 minutes.
 
+> 🛑 Ambit is implemented as a plugin for the Windows version of Unreal Engine 4 (UE4). Therefore, Windows is required. However, the content you create with Ambit can be exported and used with other versions of UE4 (Mac, Linux) or even non-UE4 simulators and 3D tools. 
+
 > 🛑 These instructions assume you already have Unreal Engine 4.27 installed. If you don't, you can [download Unreal Engine for free](https://www.unrealengine.com/en-US/download). Choose the Unreal Engine license that is appropriate for your team. Ambit will work with any Unreal Engine license.
 
 ### 1. Download the Ambit plugin for UE4
@@ -20,7 +22,7 @@ We'll return to the Ambit plugin in later steps.
 
 ### 2. Install the AWS Command Line Interface
 
-You will be configuring your computer to communicate with AWS services. The easiest way to do this is by installing the AWS Command Line Interface (CLI).
+You will be configuring your computer to communicate with AWS services. The easiest way to do this is by installing the AWS Command Line Interface (AWS CLI).
 
 Install the AWS CLI to your local computer following the ["Install/Update" instructions on this page](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). (You can ignore the "Next steps" section at the bottom of that page.)
 
@@ -108,9 +110,7 @@ Navigate to the Unreal Engine project to which you'd like to add Ambit. Inside t
 
 `[MyUnrealProject]\Plugins\`
 
-Download the latest pre-built release of the Ambit UE4 plugin [here]() 🔥🔥🔥 *TODO: Update link when GitHub is ready.*
-
-Unzip the file you downloaded. It will unzip as a folder named "AwsAmbit". Copy that folder to the "Plugins" directory you created above.
+Find the Ambit plugin folder that you downloaded during initial setup (or re-download if necessary.) Copy that folder to the "Plugins" directory you just created.
 
 `[MyUnrealProject]\Plugins\AwsAmbit\`
 
