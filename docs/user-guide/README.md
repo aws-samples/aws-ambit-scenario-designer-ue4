@@ -59,3 +59,12 @@ Example:
 This text includes <number-badge>1</number-badge> example of a number badge!
 ```
 
+## Publishing Changes
+
+Once documentation changes have been approved, you can utilize the command to publish them to our GitHub Page. 
+
+```
+$ python -m mkdocs gh-deploy
+```
+
+This command commits and pushes the changes directly to the `gh-pages` repo, which is used to host the GitHub Page. So this should only be used once everything has been fully verified.
