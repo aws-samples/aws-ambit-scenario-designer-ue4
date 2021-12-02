@@ -28,7 +28,7 @@ Install the AWS CLI to your local computer following the ["Install/Update" instr
 
 ### 3. Create AWS credentials for use with Ambit
 
-Ambit integrates with Amazon's cloud storage service, [Amazon Simple Storage Service (S3)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html). To enable this integration, you will need to provide AWS credentials that allow access to S3. 
+Ambit integrates with Amazon's cloud storage service, [Amazon Simple Storage Service (Amazon S3)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html). To enable this integration, you will need to provide AWS credentials that allow access to Amazon S3. 
 
 The easiest way to generate these credentials is to create a new AWS Identity Access & Management (IAM) user in your AWS account. [Follow this guide](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/credentials.html) to create a new IAM user having **AmazonS3FullAccess** permissions.
 
