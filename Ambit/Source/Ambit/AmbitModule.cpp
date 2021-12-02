@@ -13,6 +13,7 @@
 //   limitations under the License.
 
 #include "AmbitModule.h"
+
 #include "Mode/AmbitMode.h"
 #include "Mode/AmbitWidget.h"
 
@@ -23,6 +24,8 @@
 #include "Actors/Spawners/SpawnWithHoudini.h"
 #include "Actors/EditorDetails/SpawnerDetails.h"
 
+#include "EditorTutorial.h"
+#include "IIntroTutorials.h"
 #include "LevelEditor.h"
 
 #include "Styling/SlateStyleRegistry.h"
@@ -115,6 +118,18 @@ void FAmbitModule::Initialize()
     StyleSet->Set("Notification.Ambit", new FSlateImageBrush(IconsDir + "Ambit_Icon_1024.png", Icon32x32));
 
     FSlateStyleRegistry::RegisterSlateStyle(*StyleSet.Get());
+
+    // Register the Ambit tutorial category with the tutorial browser.
+    FTutorialCategory AWSAmbitCategory = FTutorialCategory();
+    AWSAmbitCategory.Identifier = "AWSAmbit";
+    AWSAmbitCategory.Title = NSLOCTEXT("TutorialCategories", "AWSAmbitTitle", "AWS Ambit");
+    AWSAmbitCategory.Description = NSLOCTEXT("TutorialCategories", "AWSAmbitDescription", "This tutorial will cover how AWS Ambit works.");
+    AWSAmbitCategory.Icon = "LevelEditor.Ambit";
+    AWSAmbitCategory.Texture = FSoftObjectPath("/Ambit/Icons/AmbitIcon");
+    AWSAmbitCategory.SortOrder = 100;
+
+    IIntroTutorials& IntroTutorials = FModuleManager::LoadModuleChecked<IIntroTutorials>(TEXT("IntroTutorials"));
+    IntroTutorials.RegisterCategory(AWSAmbitCategory);
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
