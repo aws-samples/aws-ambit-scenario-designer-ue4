@@ -78,18 +78,7 @@ void SAmbitWidget::Construct(const FArguments& InArgs, TSharedRef<FAmbitModeTool
 
     FAmbitMode* AmbitMode = GetEditorMode();
 
-    // Register the Ambit tutorial category with the tutorial browser.
-    FTutorialCategory AWSAmbitCategory = FTutorialCategory();
-    AWSAmbitCategory.Identifier = "AWSAmbit";
-    AWSAmbitCategory.Title = NSLOCTEXT("TutorialCategories", "AWSAmbitTitle", "AWS Ambit");
-    AWSAmbitCategory.Description = NSLOCTEXT("TutorialCategories", "AWSAmbitDescription", "This tutorial will cover how AWS Ambit works.");
-    AWSAmbitCategory.Icon = "LevelEditor.Ambit";
-    AWSAmbitCategory.Texture = FSoftObjectPath("/Ambit/Icons/AmbitIcon");
-    AWSAmbitCategory.SortOrder = 100;
-
     IIntroTutorials& IntroTutorials = FModuleManager::LoadModuleChecked<IIntroTutorials>(TEXT("IntroTutorials"));
-    IntroTutorials.RegisterCategory(AWSAmbitCategory);
-
 
     FMargin StandardLeftPadding(6.f, 3.f, 3.f, 3.f);
     FMargin StandardRightPadding(3.f, 3.f, 6.f, 3.f);
