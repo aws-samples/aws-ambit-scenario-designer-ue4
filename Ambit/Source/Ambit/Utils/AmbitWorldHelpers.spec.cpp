@@ -997,6 +997,35 @@ void AmbitWorldHelpersSpec::Define()
             TestComponentActor->SetActorLocation(FVector(0, 0, 0));
             TestEqual("The array is empty", Transforms.Num(), 0);
         });
+
+        It("Will generate objects relative to spline rotation if bFollowSplineRotation is true", [this]()
+        {
+            const bool bFollowSplineRotation = true;
+
+            const float RotationMin = 120.0f;
+            const float RotationMax = 120.0f;
+            RealSpline->SetLocationAtSplinePoint(1, FVector(0, 1000, 0), ESplineCoordinateSpace::World);
+
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const float DensityMin = 1.0f;
+            const float DensityMax = 1.0f;
+
+            const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
+                RealSpline, ActorsToSearch, RandomSeed, false, DensityMin,
+                DensityMax, RotationMin, RotationMax, bFollowSplineRotation);
+
+            const float ExpectedRotation = 210.0f;
+
+            for (const FTransform& OneTransform : Transforms)
+            {
+                const float SplineRotation = OneTransform.Rotator().GetDenormalized().Yaw;
+
+                TestTrue(
+                    "We expect the determined transform to be equal to the sum of the spline rotation and min rotation value",
+                    FMath::IsNearlyEqual(SplineRotation, ExpectedRotation, 0.01f));
+            }
+        });
     });
 
     Describe("GenerateRandomLocationsFromActor()", [this]()

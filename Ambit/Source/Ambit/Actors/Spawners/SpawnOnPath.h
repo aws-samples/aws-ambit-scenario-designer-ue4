@@ -42,8 +42,8 @@ public:
     bool bSnapToSurfaceBelow = false;
 
     /**
-    Rotation will follow the spline. Overrides degrees of rotation.
-    */
+     * Rotation of the spawned objects will be relative to the spline orientation.
+     */
     UPROPERTY(EditAnywhere, Category = "Ambit Spawner",
         meta = (DisplayAfter = "DensityMax"))
     bool bFollowSplineRotation = false; // Put follow spline checkbox below density fields
