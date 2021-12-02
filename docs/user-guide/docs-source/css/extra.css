@@ -8,3 +8,9 @@ number-badge {
   border-radius: 100px;
   text-align: center;
 }
+
+blockquote p {
+  color: #959595;
+  background-color: #f4f4f4;
+  padding: .5em .7em;
+}

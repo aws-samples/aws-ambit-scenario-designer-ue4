@@ -2,14 +2,7 @@
 
 Ambit provides a tool to enable easy placement and randomization of your Houdini Obstacles. This tool is called **Spawn with Houdini** actor and operates very similarly to the [Spawn on Surface](/spawn-on-surface/) Ambit Spawner.
 
-## Enable Houdini Engine for Unreal Engine 4 Plugin
-
-Make sure the [Houdini Engine for Unreal](https://www.sidefx.com/docs/unreal/_getting_started.html#GettingStarted_Install) plugin is installed and enabled in your Unreal Engine installation by going to **Edit** -> **Plugins** and ensuring the **enabled** checkbox for Houdini Engine for Unreal Engine 4 is checked.
-**Note:** Only Houdini 18.5.696 or above is supported. The Houdini plugin you download should match the installed version of Houdini you have, as well as the Unreal Engine version.
-
-![Plugins Dropdown](./images/home/PluginDropdown.png)
-
-![Plugin Menu Houdini](./images/spawn-with-houdini/PluginsMenu.png)
+> ⚠️ **Important:** This spawner type leverages the Houdini Engine. Be sure you have installed both the Houdini Engine and the Houdini plugin for Unreal before using this tool. See the [Setup](../setup) section of this user guide for instructions.
 
 ## Using Spawn with Houdini
 
