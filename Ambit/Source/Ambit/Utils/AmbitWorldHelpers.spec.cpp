@@ -1002,7 +1002,7 @@ void AmbitWorldHelpersSpec::Define()
         {
             const bool bFollowSplineRotation = true;
 
-            const float RotationMin = 120.0;
+            const float RotationMin = 120.0f;
             const float RotationMax = 120.0f;
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 1000, 0), ESplineCoordinateSpace::World);
 
@@ -1014,16 +1014,12 @@ void AmbitWorldHelpersSpec::Define()
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, false, DensityMin,
                 DensityMax, RotationMin, RotationMax, bFollowSplineRotation);
-            UE_LOG(LogAmbit, Display, TEXT("The number of Transforms is: %d"), Transforms.Num());
 
-            const float SplinePointRotation = RealSpline->GetRotationAtSplinePoint(1, ESplineCoordinateSpace::World).Yaw;
-            const float ExpectedRotation = RotationMin + SplinePointRotation;
-            UE_LOG(LogAmbit, Display, TEXT("Expected Rotation: %f"), ExpectedRotation);
+            const float ExpectedRotation = 210.0f;
 
             for (const FTransform& OneTransform : Transforms)
             {
                 const float SplineRotation = OneTransform.Rotator().GetDenormalized().Yaw;
-                UE_LOG(LogAmbit, Display, TEXT("Yaw: %f"), SplineRotation);
 
                 TestTrue(
                     "We expect the determined transform to be equal to the sum of the spline rotation and min rotation value",
