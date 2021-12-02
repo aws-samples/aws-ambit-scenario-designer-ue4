@@ -4,7 +4,7 @@ Ambit integrates with [Amazon Simple Storage Service (Amazon S3)](https://docs.a
 
 ## Setup
 
-To successfully utilize an Amazon S3 bucket, AWS credentials need to be configured in your environment for a role that has access to the S3 bucket. Follow [this guide](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/credentials.html) for step-by-step instructions.
+To successfully utilize an S3 bucket, AWS credentials need to be configured in your environment for a role that has access to the S3 bucket. Follow [this guide](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/credentials.html) for step-by-step instructions.
 
 ## Configure AWS Settings
 
