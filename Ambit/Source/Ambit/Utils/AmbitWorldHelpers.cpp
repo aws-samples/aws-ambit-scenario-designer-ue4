@@ -284,8 +284,9 @@ TArray<FTransform> AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
             FRotator Rotation(0, Random.FRandRange(RotationMin, RotationMax), 0);
             if (bFollowSplineRotation)
             {
-                Rotation.Yaw = Spline->GetRotationAtDistanceAlongSpline(
+                const float SplinePointRotation = Spline->GetRotationAtDistanceAlongSpline(
                     Distance, ESplineCoordinateSpace::World).Yaw;
+                Rotation.Yaw += SplinePointRotation;
             }
             // Combine "local" Yaw rotation generated from user inputted restrictions
             // with the adjusted rotation axis
