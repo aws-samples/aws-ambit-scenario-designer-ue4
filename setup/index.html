@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="../css/theme.css" />
   <link rel="stylesheet" href="../css/theme_extra.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
   <link href="../css/extra.css" rel="stylesheet" />
   
   <script>
@@ -26,9 +26,8 @@
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
   <script src="../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
-  
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -42,7 +41,7 @@
         <a href=".." class="icon icon-home"> AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
@@ -151,6 +150,7 @@
   
   <hr/>
 </div>
+
           <div role="main">
             <div class="section">
               
@@ -162,17 +162,17 @@
 <p>🛑 Ambit is implemented as a plugin for the Windows version of Unreal Engine 4 (UE4). Therefore, Windows is required. However, the content you create with Ambit can be exported and used with other versions of UE4 (Mac, Linux) or even non-UE4 simulators and 3D tools. </p>
 <p>🛑 These instructions assume you already have Unreal Engine 4.27 installed. If you don't, you can <a href="https://www.unrealengine.com/en-US/download">download Unreal Engine for free</a>. Choose the Unreal Engine license that is appropriate for your team. Ambit will work with any Unreal Engine license.</p>
 </blockquote>
-<h3>1. Download the Ambit plugin for UE4</h3>
+<h3 id="1-download-the-ambit-plugin-for-ue4">1. Download the Ambit plugin for UE4<a class="headerlink" href="#1-download-the-ambit-plugin-for-ue4" title="Permanent link">&para;</a></h3>
 <p>Download the latest pre-built release of the Ambit UE4 plugin from the GitHub <a href="https://github.com/aws-samples/aws-ambit-scenario-designer-ue4/releases">Releases section</a>.</p>
 <p>Unzip the file you downloaded. You may unzip it to any location that's convenient for you. It will unzip as a folder named "AwsAmbit".</p>
 <p>We'll return to the Ambit plugin in later steps.</p>
-<h3>2. Install the AWS Command Line Interface</h3>
+<h3 id="2-install-the-aws-command-line-interface">2. Install the AWS Command Line Interface<a class="headerlink" href="#2-install-the-aws-command-line-interface" title="Permanent link">&para;</a></h3>
 <p>You will be configuring your computer to communicate with AWS services. The easiest way to do this is by installing the AWS Command Line Interface (AWS CLI).</p>
 <p>Install the AWS CLI to your local computer following the <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">"Install/Update" instructions on this page</a>. (You can ignore the "Next steps" section at the bottom of that page.)</p>
-<h3>3. Create AWS credentials for use with Ambit</h3>
+<h3 id="3-create-aws-credentials-for-use-with-ambit">3. Create AWS credentials for use with Ambit<a class="headerlink" href="#3-create-aws-credentials-for-use-with-ambit" title="Permanent link">&para;</a></h3>
 <p>Ambit integrates with Amazon's cloud storage service, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html">Amazon Simple Storage Service (Amazon S3)</a>. To enable this integration, you will need to provide AWS credentials that allow access to Amazon S3. </p>
 <p>The easiest way to generate these credentials is to create a new AWS Identity Access &amp; Management (IAM) user in your AWS account. <a href="https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/credentials.html">Follow this guide</a> to create a new IAM user having <strong>AmazonS3FullAccess</strong> permissions.</p>
-<h3>4. Install Houdini Engine for UE4</h3>
+<h3 id="4-install-houdini-engine-for-ue4">4. Install Houdini Engine for UE4<a class="headerlink" href="#4-install-houdini-engine-for-ue4" title="Permanent link">&para;</a></h3>
 <p>Some Ambit functionality leverages the <strong>Houdini Engine</strong>, a 3D content creation tool from SideFX. There are many flavors of Houdini available including a free version called "Houdini Engine for Unreal". That is the version we will use with Ambit.</p>
 <p>Acquire a free license for Houdini Engine for Unreal by clicking the relevant "Add To Cart" button on <a href="https://www.sidefx.com/buy/#houdini-engine-unreal-unity">this web page</a> and completing the checkout process.</p>
 <p>Download and install the "Houdini Launcher" from the <a href="https://www.sidefx.com/download/">SideFX download page</a>.</p>
@@ -191,12 +191,12 @@
 <p><code>C:\Program Files\Side Effects Software\Houdini Engine\Unreal\19.0.x\4.27\HoudiniEngine</code></p>
 <p>...to the following location...</p>
 <p><code>C:\Program Files\Epic Games\UE_4.27\Engine\Plugins\Runtime\HoudiniEngine</code></p>
-<h3>4. Add the AWSAmbit.hda to your Houdini Engine install</h3>
+<h3 id="4-add-the-awsambithda-to-your-houdini-engine-install">4. Add the AWSAmbit.hda to your Houdini Engine install<a class="headerlink" href="#4-add-the-awsambithda-to-your-houdini-engine-install" title="Permanent link">&para;</a></h3>
 <p>The final part of setting up Houdini Engine is to copy one of the Ambit plugin files to your Houdini install folder. Recall that you downloaded the Ambit plugin in step 1. Find this file...</p>
 <p><code>[AwsAmbit plugin folder]\AWSAmbit.hda</code></p>
 <p>...and copy it to the following location, creating the "otls" directory if necessary...</p>
 <p><code>C:\Users\[username]\Documents\houdini19.0\otls\AWSAmbit.hda</code></p>
-<h3>5. Install the glTF Exporter UE4 plugin</h3>
+<h3 id="5-install-the-gltf-exporter-ue4-plugin">5. Install the glTF Exporter UE4 plugin<a class="headerlink" href="#5-install-the-gltf-exporter-ue4-plugin" title="Permanent link">&para;</a></h3>
 <p>Some of Ambit's export functionality relies on the <strong>glTF Exporter plugin</strong> from Epic Games. This plugin doesn't ship with Unreal Engine but can be downloaded for free from the Unreal Engine Marketplace following the steps below.</p>
 <p>Visit the <a href="https://www.unrealengine.com/marketplace/en-US/product/gltf-exporter">glTF Exporter Marketplace web page</a>.</p>
 <p>If not already signed in, click the "Sign in to Buy" button and log in.</p>
@@ -249,17 +249,18 @@
   </div>
 
   <div class="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-      
-      
-        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../spawner-parent/" style="color: #fcfcfc">Next &raquo;</a></span>
-      
-    </span>
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../spawner-parent/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
 </div>
     <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
     <script src="../js/theme.js" defer></script>
       <script src="../search/main.js" defer></script>
     <script defer>
