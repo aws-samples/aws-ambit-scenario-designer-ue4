@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="../css/theme.css" />
   <link rel="stylesheet" href="../css/theme_extra.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
   <link href="../css/extra.css" rel="stylesheet" />
   
   <script>
@@ -26,8 +26,9 @@
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
   <script src="../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
+  
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -41,37 +42,20 @@
         <a href=".." class="icon icon-home"> AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Welcome</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../weather/">Ambit Weather</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../aws-setup/">Working with AWS in Ambit</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../individual-scenario-generation/">Individual Scenario Generation</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../bulk-senario-generation/">Bulk Scenario Generation</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../map-export/">Export Map Options</a>
-                    </li>
-                </ul>
-                <p class="caption"><span class="caption-text">Ambit Spawner Tools</span></p>
+                <p class="caption"><span class="caption-text">Static Obstacles</span></p>
                 <ul class="current">
                     <li class="toctree-l1"><a class="reference internal" href="../spawner-parent/">Overview</a>
                     </li>
@@ -92,11 +76,46 @@
                     <li class="toctree-l1"><a class="reference internal" href="../spawner-examples/">Ambit Spawner Examples</a>
                     </li>
                 </ul>
-                <p class="caption"><span class="caption-text">Ambit Path Generation Tools</span></p>
+                <p class="caption"><span class="caption-text">Dynamic Obstacles</span></p>
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path-parent/">Overview</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path/">Spawn Vehicle Path</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">City Generation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../city-generation/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../obtaining-osm/">Obtaining OpenStreetMap Files</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../building-generator/">Building Generator</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../road-generator/">Road Generator</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Weather & Time of Day FX</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../weather/">Overview</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Simulation Scenarios</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../individual-scenario-generation/">Manual Scenario Generation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../bulk-senario-generation/">Automated Scenario Generation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../aws-setup/">Working with AWS in Ambit</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Exporting Assets</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../map-export/">Export Map Options</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">APPENDIX</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../appendix-contributing/">Appendix: Contributing to Ambit Development</a>
                     </li>
                 </ul>
       </div>
@@ -120,7 +139,7 @@
     
       
         
-          <li>Ambit Spawner Tools &raquo;</li>
+          <li>Static Obstacles &raquo;</li>
         
       
     
@@ -132,20 +151,19 @@
   
   <hr/>
 </div>
-
           <div role="main">
             <div class="section">
               
-                <h1 id="spawn-on-path-actor">Spawn on Path Actor</h1>
+                <h1 id="spawn-on-path-actor">Spawn on Path Actor<a class="headerlink" href="#spawn-on-path-actor" title="Permanent link">&para;</a></h1>
 <p><TODO: Update UI image to reflect new interface></p>
 <p>The <strong>Spawn on Path</strong> actor works by using the position of the <strong>Spawn on Path</strong> and the pre-made <em>spline component</em> attached to the actor to determine the path of the line or curve along which obstacles will be spawned. If the spline curve traverses multiple surface types, you can fine tune the <strong>Spawn on Path</strong>'s behavior by <number-badge>2</number-badge> surface name pattern <number-badge>3</number-badge> and/or by tag (see <a href="/spawner-parent/#how-to-use-tags">Ambit Spawner: How To Use Tags</a>). This will limit obstacles to spawn only along portions of the spline curve that are above the specified surfaces. If you don't want to manually specify surfaces, there is also the option to <number-badge>1</number-badge> snap all spawned obstacles to <em>any</em> surfaces below the path of the spline. </p>
 <p><strong>Spawn on Path</strong> will use the <number-badge>4</number-badge> <em>density</em> range and the <number-badge>6b</number-badge> <em>rotation</em> range you provide to instantiate copies of the Unreal Engine actor randomly selected from an <number-badge>7</number-badge> Array of Unreal Engine actors you've chosen within the box component's bounds. If you just want all spawned obstacles to face the same direction, you can select <number-badge>6a</number-badge> <em>Restrict to One Rotation</em> and <strong>Spawn on Path</strong> will automatically update the range's maximum to equal its minimum. <strong>Spawn on Path</strong> also provides the option to <number-badge>5</number-badge> <em>Follow Spline Rotation</em> instead of randomly generating rotations within a provided range. To enable physics simulation on your spawned obstacles, just select <number-badge>#</number-badge> Add Physics. By default, the <strong>Spawn on Path</strong> will remove overlaps, but this behavior can be turned off by unselecting <number-badge>#</number-badge> Remove Overlaps. To change the placement pattern, just adjust the <number-badge>8</number-badge> <em>random seed</em> value.</p>
 <p><img alt="Spawn on Path annotated UI" src="../images/spawn-on-path/AmbitSpawnerSpline_UI.png" /></p>
-<h2 id="using-spawn-on-path">Using Spawn on Path</h2>
+<h2 id="using-spawn-on-path">Using Spawn on Path<a class="headerlink" href="#using-spawn-on-path" title="Permanent link">&para;</a></h2>
 <p>After adding a <strong>Spawn on Path</strong> to your map you will see an icon like this. You can place it at any 3D location you'd like. The <em>position</em> of the <strong>Spawn on Path</strong> instance is the starting point of the spline path. You can <strong>transform</strong> the <strong>Spawn on Path</strong> instance by rotation, translation, and scaling to adjust the orientation, position, and length of the spline. The spline component's spline points can be moved, created, and deleted directly in the <strong>viewport</strong> or through the <strong>Selected Points</strong> category of the Details panel.</p>
 <p><img alt="Spawn on Path placement" src="../images/spawn-on-path/AmbitSpawnerSpline_Placed.png" /></p>
 <p>If you specified surfaces for <strong>Spawn on Path</strong> using <em>surface name pattern</em> and/or <em>tags</em>, or if you choose <em>Snap to Surface Below</em>, <strong>Spawn on Path</strong> will calculate the appropriate height (Z-axis) for each of the spawned obstacles. If no surfaces are specified <em>and</em> Snap to Surface Below, then <strong>Spawn on Path</strong> will use its height for all of the spawned obstacles.</p>
-<h2 id="examples">Examples</h2>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <p>It's easiest to understand the effect of each of the <strong>Spawn on Path</strong> parameters by seeing them in action. You will find a variety of examples in the <a href="/spawner-examples/#spawn-on-path-examples">Spawn on Path Examples section</a>.</p>
               
             </div>
@@ -180,18 +198,17 @@
   </div>
 
   <div class="rst-versions" role="note" aria-label="versions">
-  <span class="rst-current-version" data-toggle="rst-current-version">
-    
-    
-      <span><a href="../spawn-with-houdini/" style="color: #fcfcfc">&laquo; Previous</a></span>
-    
-    
-      <span><a href="../spawner-examples/" style="color: #fcfcfc">Next &raquo;</a></span>
-    
-  </span>
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../spawn-with-houdini/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../spawner-examples/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
 </div>
     <script>var base_url = '..';</script>
-    <script src="../js/theme_extra.js" defer></script>
     <script src="../js/theme.js" defer></script>
       <script src="../search/main.js" defer></script>
     <script defer>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Appendix: Contributing to Ambit Development - AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link href="../css/extra.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Appendix: Contributing to Ambit Development";
+    var mkdocs_page_input_path = "appendix-contributing.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Welcome</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Static Obstacles</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawner-parent/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-surface/">Spawn on Surface</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-in-volume/">Spawn in Volume</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-with-houdini/">Spawn with Houdini Digital Assets</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-path/">Spawn on Path</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawner-examples/">Ambit Spawner Examples</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Dynamic Obstacles</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path-parent/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path/">Spawn Vehicle Path</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">City Generation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../city-generation/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../obtaining-osm/">Obtaining OpenStreetMap Files</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../building-generator/">Building Generator</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../road-generator/">Road Generator</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Weather & Time of Day FX</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../weather/">Overview</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Simulation Scenarios</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../individual-scenario-generation/">Manual Scenario Generation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../bulk-senario-generation/">Automated Scenario Generation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../aws-setup/">Working with AWS in Ambit</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Exporting Assets</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../map-export/">Export Map Options</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">APPENDIX</span></p>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Appendix: Contributing to Ambit Development</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#development-workflow">Development Workflow</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#packaging-a-release-build">Packaging a Release Build</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#contributing-to-the-user-guide">Contributing to the User Guide</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>APPENDIX &raquo;</li>
+        
+      
+    
+    <li>Appendix: Contributing to Ambit Development</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="appendix-contributing-to-ambit-development">Appendix: Contributing to Ambit Development<a class="headerlink" href="#appendix-contributing-to-ambit-development" title="Permanent link">&para;</a></h1>
+<p>This section provides important information for anyone who would like to contribute to the development of the Ambit tools or to make custom modifications to Ambit for their own purposes. It covers technical setup and developer workflow. For general contributing guidelines and process, see the repository's <a href="https://github.com/aws-samples/aws-ambit-scenario-designer-ue4/blob/main/CONTRIBUTING.md">CONTRIBUTING</a> file.</p>
+<blockquote>
+<p>✏️ This guide assumes you already have Unreal Engine development experience.</p>
+</blockquote>
+<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
+<p>Ensure you have completed the main <a href="../setup/#initial-setup-one-time">Setup &gt; Initial Setup (One-Time)</a> instructions from this user guide.</p>
+<p>In addition to having Unreal Engine 4.27 installed, you will also need the Microsoft Visual Studio development tools required for UE4 C++ development. If you need help with these setup steps, refer to the Unreal Engine 4 documentation, especially <a href="https://docs.unrealengine.com/4.26/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/">"Setting Up Visual Studio for Unreal Engine"</a>.</p>
+<p>Create a new Unreal Engine C++ project to use as a host project while you work on Ambit development. The only configuration requirements for this project is that you designate it as a C++ project rather than a Blueprint project when prompted. Otherwise, you can keep all other project configuration settings at their defaults or change them to your liking.</p>
+<p>Create a "Plugins" folder at the root of your UE project folder. Clone the <a href="https://github.com/aws-samples/aws-ambit-scenario-designer-ue4">Ambit repository</a> into the "Plugins" folder. The result will look like this...</p>
+<p><code>&lt;your sample project&gt;\Plugins\aws-ambit-scenario-designer-ue4\</code></p>
+<p>Once the Ambit plugin repository has been cloned, right-click on the <code>*.uproject</code> file at the root of the project directory and select the "Generate Visual Studio project files" option. Select the appropriate engine version if required. A new Visual Studio solution file (<code>*.sln</code>) will be generated for you.</p>
+<p>Launch your sample project by clicking on the <code>*.uproject</code> file. When prompted to rebuild missing modules, click "Yes".</p>
+<p><img alt="Missing Modules prompt" src="../images/appendix/RebuildMissingModules.png" /></p>
+<p>Next, you'll need to enable some plugins to support running automated tests. Once the project opens, enable the following plugins:</p>
+<ul>
+<li>Functional Testing Editor</li>
+<li>Runtime Tests</li>
+<li>Editor Tests</li>
+</ul>
+<p>Restart (or simply close) the editor for the plugins to take effect.</p>
+<h2 id="development-workflow">Development Workflow<a class="headerlink" href="#development-workflow" title="Permanent link">&para;</a></h2>
+<p>Follow this workflow when making changes to the Ambit C++ code...</p>
+<ol>
+<li>Launch the project's <code>*.sln</code> file in Visual Studio. </li>
+<li>In the <strong>Solution Explorer</strong> window, right-click on your project and select <strong>Set as Startup Project</strong>. </li>
+<li>Make your code edits.</li>
+<li>Compile and run the solution through either of these methods:<ul>
+<li>To build only: Select <code>Build &gt; Build Solution</code> from the Visual Studio menubar</li>
+<li>To build and run: Press the <strong>Local Windows Debugger</strong> button (or press <strong>F5</strong>).</li>
+</ul>
+</li>
+<li>Repeat steps 3-4 as needed.</li>
+</ol>
+<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
+<h3>Running Automated Tests</h3>
+<p>The Ambit plugin includes a number of automated tests. Automated test files, called "specs", end with a <code>*.spec.cpp</code> file extension and are usually located next to the files that they test. These tests will be automatically recognized by the Unreal Engine test runner. To run the tests:</p>
+<ol>
+<li>First open the <strong>Test Automation</strong> window (<code>Window &gt; Test Automation</code>).</li>
+<li>Select the <strong>Automation</strong> tab.</li>
+<li>Tick the box next to the <strong>Ambit</strong> group of tests.</li>
+<li>Click the <strong>Start Tests</strong> button.</li>
+</ol>
+<blockquote>
+<p>💡 <strong>Tip:</strong> For more info on working with automated tests in UE see <a href="https://docs.unrealengine.com/en-US/Programming/Automation/AutomationSpec/index.html">"Automation Spec Overview"</a></p>
+</blockquote>
+<h3>Test Maps</h3>
+<p>A sample map is provided to aid in manual testing of the various Ambit spawner actors:</p>
+<p><code>/Ambit Content/Test/Maps/ProceduralPlacementTestMap</code></p>
+<p>A sample map is provided to aid in manual testing of the Environment FX actor:</p>
+<p><code>Ambit Content/EnvironmentFX/TestMap/TestWeatherMap</code></p>
+<h3>Testing Scenario Import/Export</h3>
+<p>To manually test scenario import and export functionality, follow these steps:</p>
+<ol>
+<li>First set some random parameters in the <strong>Scenario Settings</strong> section of the Ambit Mode.</li>
+<li>Click the "Export Scenario" Button at the bottom of the <strong>Scenario Settings</strong> section and save the <code>*.sdf.json</code> file.</li>
+<li>Verify the file was created in the destination location you specified.</li>
+<li>Reset all the values of your <strong>Scenario Settings</strong> section or re-load the project.</li>
+<li>Click the <code>...</code> next to <strong>Scenario Name</strong> and import the <code>*.sdf.json</code> file.</li>
+<li>Confirm that all settings were restored as expected.</li>
+</ol>
+<h2 id="packaging-a-release-build">Packaging a Release Build<a class="headerlink" href="#packaging-a-release-build" title="Permanent link">&para;</a></h2>
+<p>To create a packaged version of the plugin for distribution, follow these steps:</p>
+<ol>
+<li>Click the <strong>Edit</strong> tab and open <strong>Plugins</strong> window.</li>
+<li>Find the <strong>AWS Ambit Scenario Designer</strong> plugin.</li>
+<li>Click the <strong>Package</strong> button and choose the folder to which you would like to save the plugin.</li>
+<li>Wait for the packaging process to complete and use the <strong>Output Log</strong> panel to check for any warnings or errors.</li>
+</ol>
+<p>You can use this pre-built plugin in both Unreal Engine C++ and Blueprint Projects by installing it in your project's "Plugins" folder or the Engine "Plugins" folder.</p>
+<h2 id="contributing-to-the-user-guide">Contributing to the User Guide<a class="headerlink" href="#contributing-to-the-user-guide" title="Permanent link">&para;</a></h2>
+<p>To contribute to the User Guide, follow the instructions listed <a href="https://github.com/aws-samples/aws-ambit-scenario-designer-ue4/blob/main/docs/user-guide/README.md">here</a>.</p>
+<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
+<p>The Ambit plugin uses a subset of the AWS SDK for C++ to communicate with AWS services. A precompiled version of these libraries (<a href="https://github.com/aws/aws-sdk-cpp/tree/1.9.93">Version 1.9</a>) has been included in this repository and encapsulated as a module called "AWSUE4Module".</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../map-export/" class="btn btn-neutral" title="Export Map Options"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../map-export/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

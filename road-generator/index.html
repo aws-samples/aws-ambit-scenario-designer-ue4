@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Road Generator - AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link href="../css/extra.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Road Generator";
+    var mkdocs_page_input_path = "road-generator.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Welcome</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Static Obstacles</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawner-parent/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-surface/">Spawn on Surface</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-in-volume/">Spawn in Volume</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-with-houdini/">Spawn with Houdini Digital Assets</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-path/">Spawn on Path</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawner-examples/">Ambit Spawner Examples</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Dynamic Obstacles</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path-parent/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path/">Spawn Vehicle Path</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">City Generation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../city-generation/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../obtaining-osm/">Obtaining OpenStreetMap Files</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../building-generator/">Building Generator</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Road Generator</a>
+    <ul class="current">
+    </ul>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Weather & Time of Day FX</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../weather/">Overview</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Simulation Scenarios</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../individual-scenario-generation/">Manual Scenario Generation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../bulk-senario-generation/">Automated Scenario Generation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../aws-setup/">Working with AWS in Ambit</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Exporting Assets</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../map-export/">Export Map Options</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">APPENDIX</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../appendix-contributing/">Appendix: Contributing to Ambit Development</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>City Generation &raquo;</li>
+        
+      
+    
+    <li>Road Generator</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><img alt="Ambit Road Generator output" src="../images/city-generation/RoadGeneratorOutput.jpg" /></p>
+<h2 id="using-the-ambit-road-generator-experimental">Using the Ambit Road Generator (Experimental)<a class="headerlink" href="#using-the-ambit-road-generator-experimental" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>🧪 The Ambit Road Generator is currently considered experimental. There are many types of road configurations that it doesn't handle well at the moment.</p>
+</blockquote>
+<p>Using the UE editor's Content Browser, navigate to the <em><strong>Ambit Content &gt; ProceduralTools</strong></em> folder. Then, right-click on the <strong>AmbitRoadGenerator</strong> and select <strong>"Instantiate at the origin"</strong>.</p>
+<blockquote>
+<p>✏️ <strong>Note:</strong> If you don't see the <strong>Ambit Content</strong> folder listed in the Content Browser you will need to enable the "Show Plugin Content" option using the Content Browser's View Options menu. <img alt="View Options menu" src="../images/city-generation/ViewOptionsMenu.png" /> You may also need to toggle the "Show/Hide Sources Panel" icon. <img alt="Show Sources icon" src="../images/city-generation/ShowSourcesIcon.png" /></p>
+</blockquote>
+<p>There will be a small delay while the Houdini Engine starts in the background and then initializes the asset.</p>
+<p>Ensure that the new <strong>AmbitRoadGenerator</strong> instance is selected in the World Outliner panel. Then, find the section of the Details panel titled <em><strong>Houdini Parameters</strong></em>. Import an OSM file that you downloaded previously by clicking the <code>…</code> icon next to the <em><strong>OSM File</strong></em> parameter field.</p>
+<p><img alt="OSM File parameter" src="../images/city-generation/RoadGen_OSMParam.png" /></p>
+<p>Road generation will start automatically. Generation time may range from a few seconds to a few minutes.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../weather/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../building-generator/" class="btn btn-neutral" title="Building Generator"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../building-generator/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../weather/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

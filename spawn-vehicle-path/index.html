@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="../css/theme.css" />
   <link rel="stylesheet" href="../css/theme_extra.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
   <link href="../css/extra.css" rel="stylesheet" />
   
   <script>
@@ -26,8 +26,9 @@
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
   <script src="../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
+  
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -41,37 +42,20 @@
         <a href=".." class="icon icon-home"> AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Welcome</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../weather/">Ambit Weather</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../aws-setup/">Working with AWS in Ambit</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../individual-scenario-generation/">Individual Scenario Generation</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../bulk-senario-generation/">Bulk Scenario Generation</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../map-export/">Export Map Options</a>
-                    </li>
-                </ul>
-                <p class="caption"><span class="caption-text">Ambit Spawner Tools</span></p>
+                <p class="caption"><span class="caption-text">Static Obstacles</span></p>
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../spawner-parent/">Overview</a>
                     </li>
@@ -86,7 +70,7 @@
                     <li class="toctree-l1"><a class="reference internal" href="../spawner-examples/">Ambit Spawner Examples</a>
                     </li>
                 </ul>
-                <p class="caption"><span class="caption-text">Ambit Path Generation Tools</span></p>
+                <p class="caption"><span class="caption-text">Dynamic Obstacles</span></p>
                 <ul class="current">
                     <li class="toctree-l1"><a class="reference internal" href="../spawn-vehicle-path-parent/">Overview</a>
                     </li>
@@ -97,6 +81,41 @@
     <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
     </li>
     </ul>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">City Generation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../city-generation/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../obtaining-osm/">Obtaining OpenStreetMap Files</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../building-generator/">Building Generator</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../road-generator/">Road Generator</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Weather & Time of Day FX</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../weather/">Overview</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Simulation Scenarios</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../individual-scenario-generation/">Manual Scenario Generation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../bulk-senario-generation/">Automated Scenario Generation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../aws-setup/">Working with AWS in Ambit</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Exporting Assets</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../map-export/">Export Map Options</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">APPENDIX</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../appendix-contributing/">Appendix: Contributing to Ambit Development</a>
                     </li>
                 </ul>
       </div>
@@ -120,7 +139,7 @@
     
       
         
-          <li>Ambit Path Generation Tools &raquo;</li>
+          <li>Dynamic Obstacles &raquo;</li>
         
       
     
@@ -132,15 +151,14 @@
   
   <hr/>
 </div>
-
           <div role="main">
             <div class="section">
               
-                <h1 id="spawn-vehicle-path-actor">Spawn Vehicle Path Actor</h1>
+                <h1 id="spawn-vehicle-path-actor">Spawn Vehicle Path Actor<a class="headerlink" href="#spawn-vehicle-path-actor" title="Permanent link">&para;</a></h1>
 <p>The <strong>Spawn Vehicle Path</strong> actor can be used to generate a path and spawn a single vehicle running along this path by easily doing drag-and-drop, configurating parameters and tweaking the curves.</p>
 <p>The <strong>Spawn Vehicle Path</strong> tool works by using the position of the <strong>Spawn Vehicle Path</strong> actor and the pre-made <em>spline component</em> attached to the actor to determine the path of the vehicle, which will run along the determined path. At runtime, a list of Waypoints will be generated along the path/curve defined by the spline. They will be separated by the fixed distance specified by <number-badge>2</number-badge> (unit in meter). At the same time, a copy of vehicle which can be set at <number-badge>4</number-badge> in class (<a href="https://docs.unrealengine.com/4.27/en-US/API/Plugins/PhysXVehicles/AWheeledVehicle/">AWheeledVehicle</a>) will be instantiated at the beginning of the path. The vehicle will try follow the path by reaching each waypoint from beginning and achieve the speed limit (unit in km/h) set at <number-badge>1</number-badge>. Besides, for debugging purpose, <number-badge>3</number-badge> can be toggled to visualize the waypoints at runtime.</p>
 <p><img alt="Spawn Vehicle Path annotated UI" src="../images/spawn-vehicle-path/AmbitVehiclePathGenerator_UI.png" /></p>
-<h2 id="using-spawn-vehicle-path">Using Spawn Vehicle Path</h2>
+<h2 id="using-spawn-vehicle-path">Using Spawn Vehicle Path<a class="headerlink" href="#using-spawn-vehicle-path" title="Permanent link">&para;</a></h2>
 <p>You can use one or more <strong>Spawn Vehicle Path</strong> instances within a scene. To add an instance, drag-drop the <strong>Spawn Vehicle Path</strong> class from the <strong>Content Browser</strong> or the <strong>AWS Ambit</strong> category tab in the <em>Place Actors</em> panel into your map. You'll find the class under <strong>"Ambit C++ Classes/Ambit/Actors/Spawners"</strong>.</p>
 <p><img alt="Locating the Spawn Vehicle Path class" src="../images/spawn-vehicle-path/ContentBrowser_AmbitVehiclePathGenerator.png" /></p>
 <p>After adding an <strong>Spawn Vehicle Path</strong> to your map you will see an icon like this. You should place it at a 3D location where it's on or above the surface/ground you'd like the vehicle to spawn. 
@@ -155,7 +173,7 @@
 <p>Vehicle to spawn set has to be of class or a derived class of <a href="https://docs.unrealengine.com/4.27/en-US/API/Plugins/PhysXVehicles/AWheeledVehicle/">AWheeledVehicle</a>.</p>
 <p><img alt="Vehicle To Spawn" src="../images/spawn-vehicle-path/VehicleToSpawn.png" /></p>
 <p>Example vehicle blueprint assets can be found in Unreal Marketplace like <a href="https://www.unrealengine.com/marketplace/en-US/product/bbcb90a03f844edbb20c8b89ee16ea32">this</a> or you can follow Unreal tutorial <a href="https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Vehicles/VehicleUserGuide/">here</a> to create your own vehicle asset. </p>
-<h2 id="examples">Examples</h2>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <p>If you set everything up, you should see the spawned vehicle running along the path with optional display of waypoints.
 <img alt="Spawn Vehicle Path Example" src="../images/spawn-vehicle-path/Example.png" /></p>
               
@@ -164,6 +182,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../city-generation/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../spawn-vehicle-path-parent/" class="btn btn-neutral" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -189,16 +209,17 @@
   </div>
 
   <div class="rst-versions" role="note" aria-label="versions">
-  <span class="rst-current-version" data-toggle="rst-current-version">
-    
-    
-      <span><a href="../spawn-vehicle-path-parent/" style="color: #fcfcfc">&laquo; Previous</a></span>
-    
-    
-  </span>
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../spawn-vehicle-path-parent/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../city-generation/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
 </div>
     <script>var base_url = '..';</script>
-    <script src="../js/theme_extra.js" defer></script>
     <script src="../js/theme.js" defer></script>
       <script src="../search/main.js" defer></script>
     <script defer>

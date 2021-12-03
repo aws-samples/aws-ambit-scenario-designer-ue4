@@ -14,13 +14,14 @@
 
   <link rel="stylesheet" href="./css/theme.css" />
   <link rel="stylesheet" href="./css/theme_extra.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
   <link href="./css/extra.css" rel="stylesheet" />
   
   <script src="./js/jquery-2.1.1.min.js" defer></script>
   <script src="./js/modernizr-2.8.3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
+  
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -34,37 +35,20 @@
         <a href="./." class="icon icon-home"> AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <p class="caption"><span class="caption-text">Getting Started</span></p>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="./.">Home</a>
+                    <li class="toctree-l1"><a class="reference internal" href="./.">Welcome</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="./setup/">Setup</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="./weather/">Ambit Weather</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="./aws-setup/">Working with AWS in Ambit</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="./individual-scenario-generation/">Individual Scenario Generation</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="./bulk-senario-generation/">Bulk Scenario Generation</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="./map-export/">Export Map Options</a>
-                    </li>
-                </ul>
-                <p class="caption"><span class="caption-text">Ambit Spawner Tools</span></p>
+                <p class="caption"><span class="caption-text">Static Obstacles</span></p>
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="./spawner-parent/">Overview</a>
                     </li>
@@ -79,11 +63,46 @@
                     <li class="toctree-l1"><a class="reference internal" href="./spawner-examples/">Ambit Spawner Examples</a>
                     </li>
                 </ul>
-                <p class="caption"><span class="caption-text">Ambit Path Generation Tools</span></p>
+                <p class="caption"><span class="caption-text">Dynamic Obstacles</span></p>
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="./spawn-vehicle-path-parent/">Overview</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="./spawn-vehicle-path/">Spawn Vehicle Path</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">City Generation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="./city-generation/">Overview</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="./obtaining-osm/">Obtaining OpenStreetMap Files</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="./building-generator/">Building Generator</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="./road-generator/">Road Generator</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Weather & Time of Day FX</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="./weather/">Overview</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Simulation Scenarios</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="./individual-scenario-generation/">Manual Scenario Generation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="./bulk-senario-generation/">Automated Scenario Generation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="./aws-setup/">Working with AWS in Ambit</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Exporting Assets</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="./map-export/">Export Map Options</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">APPENDIX</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="./appendix-contributing/">Appendix: Contributing to Ambit Development</a>
                     </li>
                 </ul>
       </div>
@@ -113,7 +132,6 @@
   
   <hr/>
 </div>
-
           <div role="main">
             <div class="section">
               
@@ -125,7 +143,7 @@
     <input name="q" id="mkdocs-search-query" type="text" class="search_input search-query ui-autocomplete-input" placeholder="Search the Docs" autocomplete="off" autofocus title="Type search term here">
   </form>
 
-  <div id="mkdocs-search-results" class="search-results" data-no-results-text="No results found">
+  <div id="mkdocs-search-results" class="search-results">
     Searching...
   </div>
 
@@ -153,14 +171,13 @@
   </div>
 
   <div class="rst-versions" role="note" aria-label="versions">
-  <span class="rst-current-version" data-toggle="rst-current-version">
-    
-    
-    
-  </span>
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
 </div>
     <script>var base_url = '.';</script>
-    <script src="./js/theme_extra.js" defer></script>
     <script src="./js/theme.js" defer></script>
       <script src="./search/main.js" defer></script>
     <script defer>
