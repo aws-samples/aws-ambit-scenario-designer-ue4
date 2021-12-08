@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,23 +13,26 @@
 //   limitations under the License.
 
 #include "AmbitSpawnerCollisionHelpers.h"
-#include "AmbitWorldHelpers.h"
-#include "Misc/AutomationTest.h"
+
+#include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMeshActor.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
+#include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"
-#include "Components/StaticMeshComponent.h"
 #include "UObject/UObjectGlobals.h"
 
+#include "AmbitWorldHelpers.h"
+
 BEGIN_DEFINE_SPEC(AmbitSpawnerCollisionHelpersSpec, "Ambit.AmbitSpawnerCollisionHelpers",
-    EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-    ApplicationContextMask)
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
+                  ApplicationContextMask)
+
     UWorld* World;
-AStaticMeshActor* TestSurfaceActor;
-AActor* TestSpawnedActor;
-FString ExpectedActorName;
+    AStaticMeshActor* TestSurfaceActor;
+    AActor* TestSpawnedActor;
+    FString ExpectedActorName;
 END_DEFINE_SPEC(AmbitSpawnerCollisionHelpersSpec)
 
 void AmbitSpawnerCollisionHelpersSpec::Define()
@@ -46,8 +49,8 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
         Params.Name = FName(*ExpectedActorName);
 
         UStaticMesh* StaticMesh = LoadObject<UStaticMesh>
-            (nullptr, *Path, nullptr,
-                LOAD_None, nullptr);
+        (nullptr, *Path, nullptr,
+         LOAD_None, nullptr);
         TestNotNull("Check if static mesh for surface actor is properly loaded", StaticMesh);
 
         FVector Location(0, 0, 0);
@@ -69,14 +72,13 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
         FVector NewLocation(0, 0, 100);
         FRotator NewRotation(0, 0, 0);
         const FString SpawnedActorPath =
-            "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+                "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
         const FSoftClassPath ClassPath(SpawnedActorPath);
         const TSubclassOf<AActor> ActorToSpawn =
-            ClassPath.TryLoadClass<UObject>();
+                ClassPath.TryLoadClass<UObject>();
         TestSpawnedActor = World->SpawnActor(
             ActorToSpawn.Get(), &NewLocation, &NewRotation);
         TestNotNull("Check if spawned actor is properly created", TestSpawnedActor);
-
     });
     Describe("SetGenerateOverlapEventsForActor()", [this]()
     {
@@ -85,43 +87,43 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
             AActor* NoStaticMeshActor = World->SpawnActor(AActor::StaticClass());
             TArray<bool> Original;
             AmbitSpawnerCollisionHelpers::
-                SetGenerateOverlapEventsForActor(NoStaticMeshActor, Original);
+                    SetGenerateOverlapEventsForActor(NoStaticMeshActor, Original);
             TestEqual("nothing added to array", Original.Num(), 0);
             NoStaticMeshActor->Destroy();
         });
 
         It("produces an error message and returns early if the number of static mesh components"
-            " does not equal the number of elements in the original array if bReset is true", [this]()
-        {
-            AddExpectedError("The amount of StaticMeshComponents found for Actor");
-            UStaticMeshComponent* StaticMesh =
-                TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
-            StaticMesh->SetGenerateOverlapEvents(false);
-            TArray<bool> Original;
-            Original.Add(true);
-            Original.Add(true);
-            AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
-                TestSurfaceActor, Original, true);
-            TestFalse("static mesh setting was not changed", StaticMesh->GetGenerateOverlapEvents());
-        });
+           " does not equal the number of elements in the original array if bReset is true", [this]()
+           {
+               AddExpectedError("The amount of StaticMeshComponents found for Actor");
+               UStaticMeshComponent* StaticMesh =
+                       TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
+               StaticMesh->SetGenerateOverlapEvents(false);
+               TArray<bool> Original;
+               Original.Add(true);
+               Original.Add(true);
+               AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
+                   TestSurfaceActor, Original, true);
+               TestFalse("static mesh setting was not changed", StaticMesh->GetGenerateOverlapEvents());
+           });
 
         It("sets generate overlap events to true if only one static mesh component exists", [this]()
         {
             UStaticMeshComponent* StaticMesh =
-                TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
+                    TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
             StaticMesh->SetGenerateOverlapEvents(false);
             TArray<bool> Original;
             AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
                 TestSurfaceActor, Original);
             TestTrue("set to true",
-                TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>()
-                ->GetGenerateOverlapEvents());
+                     TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>()
+                                     ->GetGenerateOverlapEvents());
         });
 
         It("does not accumulate stored original settings if called twice", [this]()
         {
             UStaticMeshComponent* StaticMesh =
-                TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
+                    TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
             StaticMesh->SetGenerateOverlapEvents(false);
             TArray<bool> Original;
             AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
@@ -135,7 +137,7 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
         It("stores original setting if only one static mesh component exists", [this]()
         {
             UStaticMeshComponent* StaticMesh =
-                TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
+                    TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
             StaticMesh->SetGenerateOverlapEvents(false);
             TArray<bool> Original;
             AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
@@ -146,7 +148,7 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
         It("resets generate overlap events if only one static mesh component exists", [this]()
         {
             UStaticMeshComponent* StaticMesh =
-                TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
+                    TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
             StaticMesh->SetGenerateOverlapEvents(true);
             TArray<bool> Original;
             Original.Add(false); // "Default"
@@ -154,8 +156,8 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
                 TestSurfaceActor, Original, true);
 
             TestFalse("reset to false",
-                TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>()
-                ->GetGenerateOverlapEvents());
+                      TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>()
+                                      ->GetGenerateOverlapEvents());
         });
 
         Describe("given multiple static mesh components", [this]()
@@ -167,8 +169,8 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
                 UStaticMesh* StaticMesh = LoadObject<UStaticMesh>(nullptr, *Path, nullptr, LOAD_None, nullptr);
                 TestNotNull("Check if static mesh is properly loaded", StaticMesh);
                 UStaticMeshComponent* Mesh2 =
-                    NewObject<UStaticMeshComponent>(TestSurfaceActor,
-                        UStaticMeshComponent::StaticClass());
+                        NewObject<UStaticMeshComponent>(TestSurfaceActor,
+                                                        UStaticMeshComponent::StaticClass());
                 Mesh2->SetStaticMesh(StaticMesh);
             });
 
@@ -184,9 +186,9 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
                 TArray<bool> Original;
                 AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(TestSurfaceActor, Original);
                 TestTrue("set to true",
-                    ArrayOfMeshes[0]->GetGenerateOverlapEvents());
+                         ArrayOfMeshes[0]->GetGenerateOverlapEvents());
                 TestTrue("set to true",
-                    ArrayOfMeshes[1]->GetGenerateOverlapEvents());
+                         ArrayOfMeshes[1]->GetGenerateOverlapEvents());
             });
 
             It("resets generate overlap events if multiple static mesh components exist", [this]()
@@ -204,9 +206,9 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
                 AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
                     TestSurfaceActor, Original, true);
                 TestFalse("reset",
-                    ArrayOfMeshes[0]->GetGenerateOverlapEvents());
+                          ArrayOfMeshes[0]->GetGenerateOverlapEvents());
                 TestFalse("reset",
-                    ArrayOfMeshes[1]->GetGenerateOverlapEvents());
+                          ArrayOfMeshes[1]->GetGenerateOverlapEvents());
             });
 
             It("stores original settings if multiple static mesh components exist", [this]()
@@ -225,7 +227,6 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
                 TestFalse("stored original settings", Original[1]);
             });
         });
-
     });
 
     Describe("FindDefaultStaticMeshComponents()", [this]()
@@ -236,7 +237,7 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
             AmbitSpawnerCollisionHelpers::FindDefaultStaticMeshComponents(
                 AActor::StaticClass(), Actual);
             TestEqual("Static mesh component array is empty",
-                Actual.Num(), 0);
+                      Actual.Num(), 0);
         });
 
         It("will get the right StaticMeshComponent when there is one", [this]()
@@ -245,11 +246,11 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
             AmbitSpawnerCollisionHelpers::FindDefaultStaticMeshComponents(
                 TestSurfaceActor->GetClass(), Actual);
             TestEqual("Static mesh component array has one element",
-                Actual.Num(), 1);
+                      Actual.Num(), 1);
 
             TestEqual("static mesh component array is correct",
-                TestSurfaceActor->GetStaticMeshComponent()->GetClass(),
-                Actual[0]->GetClass());
+                      TestSurfaceActor->GetStaticMeshComponent()->GetClass(),
+                      Actual[0]->GetClass());
         });
     });
 
@@ -258,7 +259,7 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
         It("sets component to object type for Ambit Spawner Obstacles", [this]()
         {
             UStaticMeshComponent* StaticMesh =
-                TestSurfaceActor->GetStaticMeshComponent();
+                    TestSurfaceActor->GetStaticMeshComponent();
 
             TArray<UStaticMeshComponent*> Meshes;
             StaticMesh->SetCollisionObjectType(ECC_WorldDynamic);
@@ -266,22 +267,22 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
             AmbitSpawnerCollisionHelpers::SetCollisionForAllStaticMeshComponents(Meshes);
 
             TestEqual("channel", StaticMesh->
-                GetCollisionObjectType(), ECC_GameTraceChannel1);
+                      GetCollisionObjectType(), ECC_GameTraceChannel1);
         });
 
         It("sets channels correctly", [this]()
         {
             UStaticMeshComponent* StaticMesh =
-                TestSurfaceActor->GetStaticMeshComponent();
+                    TestSurfaceActor->GetStaticMeshComponent();
 
             TArray<UStaticMeshComponent*> Meshes;
             Meshes.Add(StaticMesh);
             AmbitSpawnerCollisionHelpers::SetCollisionForAllStaticMeshComponents(Meshes);
             TestEqual("collision enabled", StaticMesh->GetCollisionEnabled(),
-                ECollisionEnabled::QueryAndPhysics);
+                      ECollisionEnabled::QueryAndPhysics);
 
             const FCollisionResponseContainer& Container =
-                StaticMesh->GetCollisionResponseToChannels();
+                    StaticMesh->GetCollisionResponseToChannels();
             TestEqual("ambit spawned obstacles", Container.GameTraceChannel1, ECR_Block);
             TestEqual("camera", Container.Camera, ECR_Overlap);
             TestEqual("visibility", Container.Visibility, ECR_Overlap);
@@ -303,11 +304,11 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
             TestSpawnedActor->SetActorLocation(FVector(0));
 
             UStaticMeshComponent* Surface =
-                TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
+                    TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
 
             TestTrue("is penetrating overlap",
-                AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(
-                    Surface, TestSpawnedActor));
+                     AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(
+                         Surface, TestSpawnedActor));
         });
 
         It("returns false if actor is on top of surface", [this]()
@@ -316,17 +317,17 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
             TestSurfaceActor->SetActorLocation(FVector(0, 0, 100));
             TestSurfaceActor->SetActorScale3D(FVector(2));
             const FHitResult& Hit =
-                AmbitWorldHelpers::LineTraceBelowWorldPoint(FVector(0, 0, 1000));
+                    AmbitWorldHelpers::LineTraceBelowWorldPoint(FVector(0, 0, 1000));
             TestSpawnedActor->SetActorLocation(Hit.ImpactPoint);
             TestSurfaceActor->SetActorEnableCollision(true);
             TestSpawnedActor->SetActorEnableCollision(true);
 
             UStaticMeshComponent* Surface =
-                TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
+                    TestSurfaceActor->FindComponentByClass<UStaticMeshComponent>();
 
             TestFalse("is not penetrating overlap",
-                AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(
-                    Surface, TestSpawnedActor));
+                      AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(
+                          Surface, TestSpawnedActor));
         });
     });
 
@@ -337,11 +338,11 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
             const TArray<UStaticMeshComponent*> StaticMeshComponents;
             TMap<FString, TArray<FCollisionResponseTemplate>> OutMap;
             AmbitSpawnerCollisionHelpers::StoreCollisionProfiles("Empty",
-                StaticMeshComponents, OutMap);
+                                                                 StaticMeshComponents, OutMap);
 
             TestEqual("empty key added to map", OutMap.Num(), 1);
             TestEqual("empty array associated with empty key",
-                OutMap.FindChecked("Empty").Num(), 0);
+                      OutMap.FindChecked("Empty").Num(), 0);
         });
 
         It("correctly adds to the map when there is only one component", [this]()
@@ -353,12 +354,12 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
             TMap<FString, TArray<FCollisionResponseTemplate>> OutMap;
 
             AmbitSpawnerCollisionHelpers::StoreCollisionProfiles("One",
-                StaticMeshComponents, OutMap);
+                                                                 StaticMeshComponents, OutMap);
 
             TestEqual("number of map elements", OutMap.Num(), 1);
             TestEqual("number of static meshes for element", OutMap.FindChecked("One").Num(), 1);
             TestTrue("correct collisions", OutMap.FindChecked("One")[0].ResponseToChannels ==
-                Mesh->GetCollisionResponseToChannels());
+                     Mesh->GetCollisionResponseToChannels());
         });
 
         It("correctly adds to the map when there are multiple components", [this]()
@@ -375,14 +376,14 @@ void AmbitSpawnerCollisionHelpersSpec::Define()
 
             TMap<FString, TArray<FCollisionResponseTemplate>> OutMap;
             AmbitSpawnerCollisionHelpers::StoreCollisionProfiles("One",
-                StaticMeshComponents, OutMap);
+                                                                 StaticMeshComponents, OutMap);
 
             TestEqual("elements in map", OutMap.Num(), 1);
             TestEqual("number of static meshes for element", OutMap.FindChecked("One").Num(), 2);
             TestTrue("correct collisions", OutMap.FindChecked("One")[0].ResponseToChannels ==
-                MeshOne->GetCollisionResponseToChannels());
+                     MeshOne->GetCollisionResponseToChannels());
             TestTrue("correct collisions", OutMap.FindChecked("One")[1].ResponseToChannels ==
-                MeshTwo->GetCollisionResponseToChannels());
+                     MeshTwo->GetCollisionResponseToChannels());
         });
     });
 

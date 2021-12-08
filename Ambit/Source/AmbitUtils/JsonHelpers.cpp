@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,18 +14,18 @@
 
 #include "JsonHelpers.h"
 
-#include <stdexcept>
-
 #include "MenuHelpers.h"
 #include "Serialization/JsonSerializer.h"
 
+#include <stdexcept>
+
 namespace FJsonHelpers
 {
-    FString SerializeJson(TSharedPtr<FJsonObject> JsonObject)
+    FString SerializeJson(const TSharedPtr<FJsonObject>& JsonObject)
     {
         typedef TJsonWriter<TCHAR, TPrettyJsonPrintPolicy<TCHAR>> FStringWriter;
         typedef TJsonWriterFactory<TCHAR, TPrettyJsonPrintPolicy<TCHAR>>
-            FStringWriterFactory;
+                FStringWriterFactory;
 
         FString OutputString;
         const TSharedRef<FStringWriter> Writer = FStringWriterFactory::Create(
@@ -38,11 +38,11 @@ namespace FJsonHelpers
         return OutputString;
     }
 
-    FString SerializeJsonCondense(TSharedPtr<FJsonObject> JsonObject)
+    FString SerializeJsonCondense(const TSharedPtr<FJsonObject>& JsonObject)
     {
         typedef TJsonWriter<TCHAR, TCondensedJsonPrintPolicy<TCHAR>> FStringWriter;
         typedef TJsonWriterFactory<TCHAR, TCondensedJsonPrintPolicy<TCHAR>>
-            FStringWriterFactory;
+                FStringWriterFactory;
 
         FString OutputString;
         const TSharedRef<FStringWriter> Writer = FStringWriterFactory::Create(
@@ -74,7 +74,10 @@ namespace FJsonHelpers
         FVector Vector;
         try
         {
-            if (JsonValues.Num() != 3) throw JsonValues.Num();
+            if (JsonValues.Num() != 3)
+            {
+                throw JsonValues.Num();
+            }
             Vector.X = JsonValues[0]->AsNumber();
             Vector.Y = JsonValues[1]->AsNumber();
             Vector.Z = JsonValues[2]->AsNumber();
@@ -83,7 +86,7 @@ namespace FJsonHelpers
         catch (int32 n)
         {
             FString Message =
-                "Instead of size 3, the JSON array is of size ";
+                    "Instead of size 3, the JSON array is of size ";
             Message.AppendInt(n);
             FMenuHelpers::LogErrorAndPopup(Message);
         }
@@ -95,7 +98,10 @@ namespace FJsonHelpers
         FRotator Rotation;
         try
         {
-            if (JsonValues.Num() != 3) throw JsonValues.Num();
+            if (JsonValues.Num() != 3)
+            {
+                throw JsonValues.Num();
+            }
             Rotation.Pitch = JsonValues[0]->AsNumber();
             Rotation.Yaw = JsonValues[1]->AsNumber();
             Rotation.Roll = JsonValues[2]->AsNumber();
@@ -104,10 +110,9 @@ namespace FJsonHelpers
         catch (const int32 n)
         {
             FString Message =
-                "Instead of size 3, the JSON array is of size ";
+                    "Instead of size 3, the JSON array is of size ";
             Message.AppendInt(n);
             FMenuHelpers::LogErrorAndPopup(Message);
-
         }
         return Rotation;
     }

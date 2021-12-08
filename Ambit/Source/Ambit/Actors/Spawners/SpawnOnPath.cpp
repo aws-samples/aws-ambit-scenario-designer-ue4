@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,27 +56,27 @@ TSharedPtr<FSpawnOnPathConfig>
 ASpawnOnPath::GetConfiguration() const
 {
     TSharedPtr<FSpawnOnPathConfig> Config =
-        Super::GetConfiguration<FSpawnOnPathConfig>();
+            Super::GetConfiguration<FSpawnOnPathConfig>();
     Config->bSnapToSurfaceBelow = bSnapToSurfaceBelow;
     TArray<FSplinePoint> SplinePoints;
     const int32 SplinePointCount = Spline->GetNumberOfSplinePoints();
     for (int32 i = 0; i < SplinePointCount; i++)
     {
         const FVector& ArriveVector = Spline->GetArriveTangentAtSplinePoint(i,
-            ESplineCoordinateSpace::Local);
+                                                                            ESplineCoordinateSpace::Local);
         const float InputKey = Spline->GetInputKeyAtDistanceAlongSpline(
             Spline->GetDistanceAlongSplineAtSplinePoint(i));
         const FVector& LeaveVector = Spline->GetLeaveTangentAtSplinePoint(i,
-            ESplineCoordinateSpace::Local);
-        const FVector& Location = Spline->GetLocationAtSplinePoint(i, 
-            ESplineCoordinateSpace::Local);
+                                                                          ESplineCoordinateSpace::Local);
+        const FVector& Location = Spline->GetLocationAtSplinePoint(i,
+                                                                   ESplineCoordinateSpace::Local);
         const FRotator& Rotation = Spline->GetRotationAtSplineInputKey(i,
-            ESplineCoordinateSpace::Local);
+                                                                       ESplineCoordinateSpace::Local);
         const FVector& Scale = Spline->GetScaleAtSplinePoint(i);
         const TEnumAsByte<ESplinePointType::Type>& Type = Spline->GetSplinePointType(i);
 
         FSplinePoint Point(InputKey, Location, ArriveVector,
-            LeaveVector, Rotation, Scale, Type);
+                           LeaveVector, Rotation, Scale, Type);
         SplinePoints.Add(Point);
     }
     Config->SplinePoints = SplinePoints;

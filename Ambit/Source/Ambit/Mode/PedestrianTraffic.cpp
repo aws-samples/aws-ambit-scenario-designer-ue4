@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,12 +14,11 @@
 
 #include "PedestrianTraffic.h"
 
-#include "AmbitUtils/MathHelpers.h"
-
 #include "Constant.h"
 #include "ScenarioDefinition.h"
 #include "Dom/JsonObject.h"
 
+#include "AmbitUtils/MathHelpers.h"
 #include "AmbitUtils/MenuHelpers.h"
 
 TSharedPtr<FJsonObject> FPedestrianTraffic::SerializeToJson() const
@@ -43,7 +42,7 @@ void FPedestrianTraffic::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
         const float IncomingMin = JsonObject->GetNumberField(
             JsonConstants::KMinKey);
         this->Min = FMathHelpers::ClampBoundary(IncomingMin, 0.f, 1.f,
-            TEXT("pedestrian density min"), TempMessage);
+                                                TEXT("pedestrian density min"), TempMessage);
 
         if (!TempMessage.IsEmpty())
         {
@@ -58,7 +57,7 @@ void FPedestrianTraffic::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
         const float IncomingMax = JsonObject->GetNumberField(
             JsonConstants::KMaxKey);
         this->Max = FMathHelpers::ClampBoundary(IncomingMax, 0.f, 1.f,
-            TEXT("pedestrian density max"), TempMessage);
+                                                TEXT("pedestrian density max"), TempMessage);
 
         if (!TempMessage.IsEmpty())
         {
@@ -73,7 +72,7 @@ void FPedestrianTraffic::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
         const float IncomingIncrement = JsonObject->GetNumberField(
             JsonConstants::KIncrementKey);
         this->Increment = FMathHelpers::ClampBoundary(IncomingIncrement, 0.1f, 0.1f,
-            TEXT("pedestrian density increment"), TempMessage);
+                                                      TEXT("pedestrian density increment"), TempMessage);
 
         if (!TempMessage.IsEmpty())
         {

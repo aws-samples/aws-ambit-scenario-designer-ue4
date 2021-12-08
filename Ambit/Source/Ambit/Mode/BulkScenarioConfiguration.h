@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,15 +15,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-#include <AmbitUtils/ConfigJsonSerializer.h>
-
 #include "IScenarioParameter.h"
 #include "PedestrianTraffic.h"
 #include "TimeOfDayTypes.h"
 #include "VehicleTraffic.h"
 #include "WeatherTypes.h"
-#include "Dom/JsonValue.h"
+
+#include <AmbitUtils/ConfigJsonSerializer.h>
 
 struct FScenarioDefinition;
 class FJsonObject;
@@ -33,9 +31,7 @@ class FJsonObject;
  */
 struct FBulkScenarioConfiguration : public FConfigJsonSerializer
 {
-    virtual ~FBulkScenarioConfiguration() override
-    {
-    }
+    virtual ~FBulkScenarioConfiguration() override = default;
 
     const static FString KCurrentVersion;
 
@@ -49,6 +45,7 @@ struct FBulkScenarioConfiguration : public FConfigJsonSerializer
     TSharedPtr<FJsonObject> AllSpawnersConfigs;
 
     TSharedPtr<FJsonObject> SerializeToJson() const override;
+
     void DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject) override;
 
     /**
@@ -58,11 +55,11 @@ struct FBulkScenarioConfiguration : public FConfigJsonSerializer
     TArray<FScenarioDefinition> GenerateScenarios();
 
 private:
-
     /**
      * Uses Depth First Search to get all scenario definition from an array IScenarioParameter objects
      * and saves in the TArray<FScenarioDefinition>& Scenarios.
      */
-    void GetAllPermutationScenarios(TArray<IScenarioParameter*> VariantParameters, TArray<FScenarioDefinition>& Scenarios, int Depth,
+    void GetAllPermutationScenarios(TArray<IScenarioParameter*> VariantParameters,
+                                    TArray<FScenarioDefinition>& Scenarios, int Depth,
                                     FScenarioDefinition& ScenarioDefinition);
 };

@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,11 +22,11 @@
 #include "Math/UnrealMathUtility.h"
 #include "UObject/ConstructorHelpers.h"
 
-#include <AmbitUtils/MenuHelpers.h>
-
 #include "Ambit/AmbitModule.h"
 #include "Ambit/Mode/Constant.h"
 #include "Ambit/Utils/AmbitWorldHelpers.h"
+
+#include <AmbitUtils/MenuHelpers.h>
 
 ASpawnInVolume::ASpawnInVolume()
 {
@@ -53,7 +53,8 @@ void ASpawnInVolume::PostEditChangeProperty(
         !FMath::IsNearlyEqual(BoxRotation.Pitch, 0.f))
     {
         const FString& Message = FString::Printf(
-            TEXT("The bound specifier of %s is not flat, which is not allowed. Please set roll (x) and pitch (y) values to 0."),
+            TEXT(
+                "The bound specifier of %s is not flat, which is not allowed. Please set roll (x) and pitch (y) values to 0."),
             *this->GetActorLabel());
         FMenuHelpers::DisplayMessagePopup(Message, "Warning");
     }
@@ -68,7 +69,7 @@ TSharedPtr<FSpawnInVolumeConfig>
 ASpawnInVolume::GetConfiguration() const
 {
     TSharedPtr<FSpawnInVolumeConfig> Config =
-        Super::GetConfiguration<FSpawnInVolumeConfig>();
+            Super::GetConfiguration<FSpawnInVolumeConfig>();
     Config->BoxExtent = Box->GetScaledBoxExtent();
     Config->bSnapToSurfaceBelow = bSnapToSurfaceBelow;
     return Config;
@@ -97,7 +98,8 @@ TMap<FString, TArray<FTransform>> ASpawnInVolume::GenerateActors()
         !FMath::IsNearlyEqual(BoxRotation.Pitch, 0.f))
     {
         const FString& Message = FString::Printf(
-            TEXT("The bound specifier of %s is not flat, which is not allowed. Please set roll (x) and pitch (y) values to 0."),
+            TEXT(
+                "The bound specifier of %s is not flat, which is not allowed. Please set roll (x) and pitch (y) values to 0."),
             *this->GetActorLabel());
         FMenuHelpers::DisplayMessagePopup(Message, "Warning");
         return SpawnedObject;
@@ -115,7 +117,7 @@ TMap<FString, TArray<FTransform>> ASpawnInVolume::GenerateActors()
     {
         UE_LOG(LogAmbit, Warning,
                TEXT("%s: The bound specifier is not a plane. SpawnInVolume will use the top of the box."),
-            *this->GetActorLabel());
+               *this->GetActorLabel());
     }
 
     const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
@@ -128,4 +130,3 @@ TMap<FString, TArray<FTransform>> ASpawnInVolume::GenerateActors()
     }
     return SpawnedObject;
 }
-

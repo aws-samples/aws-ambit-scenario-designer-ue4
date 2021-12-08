@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,14 +13,16 @@
 //   limitations under the License.
 
 #include "AmbitSpawnerCollisionHelpers.h"
-#include "Components/StaticMeshComponent.h"
+
 #include "EngineUtils.h"
-#include "Ambit/AmbitModule.h"
-#include "Ambit/Mode/Constant.h"
+#include "Components/StaticMeshComponent.h"
 #include "Engine/SCS_Node.h"
 #include "Engine/SimpleConstructionScript.h"
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
+
+#include "Ambit/AmbitModule.h"
+#include "Ambit/Mode/Constant.h"
 
 // TODO: Figure out a way to change DefaultEngine.ini in code
 // to indicate that GameTraceChannel1 is for "Spawned Obstacles"
@@ -46,13 +48,13 @@ bool AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(
         return true;
     }
     const FVector& SpawnedActorLocation =
-        SpawnedActor->GetActorLocation();
+            SpawnedActor->GetActorLocation();
     const FVector& LocationOfOverlappingComp =
-        OverlappingComponent->GetComponentLocation();
+            OverlappingComponent->GetComponentLocation();
 
     const float DistanceBetweenActorAndComp =
-        FVector::Distance(SpawnedActorLocation,
-            LocationOfOverlappingComp) / 100.f;
+            FVector::Distance(SpawnedActorLocation,
+                              LocationOfOverlappingComp) / 100.f;
 
     // Gets point on collision that is closest
     // to the location of the spawned actor
@@ -65,8 +67,8 @@ bool AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(
     // Calculates distance from location of overlapping component
     // to the collision point on said component closest to spawned actor
     const float DistanceFromOverlappedMesh =
-        FVector::Distance(CollisionPointClosestToActor,
-            LocationOfOverlappingComp) / 100.f;
+            FVector::Distance(CollisionPointClosestToActor,
+                              LocationOfOverlappingComp) / 100.f;
 
     // If the distances are nearly equal, this means that spawned actor
     // is not penetrating the overlapping actor
@@ -81,13 +83,12 @@ bool AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(
             return OverlappingComponent->Bounds.BoxExtent.Z > 0;
         }
         return false;
-
     }
     return true;
 }
 
 void AmbitSpawnerCollisionHelpers::FindDefaultStaticMeshComponents(UClass* Actor,
-    TArray<UStaticMeshComponent*>& OutArray)
+                                                                   TArray<UStaticMeshComponent*>& OutArray)
 {
     OutArray.Empty();
     // Gets all C++ added default sub-object components of Actor class
@@ -95,8 +96,8 @@ void AmbitSpawnerCollisionHelpers::FindDefaultStaticMeshComponents(UClass* Actor
     TArray<UObject*> StaticMeshUObjects;
     Actor->GetDefaultObjectSubobjects(AllComponents);
     ContainsObjectOfClass(AllComponents,
-        UStaticMeshComponent::StaticClass(), false,
-        &StaticMeshUObjects);
+                          UStaticMeshComponent::StaticClass(), false,
+                          &StaticMeshUObjects);
 
     for (UObject* StaticMeshUObject : StaticMeshUObjects)
     {
@@ -109,13 +110,13 @@ void AmbitSpawnerCollisionHelpers::FindDefaultStaticMeshComponents(UClass* Actor
         // and adds them to the actor class via blueprint
         UClass* StaticMeshComponent = UStaticMeshComponent::StaticClass();
         const UBlueprintGeneratedClass* ActorBlueprintGeneratedClass =
-            Cast<UBlueprintGeneratedClass>(Actor);
+                Cast<UBlueprintGeneratedClass>(Actor);
         const TArray<USCS_Node*>& Nodes =
-            ActorBlueprintGeneratedClass->SimpleConstructionScript->GetAllNodes();
-        for (USCS_Node* Node : Nodes)
+                ActorBlueprintGeneratedClass->SimpleConstructionScript->GetAllNodes();
+        for (const USCS_Node* Node : Nodes)
         {
             if (UClass::FindCommonBase(Node->ComponentClass,
-                StaticMeshComponent) == StaticMeshComponent)
+                                       StaticMeshComponent) == StaticMeshComponent)
             {
                 OutArray.Add(
                     Cast<UStaticMeshComponent>(
@@ -155,7 +156,7 @@ void AmbitSpawnerCollisionHelpers::SetCollisionForAllStaticMeshComponents(
 }
 
 void AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
-     const AActor* Actor, TArray<bool>& Original, const bool bReset)
+    const AActor* Actor, TArray<bool>& Original, const bool bReset)
 {
     TArray<UStaticMeshComponent*> StaticMeshComponents;
     Actor->GetComponents<UStaticMeshComponent>(StaticMeshComponents);
@@ -169,9 +170,11 @@ void AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
     {
         if (StaticMeshComponents.Num() != Original.Num())
         {
-            UE_LOG(LogAmbit, Warning, 
-                TEXT("The amount of StaticMeshComponents found for Actor %s does not match the number of Original GenerateOverlapEvents settings stored."), 
-                *Actor->GetName());
+            UE_LOG(LogAmbit, Warning,
+                   TEXT(
+                       "The amount of StaticMeshComponents found for Actor %s does not match the number of Original GenerateOverlapEvents settings stored."
+                   ),
+                   *Actor->GetName());
             return;
         }
     }
@@ -199,7 +202,7 @@ void AmbitSpawnerCollisionHelpers::StoreCollisionProfiles(
 {
     // Store the original collision profiles of the CDO static mesh components
     TArray<FCollisionResponseTemplate> OriginalResponses;
-    for (UStaticMeshComponent* Mesh : StaticMeshComponents)
+    for (const UStaticMeshComponent* Mesh : StaticMeshComponents)
     {
         FCollisionResponseTemplate CollisionResponse;
         CollisionResponse.ResponseToChannels = Mesh->GetCollisionResponseToChannels();
@@ -218,7 +221,7 @@ void AmbitSpawnerCollisionHelpers::ResetCollisionProfiles(
     for (const TSubclassOf<AActor>& Actor : ActorsToSpawnClean)
     {
         TArray<FCollisionResponseTemplate> Originals =
-            OriginalCollisionProfiles.FindChecked(Actor->GetPathName());
+                OriginalCollisionProfiles.FindChecked(Actor->GetPathName());
         TArray<UStaticMeshComponent*> StaticMeshComponents;
         FindDefaultStaticMeshComponents(
             Actor.Get(), StaticMeshComponents);

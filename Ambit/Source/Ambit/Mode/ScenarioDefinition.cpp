@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,11 +14,11 @@
 
 #include "ScenarioDefinition.h"
 
-#include "AmbitUtils/MathHelpers.h"
-#include "AmbitUtils/MenuHelpers.h"
-
 #include "Constant.h"
 #include "JsonObjectConverter.h"
+
+#include "AmbitUtils/MathHelpers.h"
+#include "AmbitUtils/MenuHelpers.h"
 
 // This should be incremented every time changes are made to
 // the serialization/deseriaization logic.
@@ -55,7 +55,8 @@ void FScenarioDefinition::DeserializeFromJson(
         // TODO: Support a list of approved/backwards compatible versions?
         if (!Version.Equals(KCurrentVersion))
         {
-            const FString InvalidVersion = FString::Printf(TEXT("The version in the file (%s) is not supported"), *Version);
+            const FString InvalidVersion = FString::Printf(
+                TEXT("The version in the file (%s) is not supported"), *Version);
             FMenuHelpers::LogErrorAndPopup(InvalidVersion);
 
             return;
@@ -75,7 +76,7 @@ void FScenarioDefinition::DeserializeFromJson(
         const float IncomingTime = JsonObject->GetNumberField(
             JsonConstants::KTimeOfDayKey);
         this->TimeOfDay = FMathHelpers::ClampBoundary(IncomingTime, 0.f, 23.99999f,
-            TEXT("time of day"), TempMessage);
+                                                      TEXT("time of day"), TempMessage);
 
         if (!TempMessage.IsEmpty())
         {
@@ -88,10 +89,11 @@ void FScenarioDefinition::DeserializeFromJson(
         FJsonObjectConverter::JsonObjectToUStruct(
             JsonObject->GetObjectField(JsonConstants::KWeatherParametersKey).
                         ToSharedRef(),
-            FAmbitWeatherParameters::StaticStruct(), &(this->AmbitWeatherParameters), 0, 0);
+            FAmbitWeatherParameters::StaticStruct(), &this->AmbitWeatherParameters, 0, 0);
 
         FString CloudinessTempMessage;
-        this->AmbitWeatherParameters.Cloudiness = FMathHelpers::ClampBoundary(this->AmbitWeatherParameters.Cloudiness, 0.f, 100.f,
+        this->AmbitWeatherParameters.Cloudiness = FMathHelpers::ClampBoundary(
+            this->AmbitWeatherParameters.Cloudiness, 0.f, 100.f,
             TEXT("cloudiness"), CloudinessTempMessage);
         if (!CloudinessTempMessage.IsEmpty())
         {
@@ -99,7 +101,8 @@ void FScenarioDefinition::DeserializeFromJson(
         }
 
         FString PrecipitationTempMessage;
-        this->AmbitWeatherParameters.Precipitation = FMathHelpers::ClampBoundary(this->AmbitWeatherParameters.Precipitation, 0.f, 100.f,
+        this->AmbitWeatherParameters.Precipitation = FMathHelpers::ClampBoundary(
+            this->AmbitWeatherParameters.Precipitation, 0.f, 100.f,
             TEXT("precipitation"), PrecipitationTempMessage);
         if (!PrecipitationTempMessage.IsEmpty())
         {
@@ -107,7 +110,8 @@ void FScenarioDefinition::DeserializeFromJson(
         }
 
         FString PuddlesTempMessage;
-        this->AmbitWeatherParameters.Puddles = FMathHelpers::ClampBoundary(this->AmbitWeatherParameters.Puddles, 0.f, 100.f,
+        this->AmbitWeatherParameters.Puddles = FMathHelpers::ClampBoundary(
+            this->AmbitWeatherParameters.Puddles, 0.f, 100.f,
             TEXT("puddles"), PuddlesTempMessage);
         if (!PuddlesTempMessage.IsEmpty())
         {
@@ -115,7 +119,8 @@ void FScenarioDefinition::DeserializeFromJson(
         }
 
         FString WetnessTempMessage;
-        this->AmbitWeatherParameters.Wetness = FMathHelpers::ClampBoundary(this->AmbitWeatherParameters.Wetness, 0.f, 100.f,
+        this->AmbitWeatherParameters.Wetness = FMathHelpers::ClampBoundary(
+            this->AmbitWeatherParameters.Wetness, 0.f, 100.f,
             TEXT("cloudiness"), WetnessTempMessage);
         if (!WetnessTempMessage.IsEmpty())
         {
@@ -123,7 +128,8 @@ void FScenarioDefinition::DeserializeFromJson(
         }
 
         FString FogDensityTempMessage;
-        this->AmbitWeatherParameters.FogDensity = FMathHelpers::ClampBoundary(this->AmbitWeatherParameters.FogDensity, 0.f, 100.f,
+        this->AmbitWeatherParameters.FogDensity = FMathHelpers::ClampBoundary(
+            this->AmbitWeatherParameters.FogDensity, 0.f, 100.f,
             TEXT("fog density"), FogDensityTempMessage);
         if (!FogDensityTempMessage.IsEmpty())
         {
@@ -138,7 +144,7 @@ void FScenarioDefinition::DeserializeFromJson(
         const float IncomingDensity = JsonObject->GetNumberField(
             JsonConstants::KPedestrianDensityKey);
         this->PedestrianDensity = FMathHelpers::ClampBoundary(IncomingDensity, 0.f, 1.f,
-            TEXT("pedestrian density"), TempMessage);
+                                                              TEXT("pedestrian density"), TempMessage);
 
         if (!TempMessage.IsEmpty())
         {
@@ -153,7 +159,7 @@ void FScenarioDefinition::DeserializeFromJson(
         const float IncomingDensity = JsonObject->GetNumberField(
             JsonConstants::KTrafficDensityKey);
         this->VehicleDensity = FMathHelpers::ClampBoundary(IncomingDensity, 0.f, 1.f,
-            TEXT("vehicle density"), TempMessage);
+                                                           TEXT("vehicle density"), TempMessage);
 
         if (!TempMessage.IsEmpty())
         {

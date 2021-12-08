@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -66,19 +66,19 @@ void SpawnInVolumeSpec::Define()
             It("when SpawnInVolume.MatchBy is 'NameOrTags', has correct value",
                [this]()
                {
-                   Spawner->MatchBy = EMatchBy::NameOrTags;
+                   Spawner->MatchBy = NameOrTags;
                    Config = Spawner->GetConfiguration();
 
-                   TestEqual("MatchBy", Config->MatchBy, EMatchBy::NameOrTags);
+                   TestEqual("MatchBy", Config->MatchBy, NameOrTags);
                });
 
             It("when SpawnInVolume.MatchBy is 'NameAndTags', has correct value",
                [this]()
                {
-                   Spawner->MatchBy = EMatchBy::NameAndTags;
+                   Spawner->MatchBy = NameAndTags;
                    Config = Spawner->GetConfiguration();
 
-                   TestEqual("MatchBy", Config->MatchBy, EMatchBy::NameAndTags);
+                   TestEqual("MatchBy", Config->MatchBy, NameAndTags);
                });
 
             It("has correct SurfaceNamePattern", [this]()
@@ -150,7 +150,7 @@ void SpawnInVolumeSpec::Define()
                 const FSoftClassPath ClassPath(ExpectedValue);
 
                 TArray<TSubclassOf<AActor>> ExpectedActors;
-                const TSubclassOf<AActor> ExpectedActor = 
+                const TSubclassOf<AActor> ExpectedActor =
                         ClassPath.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActor);
                 Spawner->ActorsToSpawn = ExpectedActors;
@@ -173,13 +173,13 @@ void SpawnInVolumeSpec::Define()
                 const FSoftClassPath ClassPathOne(ExpectedValueOne);
 
                 TArray<TSubclassOf<AActor>> ExpectedActors;
-                const TSubclassOf<AActor> ExpectedActorOne = 
+                const TSubclassOf<AActor> ExpectedActorOne =
                         ClassPathOne.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActorOne);
                 const FString ExpectedValueTwo =
-                    "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
+                        "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
                 const FSoftClassPath ClassPathTwo(ExpectedValueTwo);
-                const TSubclassOf<AActor> ExpectedActorTwo = 
+                const TSubclassOf<AActor> ExpectedActorTwo =
                         ClassPathTwo.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActorTwo);
                 Spawner->ActorsToSpawn = ExpectedActors;
@@ -215,7 +215,7 @@ void SpawnInVolumeSpec::Define()
                 Spawner->Box->SetBoxExtent(FVector(200, 200, 0));
                 Config = Spawner->GetConfiguration();
 
-                TestEqual("BoxExtent", Config->BoxExtent, 
+                TestEqual("BoxExtent", Config->BoxExtent,
                           FVector(200, 200, 0));
             });
         });
@@ -237,11 +237,11 @@ void SpawnInVolumeSpec::Define()
 
         It("sets MatchBy", [this]()
         {
-            Config->MatchBy = EMatchBy::NameOrTags;
+            Config->MatchBy = NameOrTags;
 
             Spawner->Configure(Config);
 
-            TestEqual("MatchBy", Spawner->MatchBy, EMatchBy::NameOrTags);
+            TestEqual("MatchBy", Spawner->MatchBy, NameOrTags);
         });
 
         It("sets SurfaceNamePattern", [this]()
@@ -326,7 +326,7 @@ void SpawnInVolumeSpec::Define()
                     "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
             const FSoftClassPath ClassPath(ExpectedValue);
             TArray<TSubclassOf<AActor>> ExpectedActors;
-            const TSubclassOf<AActor> ExpectedActor = 
+            const TSubclassOf<AActor> ExpectedActor =
                     ClassPath.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActor);
             Config->ActorsToSpawn = ExpectedActors;
@@ -350,13 +350,13 @@ void SpawnInVolumeSpec::Define()
             const FSoftClassPath ClassPathOne(ExpectedValueOne);
 
             TArray<TSubclassOf<AActor>> ExpectedActors;
-            const TSubclassOf<AActor> ExpectedActorOne = 
-                    ClassPathOne.TryLoadClass< UObject>();
+            const TSubclassOf<AActor> ExpectedActorOne =
+                    ClassPathOne.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActorOne);
             const FString ExpectedValueTwo =
-                "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
+                    "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
             const FSoftClassPath ClassPathTwo(ExpectedValueTwo);
-            const TSubclassOf<AActor> ExpectedActorTwo = 
+            const TSubclassOf<AActor> ExpectedActorTwo =
                     ClassPathTwo.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActorTwo);
 

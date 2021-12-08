@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include <AmbitUtils/ConfigJsonSerializer.h>
-
 #include "Ambit/Utils/MatchBy.h"
+
+#include <AmbitUtils/ConfigJsonSerializer.h>
 
 class FJsonObject;
 
@@ -39,7 +39,7 @@ struct AMBIT_API FSpawnWithHoudiniConfig : FConfigJsonSerializer
     /**
      * The Match By Tag of the Spawner.
      */
-    TEnumAsByte<EMatchBy> MatchBy = EMatchBy::NameAndTags;
+    TEnumAsByte<EMatchBy> MatchBy = NameAndTags;
 
     /**
      * The search string used to find actors representing surfaces to spawn onto.
@@ -69,17 +69,15 @@ struct AMBIT_API FSpawnWithHoudiniConfig : FConfigJsonSerializer
     /**
      * Destructor for FSpawnWithHoudiniConfig.
      */
-    ~FSpawnWithHoudiniConfig()
-    {
-    }
+    ~FSpawnWithHoudiniConfig() = default;
 
     /**
      * @inheritDoc
      */
-    virtual TSharedPtr<FJsonObject> SerializeToJson() const override;
+    TSharedPtr<FJsonObject> SerializeToJson() const override;
 
     /**
      * @inheritDoc
      */
-    virtual void DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject) override;
+    void DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject) override;
 };

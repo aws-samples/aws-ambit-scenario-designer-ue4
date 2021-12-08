@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,7 +44,7 @@ void SpawnOnPathSpec::Define()
         {
             It("JSON has correct field for bSnapToSurfaceBelow", [this]()
             {
-                AddExpectedError("No spline point data to serialize.", 
+                AddExpectedError("No spline point data to serialize.",
                                  EAutomationExpectedErrorFlags::Exact, 1);
                 Config.bSnapToSurfaceBelow = true;
                 TestTrue("Correct SnapToSurfaceBelow",
@@ -179,9 +179,9 @@ void SpawnOnPathSpec::Define()
                 }
                 TestEqual("ArriveTangent", Point.ArriveTangent,
                           ExpectedTangents);
-                TestEqual("LeaveTangent", Point.LeaveTangent, 
+                TestEqual("LeaveTangent", Point.LeaveTangent,
                           ExpectedTangents);
-                TestEqual("Rotation", Point.Rotation, 
+                TestEqual("Rotation", Point.Rotation,
                           ExpectedRotation);
                 TestEqual("Scale", Point.Scale, ExpectedScale);
                 TestEqual("Type", Point.Type, ExpectedType);
@@ -197,6 +197,5 @@ void SpawnOnPathSpec::Define()
 
                TestEqual("spline point count", Config.SplinePoints.Num(), 2);
            });
-
     });
 }

@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,6 @@
 
 ASpawnOnSurface::ASpawnOnSurface()
 {
-
     const auto& IconAsset = ConstructorHelpers::FObjectFinder<UTexture2D>(AmbitIcon::KPath);
     IconComponent->Sprite = IconAsset.Object;
     IconComponent->SetRelativeScale3D(FVector(0.5f));
@@ -75,11 +74,11 @@ TMap<FString, TArray<FTransform>> ASpawnOnSurface::GenerateActors()
         MatchBy, SurfaceNamePattern, SurfaceTags);
 
     UE_LOG(LogAmbit, Display, TEXT("%s: Matching surface actors: %i"), *this->GetActorLabel(),
-        SurfaceActors.Num());
+           SurfaceActors.Num());
 
-    const TArray<FTransform>& Transforms = 
-        AmbitWorldHelpers::GenerateRandomLocationsFromActors(SurfaceActors, RandomSeed,
-            DensityMin, DensityMax, RotationMin, RotationMax);
+    const TArray<FTransform>& Transforms =
+            AmbitWorldHelpers::GenerateRandomLocationsFromActors(SurfaceActors, RandomSeed,
+                                                                 DensityMin, DensityMax, RotationMin, RotationMax);
 
     if (Transforms.Num() > 0)
     {

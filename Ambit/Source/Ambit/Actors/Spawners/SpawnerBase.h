@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,7 +44,7 @@ public:
      * Select to Match By AND/OR
      */
     UPROPERTY(EditAnywhere, Category = "Ambit Spawner")
-    TEnumAsByte<EMatchBy> MatchBy = EMatchBy::NameAndTags;
+    TEnumAsByte<EMatchBy> MatchBy = NameAndTags;
 
     /**
      * The search string used to find actors representing surfaces to spawn onto.
@@ -120,7 +120,7 @@ public:
      * Whether or not to remove spawned obstacles
      * that overlap with other obstacles.
      */
-    UPROPERTY(EditAnywhere, AdvancedDisplay, BlueprintReadWrite, 
+    UPROPERTY(EditAnywhere, AdvancedDisplay, BlueprintReadWrite,
         Category = "Ambit Spawner")
     bool bRemoveOverlaps = true;
 
@@ -153,7 +153,7 @@ public:
     /**
      * See https://docs.unrealengine.com/4.26/en-US/API/Runtime/Engine/GameFramework/AActor/PostEditChangeProperty/
      */
-    virtual void PostEditChangeProperty(
+    void PostEditChangeProperty(
         FPropertyChangedEvent& PropertyChangedEvent) override;
 
     /**
@@ -192,14 +192,14 @@ protected:
         TMap<FString, TArray<FCollisionResponseTemplate>>& OutMap);
 
     virtual TMap<FString, TArray<FTransform>> GenerateActors()
-        PURE_VIRTUAL(AmbitSpawnerParent::GenerateActors,
-            return TMap<FString, TArray<FTransform>>(););
+    PURE_VIRTUAL(AmbitSpawnerParent::GenerateActors,
+                 return TMap<FString, TArray<FTransform>>(););
 
     // Spawns actors using locations and rotations in provided array
     void SpawnActorsAtTransforms(
         const TArray<FTransform>& Transforms,
         TMap<FString, TArray<FTransform>>& OutMap);
-    
+
     // Destroys any actors that were previously generated.
     void DestroyGeneratedActors();
 

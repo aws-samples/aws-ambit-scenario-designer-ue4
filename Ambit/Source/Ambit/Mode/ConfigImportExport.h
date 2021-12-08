@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,6 @@ class UConfigImportExport : public UObject
 {
     GENERATED_BODY()
 public:
-
     // SDF import and export
     /**
      * Starts the process to import an SDF file specified on screen.
@@ -137,7 +136,6 @@ protected:
     FDoneDelegate SdfProcessDone;
 
 private:
-
     // Spawner and Spawned Object Configuration Functions
     /**
      * Retrieves all spawners under the IAmbitSpawner and starts
@@ -183,7 +181,7 @@ private:
      * the queue. If the queue doesn't exist, it will take the values from the screen
      * to create a defaulted one.
      */
-    TSharedPtr<FScenarioDefinition> DequeueOrDefaultNextSdfConfigToProcess();
+    TSharedPtr<FScenarioDefinition> DequeueOrDefaultNextSdfConfigToProcess() const;
 
     // JSON Helpers
     /**
@@ -290,6 +288,7 @@ public:
     UFUNCTION(Category = "Ambit Detail Customization Delegate Handler")
     void SpawnedObjectConfigCompleted_Handler(UPARAM(ref) TScriptInterface<IConfigJsonSerializer>& Config,
                                               bool bSuccess);
+
 private:
     /**
      * The current number of spawners that have completed their response.

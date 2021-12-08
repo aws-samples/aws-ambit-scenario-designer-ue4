@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,9 +13,12 @@
 //   limitations under the License.
 
 #include "SpawnVehiclePathConfig.h"
-#include "Ambit/Mode/Constant.h"
+
 #include "Components/SplineComponent.h"
+
 #include "Ambit/AmbitModule.h"
+#include "Ambit/Mode/Constant.h"
+
 #include <AmbitUtils/JsonHelpers.h>
 
 namespace JsonKeys = JsonConstants::AmbitSpawner;
@@ -56,7 +59,7 @@ TSharedPtr<FJsonObject> FSpawnVehiclePathConfig::SerializeToJson() const
         int32 i = 0;
         for (const FSplinePoint& Point : SplinePoints)
         {
-            TSharedPtr<FJsonObject> PointJson = MakeShareable(
+            const TSharedPtr<FJsonObject> PointJson = MakeShareable(
                 new FJsonObject);
 
             PointJson->SetNumberField(JsonKeys::KSplinePointInputKey,
@@ -131,14 +134,14 @@ void FSpawnVehiclePathConfig::DeserializeFromJson(
 {
     // Configure location of spawner
     const TArray<TSharedPtr<FJsonValue>>& LocationJson = JsonObject->
-        GetArrayField(
-            JsonKeys::KSpawnerLocationKey);
+            GetArrayField(
+                JsonKeys::KSpawnerLocationKey);
     SpawnerLocation = FJsonHelpers::DeserializeToVector3(LocationJson);
 
     // Configure rotation of spawner
     const TArray<TSharedPtr<FJsonValue>>& RotationJson = JsonObject->
-        GetArrayField(
-            JsonKeys::KSpawnerRotationKey);
+            GetArrayField(
+                JsonKeys::KSpawnerRotationKey);
     SpawnerRotation = FJsonHelpers::DeserializeToRotation(RotationJson);
 
     FString VehicleToSpawnPath;
@@ -146,10 +149,10 @@ void FSpawnVehiclePathConfig::DeserializeFromJson(
     {
         const FSoftClassPath ClassPath(VehicleToSpawnPath);
         const auto& Actor = ClassPath.TryLoadClass<AWheeledVehicle>();
-        if (!Actor)
+        if (Actor == nullptr)
         {
             UE_LOG(LogAmbit, Error, TEXT("%s is not a valid path."),
-                   *(VehicleToSpawnPath))
+                   *VehicleToSpawnPath)
         }
         else
         {
@@ -181,34 +184,34 @@ void FSpawnVehiclePathConfig::DeserializeFromJson(
              SplinePointsJson)
         {
             const TSharedPtr<FJsonObject>& PointObject = JsonValue->
-                AsObject();
+                    AsObject();
 
             const float SplinePointInputKey =
-                PointObject->GetNumberField(JsonKeys::KSplinePointInputKey);
+                    PointObject->GetNumberField(JsonKeys::KSplinePointInputKey);
 
             const TArray<TSharedPtr<FJsonValue>>& SplinePointLocationJson =
-                PointObject->GetArrayField(
-                    JsonKeys::KSplinePointRelativeLocationKey);
+                    PointObject->GetArrayField(
+                        JsonKeys::KSplinePointRelativeLocationKey);
             SplinePointLocation = FJsonHelpers::DeserializeToVector3(
                 SplinePointLocationJson);
 
             const TArray<TSharedPtr<FJsonValue>>& ArriveTangentJson =
-                PointObject->GetArrayField(JsonKeys::KSplineArriveKey);
+                    PointObject->GetArrayField(JsonKeys::KSplineArriveKey);
             ArriveTangent = FJsonHelpers::DeserializeToVector3(ArriveTangentJson);
 
             const TArray<TSharedPtr<FJsonValue>>& LeaveTangentJson =
-                PointObject->GetArrayField(JsonKeys::KSplineLeaveKey);
+                    PointObject->GetArrayField(JsonKeys::KSplineLeaveKey);
             LeaveTangent = FJsonHelpers::DeserializeToVector3(LeaveTangentJson);
 
             const TArray<TSharedPtr<FJsonValue>>& SplinePointRotationJson =
-                PointObject->GetArrayField(
-                    JsonKeys::KSplinePointRelativeRotationKey);
+                    PointObject->GetArrayField(
+                        JsonKeys::KSplinePointRelativeRotationKey);
             SplinePointRotation = FJsonHelpers::DeserializeToRotation(
                 SplinePointRotationJson);
 
             const TArray<TSharedPtr<FJsonValue>>& SplinePointScaleJson =
-                PointObject->GetArrayField(
-                    JsonKeys::KSplinePointScaleKey);
+                    PointObject->GetArrayField(
+                        JsonKeys::KSplinePointScaleKey);
             SplinePointScale = FJsonHelpers::DeserializeToVector3(
                 SplinePointScaleJson);
 

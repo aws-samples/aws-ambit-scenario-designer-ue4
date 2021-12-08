@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,18 +14,18 @@
 
 #include "FirehoseUE4Client.h"
 
-#include <aws/identity-management/auth/CognitoCachingCredentialsProvider.h>
+#include "AWSUEStringUtils.h"
+
+#include <aws/cognito-identity/CognitoIdentityClient.h>
+#include <aws/core/auth/AWSCredentialsProvider.h>
 #include <aws/core/client/ClientConfiguration.h>
 #include <aws/firehose/FirehoseClient.h>
 #include <aws/firehose/model/PutRecordBatchRequest.h>
-#include <aws/core/auth/AWSCredentialsProvider.h>
-#include <aws/cognito-identity/CognitoIdentityClient.h>
-
-#include "AWSUEStringUtils.h"
+#include <aws/identity-management/auth/CognitoCachingCredentialsProvider.h>
 
 static const char GAllocation_Tag[] = "FirehoseUE4Client";
 
-FirehoseUE4Client::FirehoseUE4Client(FString Region)
+FirehoseUE4Client::FirehoseUE4Client(const FString& Region)
 {
     const Aws::String AWSRegion = AWSUEStringUtils::FStringToAwsString(Region);
 
@@ -35,12 +35,11 @@ FirehoseUE4Client::FirehoseUE4Client(FString Region)
     Client = Aws::MakeUnique<Aws::Firehose::FirehoseClient>(GAllocation_Tag, Config);
 }
 
-FirehoseUE4Client::FirehoseUE4Client(FString Region, FString AccountId, FString IdentityPoolId)
+FirehoseUE4Client::FirehoseUE4Client(const FString& Region, const FString& AccountId, const FString& IdentityPoolId)
 {
     const Aws::String AWSRegion = AWSUEStringUtils::FStringToAwsString(Region);
     const Aws::String CognitoAccountId = AWSUEStringUtils::FStringToAwsString(AccountId);
     const Aws::String CognitoIdentityPoolId = AWSUEStringUtils::FStringToAwsString(IdentityPoolId);
-
 
     Aws::Client::ClientConfiguration Config;
     Config.region = AWSRegion;
@@ -53,7 +52,7 @@ FirehoseUE4Client::FirehoseUE4Client(FString Region, FString AccountId, FString 
     Client = Aws::MakeUnique<Aws::Firehose::FirehoseClient>(GAllocation_Tag, CredentialsProvider, Config);
 }
 
-void FirehoseUE4Client::SendEvents(FString StreamName, TArray<FString> Data) const
+void FirehoseUE4Client::SendEvents(const FString& StreamName, const TArray<FString>& Data) const
 {
     const Aws::String DeliveryStreamName = AWSUEStringUtils::FStringToAwsString(StreamName);
 
@@ -65,7 +64,7 @@ void FirehoseUE4Client::SendEvents(FString StreamName, TArray<FString> Data) con
     {
         Aws::Firehose::Model::Record Record;
 
-        Aws::Utils::ByteBuffer bytes((unsigned char*)TCHAR_TO_UTF8(*Element), Element.Len());
+        Aws::Utils::ByteBuffer bytes(reinterpret_cast<unsigned char*>(TCHAR_TO_UTF8(*Element)), Element.Len());
 
         Record.SetData(bytes);
         Records.emplace_back(Record);
@@ -73,14 +72,14 @@ void FirehoseUE4Client::SendEvents(FString StreamName, TArray<FString> Data) con
 
     Request.SetRecords(Records);
 
-    Client->PutRecordBatchAsync(Request, [](const Aws::Firehose::FirehoseClient*,
-                                            const Aws::Firehose::Model::PutRecordBatchRequest&,
+    Client->PutRecordBatchAsync(Request, [](const Aws::Firehose::FirehoseClient* /*unused*/,
+                                            const Aws::Firehose::Model::PutRecordBatchRequest& /*unused*/,
                                             const Aws::Firehose::Model::PutRecordBatchOutcome& Outcome,
-                                            const std::shared_ptr<const Aws::Client::AsyncCallerContext>&)
+                                            const std::shared_ptr<const Aws::Client::AsyncCallerContext>& /*unused*/)
     {
         if (!Outcome.IsSuccess())
         {
-            auto Err = Outcome.GetError();
+            const auto Err = Outcome.GetError();
             UE_LOG(LogAWSUE4Module, Error, TEXT("Firehose SendEvents: %s : %s"),
                    *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
         }

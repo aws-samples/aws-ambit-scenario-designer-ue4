@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,8 +13,6 @@
 //   limitations under the License.
 
 #include "ConfigImportExport.h"
-
-#include <stdexcept>
 
 #include "BulkScenarioConfiguration.h"
 #include "GltfExport.h"
@@ -31,18 +29,16 @@
 #include "Templates/SharedPointer.h"
 #include "Widgets/Input/SNumericEntryBox.h"
 
-#include <AmbitUtils/JsonHelpers.h>
-#include <AmbitUtils/MenuHelpers.h>
+#include <stdexcept>
 
+#include "AmbitDetailCustomization.h"
 #include "AmbitMode.h"
 #include "AmbitObject.h"
 #include "Ambit/AmbitModule.h"
-#include "AmbitDetailCustomization.h"
 #include "Ambit/Actors/SpawnerConfigs/SpawnerBaseConfig.h"
 #include "Ambit/Actors/SpawnerConfigs/SpawnInVolumeConfig.h"
 #include "Ambit/Actors/SpawnerConfigs/SpawnOnPathConfig.h"
 #include "Ambit/Actors/SpawnerConfigs/SpawnVehiclePathConfig.h"
-#include "Ambit/Actors/Spawners/SpawnerBase.h"
 #include "Ambit/Actors/Spawners/SpawnInVolume.h"
 #include "Ambit/Actors/Spawners/SpawnOnPath.h"
 #include "Ambit/Actors/Spawners/SpawnOnSurface.h"
@@ -51,6 +47,9 @@
 #include "Ambit/Utils/AmbitFileHelpers.h"
 #include "Ambit/Utils/AWSWrapper.h"
 #include "Ambit/Utils/UserMetricsSubsystem.h"
+
+#include <AmbitUtils/JsonHelpers.h>
+#include <AmbitUtils/MenuHelpers.h>
 
 // INFO: Replace with an inline variable in header when Unreal allows them (C++ 17)
 /**
@@ -150,7 +149,7 @@ bool UConfigImportExport::ProcessSdfForExport(const TMap<FString, TSharedPtr<FJs
         SerializeSpawnerConfigs<ASpawnVehiclePath, FSpawnVehiclePathConfig>(
             ScenarioToProcess->AllSpawnersConfigs, JsonConstants::KSpawnerVehiclePathKey);
 
-        TSharedPtr<FJsonObject> JsonObject = ScenarioToProcess->SerializeToJson();
+        const TSharedPtr<FJsonObject> JsonObject = ScenarioToProcess->SerializeToJson();
 
         for (const auto& SpawnerKeyValue : AmbitSpawnerArray)
         {
@@ -428,7 +427,7 @@ FReply UConfigImportExport::OnExportMap()
     const FString Executable = FPlatformProcess::ExecutablePath();
     FString ErrorMessage;
 
-    UWorld* World = GEngine->GetWorldContexts()[0].World();
+    const UWorld* World = GEngine->GetWorldContexts()[0].World();
     const FString MapName = World->GetName();
     const FString MapPath = World->GetPathName();
 
@@ -519,7 +518,7 @@ FReply UConfigImportExport::OnExportGltf()
     for (TObjectIterator<UStaticMeshComponent> Itr; Itr; ++Itr)
     {
         AActor* Parent = (*Itr)->GetOwner();
-        if (!Parent)
+        if (Parent == nullptr)
         {
             continue;
         }
@@ -540,7 +539,7 @@ FReply UConfigImportExport::OnExportGltf()
         // AStaticMeshActor or AHoudiniAssetActor but not be associated with a World object,
         // (e.g) AInteractiveFoliageActor, which derives from AStaticMeshActor but doesn't point to a World object.
         UWorld* ParentWorld = Parent->GetWorld();
-        if (ParentWorld && ParentWorld == CurrentWorldContext)
+        if ((ParentWorld != nullptr) && ParentWorld == CurrentWorldContext)
         {
             bFoundWorld = true;
             break;
@@ -590,7 +589,7 @@ FReply UConfigImportExport::OnExportGltf()
         return FReply::Handled();
     }
 
-    for (FString TargetPlatform : TargetPlatforms)
+    for (const FString& TargetPlatform : TargetPlatforms)
     {
         const FString& CompressedFile = AmbitFileHelpers::CompressFile(OutputDir, FPaths::ProjectIntermediateDir(),
                                                                        FolderName, TargetPlatform);
@@ -600,7 +599,7 @@ FReply UConfigImportExport::OnExportGltf()
     }
 
     const FText NotificationText = NSLOCTEXT("Ambit", "MapUploadComplete",
-        "Successfully uploaded to S3.");
+                                             "Successfully uploaded to S3.");
     FAmbitModule::CreateAmbitNotification(NotificationText);
 
     return FReply::Handled();
@@ -671,7 +670,7 @@ void UConfigImportExport::CreateAmbitSpawnersFromJson(
         Spawner->Destroy();
     }
 
-    TSharedPtr<FJsonObject> Spawners = JsonObject->
+    const TSharedPtr<FJsonObject> Spawners = JsonObject->
             GetObjectField(JsonConstants::KAllSpawnersConfigsKey);
 
     ConfigureSpawnersByType<ASpawnOnSurface, FSpawnerBaseConfig>(
@@ -722,7 +721,7 @@ void UConfigImportExport::SerializeSpawnerConfigs(
     {
         TSharedPtr<StructType> AmbitSpawnerConfig = static_cast<
             ClassType*>(Actor)->GetConfiguration();
-        TSharedPtr<FJsonObject> curJson = AmbitSpawnerConfig->SerializeToJson();
+        const TSharedPtr<FJsonObject> curJson = AmbitSpawnerConfig->SerializeToJson();
         TSharedRef<FJsonValueObject> JsonValue = MakeShareable(
             new FJsonValueObject(curJson));
         SpawnerTypeSpecificArray.Add(JsonValue);
@@ -733,9 +732,9 @@ void UConfigImportExport::SerializeSpawnerConfigs(
     }
 }
 
-TSharedPtr<FScenarioDefinition> UConfigImportExport::DequeueOrDefaultNextSdfConfigToProcess()
+TSharedPtr<FScenarioDefinition> UConfigImportExport::DequeueOrDefaultNextSdfConfigToProcess() const
 {
-    FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+    const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
 
     TSharedPtr<FScenarioDefinition> PoppedItem;
     const bool bQueueHasPopped = QueuedSdfConfigToExport.Dequeue(PoppedItem);
@@ -767,7 +766,7 @@ TSharedPtr<FScenarioDefinition> UConfigImportExport::DequeueOrDefaultNextSdfConf
 bool UConfigImportExport::WriteJsonFile(const TSharedPtr<FJsonObject>& OutputContents, const FString& FileName,
                                         const FString& FileExtension, bool bToS3)
 {
-    FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+    const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
 
     const FString& OutputString = FJsonHelpers::SerializeJson(OutputContents);
 
@@ -825,18 +824,15 @@ bool UConfigImportExport::WriteJsonFile(const TSharedPtr<FJsonObject>& OutputCon
             return false;
         }
     }
+    const FString OutFile = LambdaGetPathFromPopup(FileExtension, "", OutputFileName);
+
+    if (!OutFile.IsEmpty())
+    {
+        LambdaWriteFileToDisk(OutFile, OutputString);
+    }
     else
     {
-        const FString OutFile = LambdaGetPathFromPopup(FileExtension, "", OutputFileName);
-
-        if (!OutFile.IsEmpty())
-        {
-            LambdaWriteFileToDisk(OutFile, OutputString);
-        }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     return true;
@@ -852,7 +848,7 @@ bool UConfigImportExport::GetAwsSettings(FString& OutAwsRegion, FString& OutAwsB
     UE_LOG(LogAmbit, Display, TEXT("Region: %s"), *OutAwsBucketName);
 
     OutAwsBucketName = AmbitMode->UISettings->S3BucketName;
-    UE_LOG(LogAmbit, Display, TEXT("BucketName: %s"), *(OutAwsBucketName));
+    UE_LOG(LogAmbit, Display, TEXT("BucketName: %s"), *OutAwsBucketName);
 
     return !(bCreateBucketOnGet && !CreateBucket(OutAwsRegion, OutAwsBucketName));
 }
@@ -918,7 +914,7 @@ void UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler(
     }
     else
     {
-        TSharedPtr<FJsonObject> OldSpawnerObjects = AllSpawnerConfiguration[ConfigName];
+        const TSharedPtr<FJsonObject> OldSpawnerObjects = AllSpawnerConfiguration[ConfigName];
         TArray<TSharedPtr<FJsonValue>> OldSpawnerObjectsJsonArray;
         if (OldSpawnerObjects->HasField(JsonConstants::KAmbitSpawnerObjectsKey))
         {

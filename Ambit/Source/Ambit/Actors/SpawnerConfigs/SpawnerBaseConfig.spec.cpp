@@ -1,24 +1,26 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include <AmbitUtils/JsonHelpers.h>
-
 #include "SpawnerBaseConfig.h"
+
 #include "Json.h"
-#include "Ambit/Utils/MatchBy.h"
 #include "Misc/AutomationTest.h"
 #include "UObject/SoftObjectPath.h"
+
+#include "Ambit/Utils/MatchBy.h"
+
+#include <AmbitUtils/JsonHelpers.h>
 
 BEGIN_DEFINE_SPEC(SpawnerBaseConfigSpec,
                   "Ambit.AmbitSpawnerBaseConfig",
@@ -45,7 +47,7 @@ void SpawnerBaseConfigSpec::Define()
             It("when MatchBy value is EMatchBy::NameOrTags, "
                "JSON has a MatchBy value of 'NameOrTags'", [this]()
                {
-                   Config.MatchBy = EMatchBy::NameOrTags;
+                   Config.MatchBy = NameOrTags;
 
                    const FString Value = Config
                                          .SerializeToJson()->GetStringField(
@@ -57,7 +59,7 @@ void SpawnerBaseConfigSpec::Define()
             It("when MatchBy value is EMatchBy::NameAndTags, "
                "JSON has a MatchBy value of 'NameAndTags'", [this]()
                {
-                   Config.MatchBy = EMatchBy::NameAndTags;
+                   Config.MatchBy = NameAndTags;
 
                    const FString Value = Config
                                          .SerializeToJson()->GetStringField(
@@ -84,7 +86,7 @@ void SpawnerBaseConfigSpec::Define()
                     Config.SurfaceTags.Add(FName("TagA"));
 
                     TArray<TSharedPtr<FJsonValue>> TagsAsJsonValues =
-                        Config.SerializeToJson()->GetArrayField("SurfaceTags");
+                            Config.SerializeToJson()->GetArrayField("SurfaceTags");
 
                     TestEqual("tag", TagsAsJsonValues[0]->AsString(), "TagA");
                 });
@@ -96,8 +98,8 @@ void SpawnerBaseConfigSpec::Define()
                     Config.SurfaceTags.Add(FName("TagA"));
                     Config.SurfaceTags.Add(FName("TagB"));
 
-                    TArray<TSharedPtr<FJsonValue>> TagsAsJsonValues = 
-                        Config.SerializeToJson()->GetArrayField("SurfaceTags");
+                    TArray<TSharedPtr<FJsonValue>> TagsAsJsonValues =
+                            Config.SerializeToJson()->GetArrayField("SurfaceTags");
 
                     const int TagCount = TagsAsJsonValues.Num();
                     if (TagCount != 2)
@@ -181,7 +183,7 @@ void SpawnerBaseConfigSpec::Define()
                 Config.RotationMax = ExpectedValue;
 
                 const double Result = Config.SerializeToJson()
-                    ->GetNumberField("RotationMax");
+                                            ->GetNumberField("RotationMax");
 
                 TestEqual("rotation", Result, ExpectedValue);
             });
@@ -191,7 +193,7 @@ void SpawnerBaseConfigSpec::Define()
                 Config.bAddPhysics = true;
 
                 const bool Result = Config.SerializeToJson()
-                    ->GetBoolField("AddPhysics");
+                                          ->GetBoolField("AddPhysics");
 
                 TestTrue("add physics", Result);
             });
@@ -200,7 +202,7 @@ void SpawnerBaseConfigSpec::Define()
             {
                 // Set a known AActor subclass as the ActorsToSpawn value.
                 const FString ExpectedValue =
-                    "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+                        "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
                 const FSoftClassPath ClassPath(ExpectedValue);
                 TArray<TSubclassOf<AActor>> ExpectedActors;
                 const TSubclassOf<AActor>& ExpectedActor = ClassPath.TryLoadClass<UObject>();
@@ -208,31 +210,31 @@ void SpawnerBaseConfigSpec::Define()
                 Config.ActorsToSpawn = ExpectedActors;
 
                 const TArray<TSharedPtr<FJsonValue>> Result =
-                    Config.SerializeToJson()->GetArrayField("ActorsToSpawn");
+                        Config.SerializeToJson()->GetArrayField("ActorsToSpawn");
 
                 TestEqual("class name", Result[0]->AsString(), ExpectedValue);
             });
 
-            It("sets ActorsToSpawn json to null if ActorsToSpawn has one nullptr element", 
-                [this]()
-            {
-                AddExpectedError("An element of the ActorsToSpawn set is not specified.",
-                    EAutomationExpectedErrorFlags::Exact, 1);
-                TArray<TSubclassOf<AActor>> ExpectedActors;
-                ExpectedActors.Add(nullptr);
-                Config.ActorsToSpawn = ExpectedActors;
+            It("sets ActorsToSpawn json to null if ActorsToSpawn has one nullptr element",
+               [this]()
+               {
+                   AddExpectedError("An element of the ActorsToSpawn set is not specified.",
+                                    EAutomationExpectedErrorFlags::Exact, 1);
+                   TArray<TSubclassOf<AActor>> ExpectedActors;
+                   ExpectedActors.Add(nullptr);
+                   Config.ActorsToSpawn = ExpectedActors;
 
-                TestTrue("class name", Config.SerializeToJson()
-                    ->HasTypedField<EJson::Null>("ActorsToSpawn"));
-            });
+                   TestTrue("class name", Config.SerializeToJson()
+                                                ->HasTypedField<EJson::Null>("ActorsToSpawn"));
+               });
 
             It("does not add array field for ActorsToSpawn in Json if said element is nullptr", [this]()
             {
                 AddExpectedError("An element of the ActorsToSpawn set is not specified.",
-                    EAutomationExpectedErrorFlags::Exact, 1);
+                                 EAutomationExpectedErrorFlags::Exact, 1);
 
                 const FString ExpectedValue =
-                    "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+                        "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
                 const FSoftClassPath ClassPath(ExpectedValue);
                 TArray<TSubclassOf<AActor>> ExpectedActors;
                 const TSubclassOf<AActor>& ExpectedActor = ClassPath.TryLoadClass<UObject>();
@@ -240,9 +242,9 @@ void SpawnerBaseConfigSpec::Define()
                 ExpectedActors.Add(nullptr);
                 Config.ActorsToSpawn = ExpectedActors;
 
-                TestTrue("class name", 
-                    Config.SerializeToJson()
-                    ->HasTypedField<EJson::Null>("ActorsToSpawn"));
+                TestTrue("class name",
+                         Config.SerializeToJson()
+                               ->HasTypedField<EJson::Null>("ActorsToSpawn"));
             });
 
             It("has ActorsToSpawn value when it has multiple valid elements", [this]()
@@ -252,15 +254,15 @@ void SpawnerBaseConfigSpec::Define()
                 TArray<TSubclassOf<AActor>> ExpectedActors;
                 TSet<FString> Expected;
                 const FString ExpectedValueOne =
-                    "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+                        "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
                 const FSoftClassPath ClassPathOne(ExpectedValueOne);
                 const TSubclassOf<AActor> ExpectedActorOne = ClassPathOne.TryLoadClass<
                     UObject>();
                 const FString ExpectedValueTwo =
-                    "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
+                        "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
                 const FSoftClassPath ClassPathTwo(ExpectedValueTwo);
                 const TSubclassOf<AActor> ExpectedActorTwo =
-                    ClassPathTwo.TryLoadClass<UObject>();
+                        ClassPathTwo.TryLoadClass<UObject>();
 
                 ExpectedActors.Add(ExpectedActorOne);
                 ExpectedActors.Add(ExpectedActorTwo);
@@ -270,7 +272,7 @@ void SpawnerBaseConfigSpec::Define()
                 Config.ActorsToSpawn = ExpectedActors;
 
                 const TArray<TSharedPtr<FJsonValue>> ResultJson =
-                    Config.SerializeToJson()->GetArrayField("ActorsToSpawn");
+                        Config.SerializeToJson()->GetArrayField("ActorsToSpawn");
 
                 TSet<FString> Result;
                 for (const auto& Json : ResultJson)
@@ -279,16 +281,16 @@ void SpawnerBaseConfigSpec::Define()
                 }
 
                 TestTrue("class name", Result.Includes(Expected)
-                    && Expected.Includes(Result));
+                         && Expected.Includes(Result));
             });
 
             It(
                 "when ActorsToSpawn is null, JSON ActorsToSpawn is null",
                 [this]()
                 {
-                    const TSharedPtr<FJsonValue> Result = 
-                        Config.SerializeToJson()->
-                        GetField<EJson::None>("ActorsToSpawn");
+                    const TSharedPtr<FJsonValue> Result =
+                            Config.SerializeToJson()->
+                                   GetField<EJson::None>("ActorsToSpawn");
 
                     TestTrue("is null", Result->Type == EJson::Null);
                 });
@@ -297,7 +299,7 @@ void SpawnerBaseConfigSpec::Define()
             {
                 Config.bRemoveOverlaps = false;
                 const bool Result = Config.SerializeToJson()
-                    ->GetBoolField("RemoveOverlaps");
+                                          ->GetBoolField("RemoveOverlaps");
 
                 TestFalse("remove overlaps", Result);
             });
@@ -308,7 +310,7 @@ void SpawnerBaseConfigSpec::Define()
                 Config.RandomSeed = ExpectedValue;
 
                 const int Result = Config.SerializeToJson()
-                    ->GetNumberField("RandomSeed");
+                                         ->GetNumberField("RandomSeed");
 
                 TestEqual("random seed", Result, ExpectedValue);
             });
@@ -327,22 +329,22 @@ void SpawnerBaseConfigSpec::Define()
             // readability. Then we replace all single quotes with double quotes (per the
             // JSON standard) before parsing the string to a JSON object.
             const FString JsonString = FString(
-                    "{"
-                    "    'SpawnerLocation': [0, 0, 0],"
-                    "    'SpawnerRotation': [0, 0, 0],"
-                    "    'MatchBy': 'NameOrTags',"
-                    "    'SurfaceNamePattern': 'MyPattern',"
-                    "    'SurfaceTags': [],"
-                    "    'DensityMin': 0.1,"
-                    "    'DensityMax': 0.4,"
-                    "    'RotationMin': 45.0,"
-                    "    'RotationMax': 90.0,"
-                    "    'AddPhysics': false,"
-                    "    'ActorsToSpawn': null,"
-                    "    'RemoveOverlaps': true,"
-                    "    'RandomSeed': 5"
-                    "}")
-                .Replace(TEXT("'"), TEXT("\""));
+                        "{"
+                        "    'SpawnerLocation': [0, 0, 0],"
+                        "    'SpawnerRotation': [0, 0, 0],"
+                        "    'MatchBy': 'NameOrTags',"
+                        "    'SurfaceNamePattern': 'MyPattern',"
+                        "    'SurfaceTags': [],"
+                        "    'DensityMin': 0.1,"
+                        "    'DensityMax': 0.4,"
+                        "    'RotationMin': 45.0,"
+                        "    'RotationMax': 90.0,"
+                        "    'AddPhysics': false,"
+                        "    'ActorsToSpawn': null,"
+                        "    'RemoveOverlaps': true,"
+                        "    'RandomSeed': 5"
+                        "}")
+                    .Replace(TEXT("'"), TEXT("\""));
             Json = FJsonHelpers::DeserializeJson(JsonString);
         });
 
@@ -352,7 +354,7 @@ void SpawnerBaseConfigSpec::Define()
 
             Config.DeserializeFromJson(Json);
 
-            TestEqual("MatchBy", Config.MatchBy, EMatchBy::NameOrTags);
+            TestEqual("MatchBy", Config.MatchBy, NameOrTags);
         });
 
         It("when JSON MatchBy is 'NameAndTags', sets MatchBy correctly", [this
@@ -362,7 +364,7 @@ void SpawnerBaseConfigSpec::Define()
 
                Config.DeserializeFromJson(Json);
 
-               TestEqual("MatchBy", Config.MatchBy, EMatchBy::NameAndTags);
+               TestEqual("MatchBy", Config.MatchBy, NameAndTags);
            });
 
         It("sets SurfaceNamePattern", [this]()
@@ -497,81 +499,81 @@ void SpawnerBaseConfigSpec::Define()
         });
 
         It("when JSON ActorsToSpawn is valid array with one element,"
-            " sets ActorsToSpawn correctly",
-            [this]()
-            {
-                // Get a reference to a sample AActor subclass.
-                const FString ActorPath =
-                    "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
-                const FSoftClassPath ClassPath(ActorPath);
-                const TSubclassOf<AActor> ExpectedValue = 
-                    ClassPath.TryLoadClass<UObject>();
-                TArray<TSubclassOf<AActor>> ExpectedActors;
-                TArray<TSharedPtr<FJsonValue>> ExpectedJson;
-                ExpectedJson.Add(MakeShareable(new FJsonValueString(ActorPath)));
-                ExpectedActors.Add(ExpectedValue);
-                Json->SetArrayField("ActorsToSpawn", ExpectedJson);
+           " sets ActorsToSpawn correctly",
+           [this]()
+           {
+               // Get a reference to a sample AActor subclass.
+               const FString ActorPath =
+                       "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+               const FSoftClassPath ClassPath(ActorPath);
+               const TSubclassOf<AActor> ExpectedValue =
+                       ClassPath.TryLoadClass<UObject>();
+               TArray<TSubclassOf<AActor>> ExpectedActors;
+               TArray<TSharedPtr<FJsonValue>> ExpectedJson;
+               ExpectedJson.Add(MakeShareable(new FJsonValueString(ActorPath)));
+               ExpectedActors.Add(ExpectedValue);
+               Json->SetArrayField("ActorsToSpawn", ExpectedJson);
 
-                Config.DeserializeFromJson(Json);
+               Config.DeserializeFromJson(Json);
 
-                TestEqual("ActorsToSpawn", Config.ActorsToSpawn.Num(),
-                    ExpectedActors.Num());
-                for (int32 i = 0; i < ExpectedActors.Num(); i++)
-                {
-                    TestEqual("ActorsToSpawn", Config.ActorsToSpawn[i],
-                        ExpectedActors[i]);
-                }
-            });
+               TestEqual("ActorsToSpawn", Config.ActorsToSpawn.Num(),
+                         ExpectedActors.Num());
+               for (int32 i = 0; i < ExpectedActors.Num(); i++)
+               {
+                   TestEqual("ActorsToSpawn", Config.ActorsToSpawn[i],
+                             ExpectedActors[i]);
+               }
+           });
 
         It("when JSON ActorsToSpawn is valid array with multiple elements,"
-            " sets ActorsToSpawn correctly",
-            [this]()
-        {
-            // Get a reference to a sample AActor subclass.
-            const FString ActorPathOne =
-                "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
-            const FSoftClassPath ClassPathOne(ActorPathOne);
-            const TSubclassOf<AActor> ExpectedValueOne =
-                ClassPathOne.TryLoadClass<UObject>();
-            const FString ActorPathTwo =
-                "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
-            const FSoftClassPath ClassPathTwo(ActorPathTwo);
-            const TSubclassOf<AActor> ExpectedValueTwo =
-                ClassPathTwo.TryLoadClass<UObject>();
-            TArray<TSubclassOf<AActor>> ExpectedActors;
-            TArray<TSharedPtr<FJsonValue>> ExpectedJson;
-            ExpectedJson.Add(MakeShareable(new FJsonValueString(ActorPathOne)));
-            ExpectedActors.Add(ExpectedValueOne);
-            ExpectedJson.Add(MakeShareable(new FJsonValueString(ActorPathTwo)));
-            ExpectedActors.Add(ExpectedValueTwo);
-            Json->SetArrayField("ActorsToSpawn", ExpectedJson);
+           " sets ActorsToSpawn correctly",
+           [this]()
+           {
+               // Get a reference to a sample AActor subclass.
+               const FString ActorPathOne =
+                       "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+               const FSoftClassPath ClassPathOne(ActorPathOne);
+               const TSubclassOf<AActor> ExpectedValueOne =
+                       ClassPathOne.TryLoadClass<UObject>();
+               const FString ActorPathTwo =
+                       "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
+               const FSoftClassPath ClassPathTwo(ActorPathTwo);
+               const TSubclassOf<AActor> ExpectedValueTwo =
+                       ClassPathTwo.TryLoadClass<UObject>();
+               TArray<TSubclassOf<AActor>> ExpectedActors;
+               TArray<TSharedPtr<FJsonValue>> ExpectedJson;
+               ExpectedJson.Add(MakeShareable(new FJsonValueString(ActorPathOne)));
+               ExpectedActors.Add(ExpectedValueOne);
+               ExpectedJson.Add(MakeShareable(new FJsonValueString(ActorPathTwo)));
+               ExpectedActors.Add(ExpectedValueTwo);
+               Json->SetArrayField("ActorsToSpawn", ExpectedJson);
 
-            Config.DeserializeFromJson(Json);
-            TestEqual("ActorsToSpawn", Config.ActorsToSpawn.Num(),
-                ExpectedActors.Num());
-            for (int32 i = 0; i < ExpectedActors.Num(); i++)
-            {
-                TestEqual("ActorsToSpawn", Config.ActorsToSpawn[i],
-                    ExpectedActors[i]);
-            }
-        });
+               Config.DeserializeFromJson(Json);
+               TestEqual("ActorsToSpawn", Config.ActorsToSpawn.Num(),
+                         ExpectedActors.Num());
+               for (int32 i = 0; i < ExpectedActors.Num(); i++)
+               {
+                   TestEqual("ActorsToSpawn", Config.ActorsToSpawn[i],
+                             ExpectedActors[i]);
+               }
+           });
 
         It("when called multiple times should not accumulate ActorsToSpawn",
-            [this]()
-        {
-            // Get a reference to a sample AActor subclass.
-            const FString ActorPath =
-                "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
-            TArray<TSharedPtr<FJsonValue>> ExpectedJson;
-            ExpectedJson.Add(MakeShareable(new FJsonValueString(ActorPath)));
-            Json->SetArrayField("ActorsToSpawn", ExpectedJson);
+           [this]()
+           {
+               // Get a reference to a sample AActor subclass.
+               const FString ActorPath =
+                       "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+               TArray<TSharedPtr<FJsonValue>> ExpectedJson;
+               ExpectedJson.Add(MakeShareable(new FJsonValueString(ActorPath)));
+               Json->SetArrayField("ActorsToSpawn", ExpectedJson);
 
-            Config.DeserializeFromJson(Json);
-            // Intentional second call
-            Config.DeserializeFromJson(Json);
+               Config.DeserializeFromJson(Json);
+               // Intentional second call
+               Config.DeserializeFromJson(Json);
 
-            TestEqual("ActorsToSpawn", Config.ActorsToSpawn.Num(), 1);
-        });
+               TestEqual("ActorsToSpawn", Config.ActorsToSpawn.Num(), 1);
+           });
 
         It("sets RemoveOverlaps", [this]()
         {

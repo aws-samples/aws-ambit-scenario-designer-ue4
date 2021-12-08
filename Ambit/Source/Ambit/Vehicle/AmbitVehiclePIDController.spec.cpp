@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,11 +13,13 @@
 //   limitations under the License.
 
 #include "AmbitVehiclePIDController.h"
+
 #include "Misc/AutomationTest.h"
 
 BEGIN_DEFINE_SPEC(AmbitVehiclePIDControllerSpec, "Ambit.AmbitVehiclePIDController",
-    EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-    ApplicationContextMask)
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
+                  ApplicationContextMask)
+
     FAmbitVehiclePIDController Controller;
 END_DEFINE_SPEC(AmbitVehiclePIDControllerSpec)
 
@@ -68,7 +70,7 @@ void AmbitVehiclePIDControllerSpec::Define()
             {
                 FAmbitVehicleLateralController Controller = FAmbitVehicleLateralController(0.5f, 0.5f, 0.5f);
 
-                const float Result = Controller.RunStep(FVector(0, 10, 0), FVector(0, 1, 0), FVector(0, 1, 0),0.02);
+                const float Result = Controller.RunStep(FVector(0, 10, 0), FVector(0, 1, 0), FVector(0, 1, 0), 0.02);
                 TestEqual("RunStepResult", Result, 0.f);
             });
         });

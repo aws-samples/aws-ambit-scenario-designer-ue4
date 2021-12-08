@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,19 +67,19 @@ void SpawnOnPathConfig::Define()
             It("when SpawnOnPathConfigConfiguration.MatchBy is 'NameOrTags', has correct value",
                [this]()
                {
-                   Spawner->MatchBy = EMatchBy::NameOrTags;
+                   Spawner->MatchBy = NameOrTags;
                    Config = Spawner->GetConfiguration();
 
-                   TestEqual("MatchBy", Config->MatchBy, EMatchBy::NameOrTags);
+                   TestEqual("MatchBy", Config->MatchBy, NameOrTags);
                });
 
             It("when SpawnOnPathConfigConfiguration.MatchBy is 'NameAndTags', has correct value",
                [this]()
                {
-                   Spawner->MatchBy = EMatchBy::NameAndTags;
+                   Spawner->MatchBy = NameAndTags;
                    Config = Spawner->GetConfiguration();
 
-                   TestEqual("MatchBy", Config->MatchBy, EMatchBy::NameAndTags);
+                   TestEqual("MatchBy", Config->MatchBy, NameAndTags);
                });
 
             It("has correct SurfaceNamePattern", [this]()
@@ -151,7 +151,7 @@ void SpawnOnPathConfig::Define()
                 const FSoftClassPath ClassPath(ExpectedValue);
 
                 TArray<TSubclassOf<AActor>> ExpectedActors;
-                const TSubclassOf<AActor> ExpectedActor = 
+                const TSubclassOf<AActor> ExpectedActor =
                         ClassPath.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActor);
                 Spawner->ActorsToSpawn = ExpectedActors;
@@ -174,13 +174,13 @@ void SpawnOnPathConfig::Define()
                 const FSoftClassPath ClassPathOne(ExpectedValueOne);
 
                 TArray<TSubclassOf<AActor>> ExpectedActors;
-                const TSubclassOf<AActor> ExpectedActorOne = 
+                const TSubclassOf<AActor> ExpectedActorOne =
                         ClassPathOne.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActorOne);
                 const FString ExpectedValueTwo =
-                    "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
+                        "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
                 const FSoftClassPath ClassPathTwo(ExpectedValueTwo);
-                const TSubclassOf<AActor> ExpectedActorTwo = 
+                const TSubclassOf<AActor> ExpectedActorTwo =
                         ClassPathTwo.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActorTwo);
                 Spawner->ActorsToSpawn = ExpectedActors;
@@ -222,17 +222,16 @@ void SpawnOnPathConfig::Define()
                 Points.Add(LocationTwo);
 
                 Spawner->Spline->ClearSplinePoints();
-                Spawner->Spline->SetSplinePoints(Points, 
+                Spawner->Spline->SetSplinePoints(Points,
                                                  ESplineCoordinateSpace::Local);
                 Config = Spawner->GetConfiguration();
 
                 int32 i = 0;
-                for(const FSplinePoint& Point : Config->SplinePoints)
+                for (const FSplinePoint& Point : Config->SplinePoints)
                 {
                     TestTrue("SplinePoint", Point.Position.Equals(Points[i]));
                     i++;
                 }
-
             });
         });
     });
@@ -253,11 +252,11 @@ void SpawnOnPathConfig::Define()
 
         It("sets MatchBy", [this]()
         {
-            Config->MatchBy = EMatchBy::NameOrTags;
+            Config->MatchBy = NameOrTags;
 
             Spawner->Configure(Config);
 
-            TestEqual("MatchBy", Spawner->MatchBy, EMatchBy::NameOrTags);
+            TestEqual("MatchBy", Spawner->MatchBy, NameOrTags);
         });
 
         It("sets SurfaceNamePattern", [this]()
@@ -342,7 +341,7 @@ void SpawnOnPathConfig::Define()
                     "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
             const FSoftClassPath ClassPath(ExpectedValue);
             TArray<TSubclassOf<AActor>> ExpectedActors;
-            const TSubclassOf<AActor>& ExpectedActor = 
+            const TSubclassOf<AActor>& ExpectedActor =
                     ClassPath.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActor);
             Config->ActorsToSpawn = ExpectedActors;
@@ -355,7 +354,6 @@ void SpawnOnPathConfig::Define()
                 TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn[i],
                           ExpectedActors[i]);
             }
-            
         });
 
         It("sets correct ActorsToSpawn when it has multiple values", [this]()
@@ -366,13 +364,13 @@ void SpawnOnPathConfig::Define()
             const FSoftClassPath ClassPathOne(ExpectedValueOne);
 
             TArray<TSubclassOf<AActor>> ExpectedActors;
-            const TSubclassOf<AActor> ExpectedActorOne = 
+            const TSubclassOf<AActor> ExpectedActorOne =
                     ClassPathOne.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActorOne);
             const FString ExpectedValueTwo =
-                "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
+                    "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
             const FSoftClassPath ClassPathTwo(ExpectedValueTwo);
-            const TSubclassOf<AActor> ExpectedActorTwo = 
+            const TSubclassOf<AActor> ExpectedActorTwo =
                     ClassPathTwo.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActorTwo);
 
@@ -403,7 +401,7 @@ void SpawnOnPathConfig::Define()
 
             TestEqual("RandomSeed", Spawner->RandomSeed, 42);
         });
-        
+
         It("sets spline points", [this]()
         {
             TArray<FSplinePoint> SplinePoints;
@@ -425,7 +423,7 @@ void SpawnOnPathConfig::Define()
             Spawner->Configure(Config);
 
             int32 i = 0;
-            USplineComponent* Spline = Spawner->Spline;
+            const USplineComponent* Spline = Spawner->Spline;
             for (const FSplinePoint& Point : Config->SplinePoints)
             {
                 TestEqual("InputKey", Spline->GetInputKeyAtDistanceAlongSpline(
@@ -434,12 +432,13 @@ void SpawnOnPathConfig::Define()
                 TestEqual("Location", Spline->GetLocationAtSplinePoint(i,
                                                                        ESplineCoordinateSpace::Local), Point.Position);
                 TestEqual("ArriveTangent", Spline->GetArriveTangentAtSplinePoint(i,
-                                                                                 ESplineCoordinateSpace::Local), Point.ArriveTangent);
+                              ESplineCoordinateSpace::Local), Point.ArriveTangent);
                 TestEqual("LeaveTangent", Spline->GetLeaveTangentAtSplinePoint(i,
-                                                                               ESplineCoordinateSpace::Local), Point.LeaveTangent);
+                                                                               ESplineCoordinateSpace::Local),
+                          Point.LeaveTangent);
                 TestEqual("Rotation", Spline->GetRotationAtSplinePoint(
                               i, ESplineCoordinateSpace::Local), Point.Rotation);
-                TestEqual("Scale", Spline->GetScaleAtSplinePoint(i), 
+                TestEqual("Scale", Spline->GetScaleAtSplinePoint(i),
                           Point.Scale);
                 TestEqual("Type", Spline->GetSplinePointType(i), Point.Type);
                 i++;

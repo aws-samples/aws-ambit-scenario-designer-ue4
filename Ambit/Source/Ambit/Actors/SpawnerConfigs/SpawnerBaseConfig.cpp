@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,10 +14,12 @@
 
 #include "SpawnerBaseConfig.h"
 
+#include "Dom/JsonObject.h"
+
 #include "Ambit/AmbitModule.h"
 #include "Ambit/Mode/Constant.h"
 #include "Ambit/Utils/MatchBy.h"
-#include "Dom/JsonObject.h"
+
 #include <AmbitUtils/JsonHelpers.h>
 
 namespace JsonKeys = JsonConstants::AmbitSpawner;
@@ -31,14 +33,14 @@ TSharedPtr<FJsonObject> FSpawnerBaseConfig::SerializeToJson() const
 
     // Serialize location and rotation of spawner as JSON arrays
     Json->SetArrayField(JsonKeys::KSpawnerLocationKey,
-        FJsonHelpers::SerializeVector3(SpawnerLocation));
+                        FJsonHelpers::SerializeVector3(SpawnerLocation));
     Json->SetArrayField(JsonKeys::KSpawnerRotationKey,
-        FJsonHelpers::SerializeRotation(SpawnerRotation));
+                        FJsonHelpers::SerializeRotation(SpawnerRotation));
 
     // Serialize MatchByValue as JSON string
-    const FString& MatchByValue = MatchBy == EMatchBy::NameOrTags
-                                     ? "NameOrTags"
-                                     : "NameAndTags";
+    const FString& MatchByValue = MatchBy == NameOrTags
+                                      ? "NameOrTags"
+                                      : "NameAndTags";
     Json->SetStringField(JsonKeys::KMatchByKey, MatchByValue);
 
     // Serialize SurfaceNamePattern as JSON string
@@ -77,7 +79,6 @@ TSharedPtr<FJsonObject> FSpawnerBaseConfig::SerializeToJson() const
             const FString& PathName = Actor->GetPathName();
             ActorsJson.Add(MakeShareable(
                 new FJsonValueString(PathName)));
-            
         }
         if (ActorsJson.Num() > 0)
         {
@@ -86,7 +87,7 @@ TSharedPtr<FJsonObject> FSpawnerBaseConfig::SerializeToJson() const
         else
         {
             Json->SetField(JsonKeys::KActorsToSpawnKey,
-                MakeShareable(new FJsonValueNull));
+                           MakeShareable(new FJsonValueNull));
         }
     }
     else
@@ -94,10 +95,10 @@ TSharedPtr<FJsonObject> FSpawnerBaseConfig::SerializeToJson() const
         if (ActorsToSpawn.Contains(nullptr))
         {
             UE_LOG(LogAmbit, Warning,
-                TEXT("An element of the ActorsToSpawn set is not specified."));
+                   TEXT("An element of the ActorsToSpawn set is not specified."));
         }
         Json->SetField(JsonKeys::KActorsToSpawnKey,
-            MakeShareable(new FJsonValueNull));
+                       MakeShareable(new FJsonValueNull));
     }
 
     // Serialize RemoveOverlaps as a JSON bool
@@ -114,22 +115,22 @@ void FSpawnerBaseConfig::DeserializeFromJson(
 {
     // Configure location of spawner
     const TArray<TSharedPtr<FJsonValue>>& LocationJson = JsonObject->
-        GetArrayField(
-            JsonKeys::KSpawnerLocationKey);
+            GetArrayField(
+                JsonKeys::KSpawnerLocationKey);
     SpawnerLocation = FJsonHelpers::DeserializeToVector3(LocationJson);
 
     // Configure rotation of spawner
     const TArray<TSharedPtr<FJsonValue>>& RotationJson = JsonObject->
-        GetArrayField(
-            JsonKeys::KSpawnerRotationKey);
+            GetArrayField(
+                JsonKeys::KSpawnerRotationKey);
     SpawnerRotation = FJsonHelpers::DeserializeToRotation(RotationJson);
 
     // Configure MatchBy property.
     const FString& MatchByString = JsonObject->GetStringField(
         JsonKeys::KMatchByKey);
     MatchBy = MatchByString == "NameOrTags"
-                  ? EMatchBy::NameOrTags
-                  : EMatchBy::NameAndTags;
+                  ? NameOrTags
+                  : NameAndTags;
 
     // Configure SurfaceNamePattern property.
     SurfaceNamePattern = JsonObject->GetStringField(
@@ -164,10 +165,10 @@ void FSpawnerBaseConfig::DeserializeFromJson(
         {
             const FSoftClassPath ClassPath(PathName->AsString());
             const auto& Actor = ClassPath.TryLoadClass<UObject>();
-            if (!Actor)
+            if (Actor == nullptr)
             {
                 UE_LOG(LogAmbit, Error, TEXT("%s is not a valid path."),
-                    *(PathName->AsString()))
+                       *PathName->AsString())
             }
             else
             {

@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,9 +16,8 @@
 
 #include "CoreMinimal.h"
 #include "MatchBy.h"
-#include "Components/SplineComponent.h"
 #include "Components/BoxComponent.h"
-#include "Engine/CollisionProfile.h"
+#include "Components/SplineComponent.h"
 
 /**
  * A collection of helpers functions that make using UWorld easier.
@@ -54,7 +53,7 @@ namespace AmbitWorldHelpers
     TArray<AActor*> GetActorsByMatchBy(const EMatchBy& MatchBy,
                                        const FString& NamePattern,
                                        const TArray<FName>& TagsList,
-                                        const bool bMatchExactName = false);
+                                       const bool bMatchExactName = false);
 
     /**
      * Returns a list of locations in the provided actors.
@@ -94,7 +93,8 @@ namespace AmbitWorldHelpers
      *  A boolean value that indicates if location hits a valid surface
      */
     bool CheckAndSnapToSurface(FTransform& Transform, const TArray<AActor*>& ActorsToHit,
-        const bool& bSnapToSurfaceBelow);
+                               const bool& bSnapToSurfaceBelow);
+
     /**
      * Returns a list of locations in the provided spline
      * and actors.

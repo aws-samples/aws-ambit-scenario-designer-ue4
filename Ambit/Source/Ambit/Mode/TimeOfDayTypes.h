@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,9 +13,10 @@
 //   limitations under the License.
 
 #pragma once
-#include "CoreMinimal.h"
 
+#include "CoreMinimal.h"
 #include "IScenarioParameter.h"
+
 #include <AmbitUtils/ConfigJsonSerializer.h>
 
 #include "TimeOfDayTypes.generated.h"
@@ -27,7 +28,7 @@
 USTRUCT()
 struct AMBIT_API FTimeOfDayTypes
 #if CPP
-    : public IScenarioParameter, public FConfigJsonSerializer
+        : public IScenarioParameter, public FConfigJsonSerializer
 #endif
 {
     GENERATED_BODY()
@@ -77,19 +78,19 @@ public:
     /**
      * Getter and Setter of time of day types
      */
-    void SetMorning(bool);
+    void SetMorning(bool SelectedMorning);
 
     bool GetMorning() const;
 
-    void SetNoon(bool);
+    void SetNoon(bool SelectedNoon);
 
     bool GetNoon() const;
 
-    void SetEvening(bool);
+    void SetEvening(bool SelectedEvening);
 
     bool GetEvening() const;
 
-    void SetNight(bool);
+    void SetNight(bool SelectedNight);
 
     bool GetNight() const;
 };

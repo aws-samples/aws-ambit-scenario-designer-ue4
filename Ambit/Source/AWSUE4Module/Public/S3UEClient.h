@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,7 +57,7 @@ namespace S3UEClient
      *  Returns a FString indicating object content by given bucket name and object path in the bucket
      */
     AWSUE4MODULE_API FString GetObjectAsString(const FString& Region, const FString& BucketName,
-                                           const FString& ObjectName);
+                                               const FString& ObjectName);
 
     /**
      *Writes a string value(ObjectContent) into the bucket
@@ -66,7 +66,7 @@ namespace S3UEClient
      *  object name, object content and region
      */
     AWSUE4MODULE_API bool PutObject(const FString& Region, const FString& BucketName,
-                                const FString& ObjectName, const FString& ObjectContent);
+                                    const FString& ObjectName, const FString& ObjectContent);
 
     /**
      * Upload a local file to the bucket
@@ -79,5 +79,5 @@ namespace S3UEClient
      *  object name, file name and region
      */
     AWSUE4MODULE_API bool PutLocalObject(const FString& Region, const FString& BucketName,
-                                     const FString& ObjectName, const FString& LocalFilePath);
+                                         const FString& ObjectName, const FString& LocalFilePath);
 };

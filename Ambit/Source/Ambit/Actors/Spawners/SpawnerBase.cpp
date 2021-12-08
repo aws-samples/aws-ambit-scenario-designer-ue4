@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,8 +19,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
-#include <AmbitUtils/MenuHelpers.h>
-
 #include "Ambit/AmbitModule.h"
 #include "Ambit/Actors/SpawnedObjectConfigs/SpawnedObjectConfig.h"
 #include "Ambit/Mode/Constant.h"
@@ -28,12 +26,13 @@
 #include "Ambit/Utils/UserMetricsSubsystem.h"
 #include "AmbitUtils/JsonHelpers.h"
 
+#include <AmbitUtils/MenuHelpers.h>
+
 // Sets default values
 ASpawnerBase::ASpawnerBase()
 {
     IconComponent = CreateDefaultSubobject<UBillboardComponent>("Icon");
 }
-
 
 void ASpawnerBase::GenerateSpawnedObjectConfiguration()
 {
@@ -60,7 +59,7 @@ template <typename Struct>
 TSharedPtr<Struct> ASpawnerBase::GetConfiguration() const
 {
     TSharedPtr<Struct> Config =
-        MakeShareable(new Struct);
+            MakeShareable(new Struct);
     Config->SpawnerLocation = this->GetActorLocation();
     Config->SpawnerRotation = this->GetActorRotation();
     Config->MatchBy = MatchBy;
@@ -106,7 +105,7 @@ void ASpawnerBase::BeginPlay()
     Super::BeginPlay();
     GenerateActors();
 
-    TSharedRef<FJsonObject> MetricContextData = MakeShareable(new FJsonObject);
+    const TSharedRef<FJsonObject> MetricContextData = MakeShareable(new FJsonObject);
     MetricContextData->SetNumberField(UserMetrics::AmbitSpawner::KAmbitSpawnerSpawnNumberContextData,
                                       SpawnedActors.Num());
     GEngine->GetEngineSubsystem<UUserMetricsSubsystem>()->Track(UserMetrics::AmbitSpawner::KAmbitSpawnerRunEvent,
@@ -119,7 +118,8 @@ void ASpawnerBase::PostActorCreated()
     //Currently there is a bug that this function could be called twice in UE engine
     if (!HasAllFlags(RF_Transient))
     {
-        GEngine->GetEngineSubsystem<UUserMetricsSubsystem>()->Track(UserMetrics::AmbitSpawner::KAmbitSpawnerPlacedEvent, UserMetrics::AmbitSpawner::KAmbitSpawnerNameSpace);
+        GEngine->GetEngineSubsystem<UUserMetricsSubsystem>()->Track(UserMetrics::AmbitSpawner::KAmbitSpawnerPlacedEvent,
+                                                                    UserMetrics::AmbitSpawner::KAmbitSpawnerNameSpace);
     }
 }
 
@@ -178,11 +178,7 @@ bool ASpawnerBase::AreParametersValid() const
         FMenuHelpers::DisplayMessagePopup(Message, "Warning");
         return false;
     }
-    if (!AreMinMaxValid())
-    {
-        return false;
-    }
-    return true;
+    return AreMinMaxValid();
 }
 
 bool ASpawnerBase::AreMinMaxValid() const
@@ -190,7 +186,8 @@ bool ASpawnerBase::AreMinMaxValid() const
     if (RotationMin > RotationMax)
     {
         const FString& Message = FString::Printf(
-            TEXT("The minimum degree of rotation is greater than the maximum degree of rotation in %s, which is not allowed."),
+            TEXT(
+                "The minimum degree of rotation is greater than the maximum degree of rotation in %s, which is not allowed."),
             *this->GetActorLabel());
         FMenuHelpers::DisplayMessagePopup(Message, "Warning");
         return false;
@@ -199,7 +196,7 @@ bool ASpawnerBase::AreMinMaxValid() const
     {
         const FString& Message = FString::Printf(
             TEXT("The minimum density is greater than the maximum density in %s, which is not allowed."),
-                *this->GetActorLabel());
+            *this->GetActorLabel());
         FMenuHelpers::DisplayMessagePopup(Message, "Warning");
         return false;
     }
@@ -242,22 +239,22 @@ void ASpawnerBase::CleanAndSetUpActorsToSpawn(
         if (OutArray.AddUnique(Actor) <= LastIndex)
         {
             UE_LOG(LogAmbit, Warning,
-                TEXT("%s: Duplicate of %s found in ActorsToSpawn. Ignoring..."), *this->GetActorLabel(),
-                *Actor->GetName());
+                   TEXT("%s: Duplicate of %s found in ActorsToSpawn. Ignoring..."), *this->GetActorLabel(),
+                   *Actor->GetName());
         }
         else
         {
             TArray<UStaticMeshComponent*> StaticMeshComponents;
             AmbitSpawnerCollisionHelpers::
-                FindDefaultStaticMeshComponents(
-                    Actor.Get(), 
-                    StaticMeshComponents);
+                    FindDefaultStaticMeshComponents(
+                        Actor.Get(),
+                        StaticMeshComponents);
             AmbitSpawnerCollisionHelpers::StoreCollisionProfiles(
                 Actor->GetPathName(),
                 StaticMeshComponents, OutMap);
             AmbitSpawnerCollisionHelpers::
-                SetCollisionForAllStaticMeshComponents(
-                    StaticMeshComponents, bRemoveOverlaps);
+                    SetCollisionForAllStaticMeshComponents(
+                        StaticMeshComponents, bRemoveOverlaps);
         }
     }
 }
@@ -280,11 +277,11 @@ void ASpawnerBase::SpawnActorsAtTransforms(
         TArray<bool> OriginalGenerateOverlapEvents;
         // Set GenerateOverlapEvents to true while Play mode is active
         AmbitSpawnerCollisionHelpers::
-            SetGenerateOverlapEventsForActor(
-                Actor, OriginalGenerateOverlapEvents);
+                SetGenerateOverlapEventsForActor(
+                    Actor, OriginalGenerateOverlapEvents);
         // Store original overlap event settings
         OriginalGenerateOverlapEventsMap.Add(
-            Actor->GetName(), 
+            Actor->GetName(),
             OriginalGenerateOverlapEvents);
     }
 
@@ -292,36 +289,36 @@ void ASpawnerBase::SpawnActorsAtTransforms(
     TArray<TSubclassOf<AActor>> ActorsToSpawnClean;
     TMap<FString, TArray<FCollisionResponseTemplate>> OriginalCollisionProfiles;
     CleanAndSetUpActorsToSpawn(
-        ActorsToSpawnClean, 
+        ActorsToSpawnClean,
         OriginalCollisionProfiles);
 
     for (const FTransform& Transform : Transforms)
     {
-        FVector SpawnedActorLocation = 
-            Transform.GetLocation();
-        const FRotator& SpawnedActorRotation = 
-            Transform.Rotator();
+        FVector SpawnedActorLocation =
+                Transform.GetLocation();
+        const FRotator& SpawnedActorRotation =
+                Transform.Rotator();
 
         int32 RandomIndex = 0;
         if (ActorsToSpawnClean.Num() > 1)
         {
             RandomIndex =
-                Random.RandRange(0, ActorsToSpawnClean.Num() - 1);
+                    Random.RandRange(0, ActorsToSpawnClean.Num() - 1);
         }
         // ActorsToSpawnClean will always have at least one element;
         // it contains all elements of a non-empty ActorsToSpawn (with duplicates removed)
-        TSubclassOf<AActor> ChosenActor = 
-            ActorsToSpawnClean[RandomIndex];
+        TSubclassOf<AActor> ChosenActor =
+                ActorsToSpawnClean[RandomIndex];
 
         FActorSpawnParameters ActorSpawnParams;
         ActorSpawnParams.SpawnCollisionHandlingOverride =
-            ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+                ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
         // Try to spawn actor at location
         // will do nothing if it would overlap with any other spawned actor
         AActor* SpawnedActor = World->SpawnActor(
             ChosenActor.Get(),
-            &SpawnedActorLocation, &SpawnedActorRotation, 
+            &SpawnedActorLocation, &SpawnedActorRotation,
             ActorSpawnParams);
 
         // Try to spawn actor again at offset
@@ -333,18 +330,18 @@ void ASpawnerBase::SpawnActorsAtTransforms(
         if (!IsValid(SpawnedActor) && bAddPhysics)
         {
             FVector LocationOffset(0, 0,
-                100);
+                                   100);
             SpawnedActorLocation = SpawnedActorLocation + LocationOffset;
             SpawnedActor = World->SpawnActor(
                 ChosenActor.Get(),
-                &SpawnedActorLocation, &SpawnedActorRotation, 
+                &SpawnedActorLocation, &SpawnedActorRotation,
                 ActorSpawnParams);
         }
 
         if (IsValid(SpawnedActor))
         {
             UStaticMeshComponent* PhysicsComponent =
-                SpawnedActor->FindComponentByClass<UStaticMeshComponent>();
+                    SpawnedActor->FindComponentByClass<UStaticMeshComponent>();
             if (bAddPhysics)
             {
                 // Set mobility
@@ -353,12 +350,12 @@ void ASpawnerBase::SpawnActorsAtTransforms(
                 // If actor could not be spawned at surface level,
                 // we want to sweep it to the surface and check for collision along the way
                 // before enabling SimulatePhysics
-                if (SpawnedActor->GetActorLocation() 
-                    != Transform.GetLocation()) 
+                if (SpawnedActor->GetActorLocation()
+                    != Transform.GetLocation())
                 {
                     PhysicsComponent->SetWorldLocation(
                         Transform.GetLocation(),
-                        true, nullptr, 
+                        true, nullptr,
                         ETeleportType::ResetPhysics);
                 }
             }
@@ -366,7 +363,7 @@ void ASpawnerBase::SpawnActorsAtTransforms(
             // of the overlapping actor
             TArray<UPrimitiveComponent*> OverlappingComponents;
             SpawnedActor
-                ->GetOverlappingComponents(OverlappingComponents);
+                    ->GetOverlappingComponents(OverlappingComponents);
             for (UPrimitiveComponent* OverlappingComponent : OverlappingComponents)
             {
                 if (AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(
@@ -389,24 +386,24 @@ void ASpawnerBase::SpawnActorsAtTransforms(
 
                 const FString& PathName = ChosenActor.Get()->GetPathName();
                 const TArray<FCollisionResponseTemplate> OriginalResponses =
-                    OriginalCollisionProfiles.FindChecked(PathName);
+                        OriginalCollisionProfiles.FindChecked(PathName);
                 for (int i = 0; i < StaticMeshComponents.Num(); i++)
                 {
                     UStaticMeshComponent* StaticMeshComponent =
-                        StaticMeshComponents[i];
+                            StaticMeshComponents[i];
                     FCollisionResponseTemplate Response =
-                        OriginalResponses[i];
+                            OriginalResponses[i];
 
                     // Restores the collision profile of this specific actor
                     // to match expected collision behavior of the asset
                     // Maintains ObjectType as "AmbitSpawnerObstacle"
                     // to ensure no overlaps occur with future spawned objects
                     StaticMeshComponent->
-                        SetCollisionResponseToChannels(
-                            Response.ResponseToChannels);
+                            SetCollisionResponseToChannels(
+                                Response.ResponseToChannels);
                     StaticMeshComponent->
-                        SetCollisionEnabled(
-                            Response.CollisionEnabled);
+                            SetCollisionEnabled(
+                                Response.CollisionEnabled);
 
                     // Maintains that "Overlappable" Obstacles
                     // are continued to be recognized as such
@@ -422,7 +419,7 @@ void ASpawnerBase::SpawnActorsAtTransforms(
                 }
 
                 // Turn on Simulate Physics if bAddPhysics is true
-                if (bAddPhysics && 
+                if (bAddPhysics &&
                     !PhysicsComponent->IsSimulatingPhysics())
                 {
                     PhysicsComponent->SetSimulatePhysics(true);
@@ -441,7 +438,7 @@ void ASpawnerBase::SpawnActorsAtTransforms(
                     PathNameTransforms.Add(SpawnedActor->GetActorTransform());
                 }
                 // Update map array value to include new transform
-                if (OutMap.Find(PathName))
+                if (OutMap.Find(PathName) != nullptr)
                 {
                     PathNameTransforms.Append(
                         OutMap.FindAndRemoveChecked(PathName));
@@ -457,11 +454,11 @@ void ASpawnerBase::SpawnActorsAtTransforms(
     for (const auto& Actor : AllActors)
     {
         TArray<bool> OriginalGenerateOverlapEvents =
-            OriginalGenerateOverlapEventsMap
+                OriginalGenerateOverlapEventsMap
                 .FindChecked(Actor->GetName());
         // Reset GenerateOverlapEvents
         AmbitSpawnerCollisionHelpers::
-            SetGenerateOverlapEventsForActor(
-                Actor, OriginalGenerateOverlapEvents, true);
+                SetGenerateOverlapEventsForActor(
+                    Actor, OriginalGenerateOverlapEvents, true);
     }
 }

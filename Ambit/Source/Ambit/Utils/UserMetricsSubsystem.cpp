@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,10 +14,13 @@
 
 #include "UserMetricsSubsystem.h"
 
-#include <AWSUE4Module/Public/FirehoseUE4Client.h>
-#include "AmbitUtils/JsonHelpers.h"
-#include "Ambit/Mode/Constant.h"
 #include "Interfaces/IPluginManager.h"
+
+#include <utility>
+#include <AWSUE4Module/Public/FirehoseUE4Client.h>
+
+#include "Ambit/Mode/Constant.h"
+#include "AmbitUtils/JsonHelpers.h"
 
 void UUserMetricsSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -53,9 +56,9 @@ void UUserMetricsSubsystem::Deinitialize()
     }
 }
 
-void UUserMetricsSubsystem::Track(FString EventName, FString NameSpace, TSharedPtr<FJsonObject> Data)
+void UUserMetricsSubsystem::Track(const FString& EventName, const FString& NameSpace, TSharedPtr<FJsonObject> Data)
 {
-    TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
+    const TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
 
     Json->SetStringField(UserMetrics::KEventInstanceIDKey, UUID);
     Json->SetStringField(UserMetrics::KEventDateTimeKey, FDateTime::UtcNow().ToString(TEXT("%Y-%m-%d %H:%M:%S")));
@@ -63,7 +66,7 @@ void UUserMetricsSubsystem::Track(FString EventName, FString NameSpace, TSharedP
 
     Json->SetStringField(UserMetrics::KEventNameKey, EventName);
     Json->SetStringField(UserMetrics::KEventNameSpaceKey, NameSpace);
-    Json->SetStringField(UserMetrics::KEventContextDataKey, FJsonHelpers::SerializeJsonCondense(Data));
+    Json->SetStringField(UserMetrics::KEventContextDataKey, FJsonHelpers::SerializeJsonCondense(std::move(Data)));
 
     Json->SetStringField(UserMetrics::KEventEngineVersionKey, EngineVersion);
     Json->SetStringField(UserMetrics::KEventPluginVersionKey, PluginVersion);

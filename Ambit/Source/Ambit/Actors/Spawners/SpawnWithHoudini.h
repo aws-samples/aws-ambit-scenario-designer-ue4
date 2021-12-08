@@ -1,11 +1,11 @@
 ﻿//   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,7 +45,6 @@ struct AMBIT_API FHoudiniLoadableAsset
     GENERATED_BODY()
 
 public:
-
     /**
      * A specific Houdini Digital Asset that we wish to load to the screen.
      */
@@ -81,6 +80,7 @@ class AMBIT_API ASpawnWithHoudini : public AActor, public IAmbitSpawner
     GENERATED_BODY()
 public:
     ASpawnWithHoudini();
+
     ~ASpawnWithHoudini();
 
     class UBillboardComponent* IconComponent;
@@ -97,7 +97,7 @@ public:
      */
     UPROPERTY(EditAnywhere,
         Category = "Ambit Spawner")
-    TEnumAsByte<EMatchBy> MatchBy = EMatchBy::NameAndTags;
+    TEnumAsByte<EMatchBy> MatchBy = NameAndTags;
 
     /**
      * The search string used to find actors representing surfaces to spawn onto.
@@ -116,7 +116,7 @@ public:
     /**
      * The maximum random value floats can be adjusted to.
      */
-     float FloatMax = 100.f;
+    float FloatMax = 100.f;
 
     /**
      * The maximum random value ints can be adjusted to.
@@ -135,7 +135,7 @@ public:
      * The maximum number of items to spawn per square meter on average.
      */
     UPROPERTY(EditAnywhere, meta = (DisplayName =
-        "Items Per Meter (Max)"),
+            "Items Per Meter (Max)"),
         Category = "Ambit Spawner")
     float DensityMax = 0.2f;
 
@@ -223,7 +223,7 @@ public:
     /**
      * @inheritDoc
      */
-    void Configure(const TSharedPtr<FSpawnWithHoudiniConfig> Config);
+    void Configure(const TSharedPtr<FSpawnWithHoudiniConfig>& Config);
 
     /**
      * @inheritDoc
@@ -320,17 +320,26 @@ private:
     /**
      * Determines if we are trying to export to SDF, which requires we bake assets to disk. 
      */
-    bool IsExportSdf() const { return OnSpawnedObjectConfigCompleted.IsBound(); };
+    bool IsExportSdf() const
+    {
+        return OnSpawnedObjectConfigCompleted.IsBound();
+    };
 
     /**
      * A content-specified path (based on the Game's Content folder) to where the baked objects will be placed.
      */
-    FString GetBakePathRelative() const { return "/Game/Ambit/" + this->GetName(); };
+    FString GetBakePathRelative() const
+    {
+        return "/Game/Ambit/" + this->GetName();
+    };
 
     /**
      * An absolute path on disk to the Content directory to where the baked objects will be placed.
      */
-    FString GetBakePathFull() const { return FPaths::ProjectContentDir() + "/Ambit/" + this->GetName(); };
+    FString GetBakePathFull() const
+    {
+        return FPaths::ProjectContentDir() + "/Ambit/" + this->GetName();
+    };
 
     /**
      * Handles the SDF export by finding all of the baked objects, packaging them for the SDF,
