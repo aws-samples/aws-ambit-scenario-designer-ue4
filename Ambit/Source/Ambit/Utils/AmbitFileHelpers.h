@@ -37,8 +37,8 @@ namespace AmbitFileHelpers
      *
      *@return returns the full path of the file to save. Empty string if none.
      */
-    FString GetPathForFileFromPopup(const FString& FileExtension,
-                                    const FString& DefaultPath = "", const FString& Filename = "");
+    FString GetPathForFileFromPopup(const FString& FileExtension, const FString& DefaultPath = "",
+                                    const FString& Filename = "");
 
     /**
      * Pops up a window and returns the path to a directory selected by th user.

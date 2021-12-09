@@ -24,24 +24,20 @@ TSharedPtr<FJsonObject> FSpawnInVolumeConfig::SerializeToJson() const
 {
     TSharedPtr<FJsonObject> Json = FSpawnerBaseConfig::SerializeToJson();
     // Serialize bSnapToSurfaceBelow as JSON bool
-    Json->SetBoolField(JsonKeys::KSnapToSurfaceBelowKey,
-                       bSnapToSurfaceBelow);
+    Json->SetBoolField(JsonKeys::KSnapToSurfaceBelowKey, bSnapToSurfaceBelow);
 
     // Serialize BoxExtent as JSON array
-    Json->SetArrayField(JsonKeys::KBoxExtentKey,
-                        FJsonHelpers::SerializeVector3(BoxExtent));
+    Json->SetArrayField(JsonKeys::KBoxExtentKey, FJsonHelpers::SerializeVector3(BoxExtent));
 
     return Json;
 }
 
 
-void FSpawnInVolumeConfig::DeserializeFromJson(
-    TSharedPtr<FJsonObject> JsonObject)
+void FSpawnInVolumeConfig::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 {
     FSpawnerBaseConfig::DeserializeFromJson(JsonObject);
     bSnapToSurfaceBelow = JsonObject->GetBoolField(JsonKeys::KSnapToSurfaceBelowKey);
     // Configure box extent
-    const TArray<TSharedPtr<FJsonValue>>& BoxExtentJson = JsonObject->
-            GetArrayField(JsonKeys::KBoxExtentKey);
+    const TArray<TSharedPtr<FJsonValue>>& BoxExtentJson = JsonObject->GetArrayField(JsonKeys::KBoxExtentKey);
     BoxExtent = FJsonHelpers::DeserializeToVector3(BoxExtentJson);
 }

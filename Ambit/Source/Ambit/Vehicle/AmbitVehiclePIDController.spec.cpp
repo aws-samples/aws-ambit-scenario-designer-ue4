@@ -17,8 +17,7 @@
 #include "Misc/AutomationTest.h"
 
 BEGIN_DEFINE_SPEC(AmbitVehiclePIDControllerSpec, "Ambit.AmbitVehiclePIDController",
-                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-                  ApplicationContextMask)
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     FAmbitVehiclePIDController Controller;
 END_DEFINE_SPEC(AmbitVehiclePIDControllerSpec)

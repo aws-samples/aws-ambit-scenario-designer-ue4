@@ -29,7 +29,7 @@ struct AMBIT_API FSpawnerBaseConfig : FConfigJsonSerializer
     FVector SpawnerLocation;
     FRotator SpawnerRotation;
 
-    TEnumAsByte<EMatchBy> MatchBy = NameAndTags;
+    TEnumAsByte<EMatchBy> MatchBy = EMatchBy::NameAndTags;
 
     // The search string used to find actors representing surfaces to spawn onto.
     FString SurfaceNamePattern = "";

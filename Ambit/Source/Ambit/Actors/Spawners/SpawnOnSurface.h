@@ -37,8 +37,7 @@ public:
     /**
      * See https://docs.unrealengine.com/4.26/en-US/API/Runtime/Engine/GameFramework/AActor/PostEditChangeProperty/
      */
-    void PostEditChangeProperty(
-        FPropertyChangedEvent& PropertyChangedEvent) override;
+    void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
     /**
      * @inheritDoc

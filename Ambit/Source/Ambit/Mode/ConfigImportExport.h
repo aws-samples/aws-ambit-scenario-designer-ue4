@@ -70,8 +70,7 @@ public:
      *
      * @return Boolean to indicate if the write was successful or not.
      */
-    bool ProcessSdfForExport(const TMap<FString, TSharedPtr<FJsonObject>>& AmbitSpawnerArray,
-                             bool bToS3);
+    bool ProcessSdfForExport(const TMap<FString, TSharedPtr<FJsonObject>>& AmbitSpawnerArray, bool bToS3);
 
     // Generate Permutations
     /**
@@ -113,8 +112,8 @@ protected:
      * Calls AWSWrapper::PutObject
      * Allows for injection of the function to be changed. Should only be changed in testing.
      */
-    TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName,
-                   const FString& Content)> LambdaPutS3Object = AWSWrapper::PutObject;
+    TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& Content)>
+    LambdaPutS3Object = AWSWrapper::PutObject;
 
     /**
      * Calls AmbitFileHelpers::WriteFile
@@ -127,8 +126,8 @@ protected:
      * Calls AmbitFileHelpers::GetPathForFileFromPopup
      * Allows for injection of the function to be changed. Should only be changed in testing.
      */
-    TFunction<FString(const FString& FileExtension, const FString& DefaultPath,
-                      const FString& Filename)> LambdaGetPathFromPopup = AmbitFileHelpers::GetPathForFileFromPopup;
+    TFunction<FString(const FString& FileExtension, const FString& DefaultPath, const FString& Filename)>
+    LambdaGetPathFromPopup = AmbitFileHelpers::GetPathForFileFromPopup;
 
     /**
     * For internal testing only. Returns when ProcessSdfForExport() has been completed and there are no more items in queue. 
@@ -160,16 +159,14 @@ private:
      * recreates and configures any spawner of ClassType using the StructType configuration.
      */
     template <typename ClassType, typename StructType>
-    void ConfigureSpawnersByType(const TSharedPtr<FJsonObject>& Spawners,
-                                 const FString& TypeKey, UWorld*& World);
+    void ConfigureSpawnersByType(const TSharedPtr<FJsonObject>& Spawners, const FString& TypeKey, UWorld*& World);
 
     /**
      * Given a JSON object, adds an array field to the object containing JSON objects
      * serialized from StructType configuration that describe each Ambit Spawner of ClassType
      */
     template <typename ClassType, typename StructType>
-    void SerializeSpawnerConfigs(
-        TSharedPtr<FJsonObject>& SpawnersJson, const FString& SpawnerTypeKey);
+    void SerializeSpawnerConfigs(TSharedPtr<FJsonObject>& SpawnersJson, const FString& SpawnerTypeKey);
 
     /**
      * Retrieves the next item in QueuedSdfConfigToExport if one exist, else

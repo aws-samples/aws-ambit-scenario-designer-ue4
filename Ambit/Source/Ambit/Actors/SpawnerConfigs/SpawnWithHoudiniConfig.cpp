@@ -29,15 +29,11 @@ TSharedPtr<FJsonObject> FSpawnWithHoudiniConfig::SerializeToJson() const
     TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
 
     // Serialize location and rotation of spawner as JSON arrays
-    Json->SetArrayField(JsonKeys::KSpawnerLocationKey,
-                        FJsonHelpers::SerializeVector3(SpawnerLocation));
-    Json->SetArrayField(JsonKeys::KSpawnerRotationKey,
-                        FJsonHelpers::SerializeRotation(SpawnerRotation));
+    Json->SetArrayField(JsonKeys::KSpawnerLocationKey, FJsonHelpers::SerializeVector3(SpawnerLocation));
+    Json->SetArrayField(JsonKeys::KSpawnerRotationKey, FJsonHelpers::SerializeRotation(SpawnerRotation));
 
     // Serialize MatchByValue as JSON string
-    const FString& MatchByValue = MatchBy == NameOrTags
-                                      ? "NameOrTags"
-                                      : "NameAndTags";
+    const FString& MatchByValue = MatchBy == EMatchBy::NameOrTags ? "NameOrTags" : "NameAndTags";
     Json->SetStringField(JsonKeys::KMatchByKey, MatchByValue);
 
     // Serialize SurfaceNamePattern as JSON string
@@ -64,36 +60,26 @@ TSharedPtr<FJsonObject> FSpawnWithHoudiniConfig::SerializeToJson() const
     return Json;
 }
 
-void FSpawnWithHoudiniConfig::DeserializeFromJson(
-    TSharedPtr<FJsonObject> JsonObject)
+void FSpawnWithHoudiniConfig::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 {
     // Configure location of spawner
-    const TArray<TSharedPtr<FJsonValue>>& LocationJson = JsonObject->
-            GetArrayField(
-                JsonKeys::KSpawnerLocationKey);
+    const TArray<TSharedPtr<FJsonValue>>& LocationJson = JsonObject->GetArrayField(JsonKeys::KSpawnerLocationKey);
     SpawnerLocation = FJsonHelpers::DeserializeToVector3(LocationJson);
 
     // Configure rotation of spawner
-    const TArray<TSharedPtr<FJsonValue>>& RotationJson = JsonObject->
-            GetArrayField(
-                JsonKeys::KSpawnerRotationKey);
+    const TArray<TSharedPtr<FJsonValue>>& RotationJson = JsonObject->GetArrayField(JsonKeys::KSpawnerRotationKey);
     SpawnerRotation = FJsonHelpers::DeserializeToRotation(RotationJson);
 
     // Configure MatchBy property.
-    const FString& MatchByString = JsonObject->GetStringField(
-        JsonKeys::KMatchByKey);
-    MatchBy = MatchByString == "NameOrTags"
-                  ? NameOrTags
-                  : NameAndTags;
+    const FString& MatchByString = JsonObject->GetStringField(JsonKeys::KMatchByKey);
+    MatchBy = MatchByString == "NameOrTags" ? EMatchBy::NameOrTags : EMatchBy::NameAndTags;
 
     // Configure SurfaceNamePattern property.
-    SurfaceNamePattern = JsonObject->GetStringField(
-        JsonKeys::KSurfaceNamePatternKey);
+    SurfaceNamePattern = JsonObject->GetStringField(JsonKeys::KSurfaceNamePatternKey);
 
     // Configure SurfaceTags property.
     SurfaceTags.Empty();
-    for (const TSharedPtr<FJsonValue>& JsonValue : JsonObject->GetArrayField(
-             JsonKeys::KSurfaceTagsKey))
+    for (const TSharedPtr<FJsonValue>& JsonValue : JsonObject->GetArrayField(JsonKeys::KSurfaceTagsKey))
     {
         FString TagName = JsonValue->AsString();
         SurfaceTags.Add(*TagName);

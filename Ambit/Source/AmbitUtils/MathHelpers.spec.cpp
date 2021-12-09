@@ -23,8 +23,8 @@ void MathHelpersSpec::Define()
 {
     Describe("Convert angles in radians to degrees", [this]()
     {
-        It("Should be equal to FVector(60.0, 120.0, 90.0) when input is FVector(PI / 3.0, 2 * PI / 3.0, PI / 2.0)", [
-               this]()
+        It("Should be equal to FVector(60.0, 120.0, 90.0) when input is FVector(PI / 3.0, 2 * PI / 3.0, PI / 2.0)",
+           [this]()
            {
                const FVector RotationInRadians(PI / 3.0, 2 * PI / 3.0, PI / 2);
                const FVector RotationInDegrees = FMathHelpers::RadiansToDegrees(RotationInRadians);
@@ -53,8 +53,7 @@ void MathHelpersSpec::Define()
         It("Should not be equal to FVector(100, 0, -100) when input is not FVector(1, 0, -1).", [this]()
         {
             const FVector LocationInMeters(0, 1, -1);
-            TestNotEqual("The actor location in meters is",
-                         FMathHelpers::MetersToCentimeters(LocationInMeters),
+            TestNotEqual("The actor location in meters is", FMathHelpers::MetersToCentimeters(LocationInMeters),
                          FVector(100, 0, -100));
         });
     });
@@ -67,8 +66,7 @@ void MathHelpersSpec::Define()
             const FString ExpectedMessage = TEXT(
                 "The imported test min (-0.500000) is lower than 0.000000 and will be clamped to 0.000000.");
             TestEqual("Should return 0 when density is lower than 0",
-                      FMathHelpers::ClampBoundary(-0.5f, 0.f, 1.f, TEXT("test min"), ReturnedMessage),
-                      0.f);
+                      FMathHelpers::ClampBoundary(-0.5f, 0.f, 1.f, TEXT("test min"), ReturnedMessage), 0.f);
 
             TestEqual("Should return warning message for min", ReturnedMessage, ExpectedMessage);
         });
@@ -78,8 +76,7 @@ void MathHelpersSpec::Define()
             const FString ExpectedMessage = TEXT(
                 "The imported test max (100.000000) is greater than 1.000000 and will be clamped to 1.000000.");
             TestEqual("Should return 1 when density is greater than 1",
-                      FMathHelpers::ClampBoundary(100.f, 0.f, 1.f, TEXT("test max"), ReturnedMessage),
-                      1.f);
+                      FMathHelpers::ClampBoundary(100.f, 0.f, 1.f, TEXT("test max"), ReturnedMessage), 1.f);
 
             TestEqual("Should return warning message for max", ReturnedMessage, ExpectedMessage);
         });
@@ -88,8 +85,7 @@ void MathHelpersSpec::Define()
         {
             FString ReturnedMessage;
             TestEqual("Should return the input density itself",
-                      FMathHelpers::ClampBoundary(0.5f, 0.f, 1.f, TEXT("test"), ReturnedMessage),
-                      0.5f);
+                      FMathHelpers::ClampBoundary(0.5f, 0.f, 1.f, TEXT("test"), ReturnedMessage), 0.5f);
 
             TestTrue("Should not return a warning message when correct", ReturnedMessage.IsEmpty());
         });

@@ -28,7 +28,7 @@ namespace FJsonHelpers
      * @return
      *  an empty string if unable to parse JsonObject
      */
-    AMBITUTILS_API FString SerializeJson(const TSharedPtr<FJsonObject>& JsonObject);
+    AMBITUTILS_API FString SerializeJson(TSharedPtr<FJsonObject> JsonObject);
 
     /**
      * Serialize the JsonObject to a condensed string.
@@ -44,8 +44,7 @@ namespace FJsonHelpers
      * @return
      *  a nullptr if unable to parse JsonString.
      */
-    AMBITUTILS_API TSharedPtr<FJsonObject> DeserializeJson(
-        const FString& JsonString);
+    AMBITUTILS_API TSharedPtr<FJsonObject> DeserializeJson(const FString& JsonString);
 
     /**
      * Serialize a Vector3 to an array of JsonValue
@@ -55,8 +54,7 @@ namespace FJsonHelpers
      * @return
      *  a JSON array containing three numeric values. Example, [0.0, 5.2, 101].
      */
-    AMBITUTILS_API TArray<TSharedPtr<FJsonValue>> SerializeVector3(
-        const FVector& Vector);
+    AMBITUTILS_API TArray<TSharedPtr<FJsonValue>> SerializeVector3(const FVector& Vector);
 
     /**
     * Deserialize an array of JsonValue to a Vector3
@@ -67,8 +65,7 @@ namespace FJsonHelpers
     *  an FVector
     *  throws an exception and pops an error message if the JSON array is not size 3
     */
-    AMBITUTILS_API FVector DeserializeToVector3(
-        const TArray<TSharedPtr<FJsonValue>>& JsonValues);
+    AMBITUTILS_API FVector DeserializeToVector3(const TArray<TSharedPtr<FJsonValue>>& JsonValues);
 
     /**
      * Serialize a Rotator to an array of JsonValue
@@ -80,8 +77,7 @@ namespace FJsonHelpers
      *  expressed in degrees.
      *  Example: [90.0, 45.0, 0]
      */
-    AMBITUTILS_API TArray<TSharedPtr<FJsonValue>> SerializeRotation(
-        const FRotator& Rotation);
+    AMBITUTILS_API TArray<TSharedPtr<FJsonValue>> SerializeRotation(const FRotator& Rotation);
 
     /**
      * Deserialize an array of JsonValue to a Rotator
@@ -94,6 +90,5 @@ namespace FJsonHelpers
      *  an FRotator
      *  throws an exception and pops an error message if the JSON array is not size 3
      */
-    AMBITUTILS_API FRotator DeserializeToRotation(
-        const TArray<TSharedPtr<FJsonValue>>& JsonValues);
+    AMBITUTILS_API FRotator DeserializeToRotation(const TArray<TSharedPtr<FJsonValue>>& JsonValues);
 }

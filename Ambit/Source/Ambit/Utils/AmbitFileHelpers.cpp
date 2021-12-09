@@ -50,8 +50,7 @@ namespace AmbitFileHelpers
         return InString;
     }
 
-    FString GetPathForFileFromPopup(const FString& FileExtension,
-                                    const FString& DefaultPath, const FString& Filename)
+    FString GetPathForFileFromPopup(const FString& FileExtension, const FString& DefaultPath, const FString& Filename)
     {
         IDesktopPlatform* DesktopPlatform = FDesktopPlatformModule::Get();
         if (DesktopPlatform == nullptr)
@@ -62,13 +61,10 @@ namespace AmbitFileHelpers
         TArray<FString> OpenFilenames;
         const bool bSuccessfullyOpenedFile = DesktopPlatform->SaveFileDialog(
             FSlateApplication::Get().FindBestParentWindowHandleForDialogs(nullptr),
-            NSLOCTEXT("UnrealEd", "ExportFile", "Export Ambit File").ToString(),
+            NSLOCTEXT("UnrealEd", "ExportFile", "Export Ambit File").ToString(), 
             DefaultPath, // Path to open the dialog.
             Filename, // Default filename to use
-            FileExtension,
-            EFileDialogFlags::None,
-            OpenFilenames
-        );
+            FileExtension, EFileDialogFlags::None, OpenFilenames);
 
         if (!bSuccessfullyOpenedFile)
         {
@@ -89,10 +85,8 @@ namespace AmbitFileHelpers
         FString OutFolder;
         const bool bSuccessfullyOpenedFile = DesktopPlatform->OpenDirectoryDialog(
             FSlateApplication::Get().FindBestParentWindowHandleForDialogs(nullptr),
-            NSLOCTEXT("UnrealEd", "ChooseLocation", "Select Location for Ambit Files").ToString(),
-            DefaultPath,
-            OutFolder
-        );
+            NSLOCTEXT("UnrealEd", "ChooseLocation", "Select Location for Ambit Files").ToString(), DefaultPath,
+            OutFolder);
 
         if (!bSuccessfullyOpenedFile)
         {
@@ -105,10 +99,8 @@ namespace AmbitFileHelpers
 
     void WriteFile(const FString& FilePath, const FString& OutString)
     {
-        FFileHelper::SaveStringToFile(OutString, *FilePath,
-                                      FFileHelper::EEncodingOptions::AutoDetect,
-                                      &IFileManager::Get(),
-                                      FILEWRITE_None);
+        FFileHelper::SaveStringToFile(OutString, *FilePath, FFileHelper::EEncodingOptions::AutoDetect,
+                                      &IFileManager::Get(), FILEWRITE_None);
     }
 
     FString CompressFile(const FString& SourceDir, const FString& TargetDir, const FString& FileName,
@@ -147,8 +139,7 @@ namespace AmbitFileHelpers
                 {
                     Executable = "powershell";
                     Arguments = "-command \"& { Compress-Archieve -Update -Path " + FPaths::Combine(
-                                *SourceDir, TEXT("*"))
-                            + " -CompressionLevel Fastest -DestinationPath " + Destination + " }\"";
+                        *SourceDir, TEXT("*")) + " -CompressionLevel Fastest -DestinationPath " + Destination + " }\"";
                 }
             }
             else

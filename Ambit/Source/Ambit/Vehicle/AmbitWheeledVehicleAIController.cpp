@@ -22,20 +22,18 @@
 
 #include "AmbitVehicleHelpers.h"
 
-AAmbitWheeledVehicleAIController::AAmbitWheeledVehicleAIController(const FObjectInitializer& ObjectInitializer)
-    : Super(ObjectInitializer)
+AAmbitWheeledVehicleAIController::AAmbitWheeledVehicleAIController(const FObjectInitializer& ObjectInitializer) : Super(
+    ObjectInitializer)
 {
     PrimaryActorTick.bCanEverTick = true;
     PrimaryActorTick.TickGroup = TG_PrePhysics;
 
-    ThrottleController = FAmbitVehicleLongitudinalController(
-        PIDController::LongitudinalProportionalTerm,
-        PIDController::LongitudinalDifferentialTerm,
-        PIDController::LongitudinalIntegralTerm);
-    SteeringController = FAmbitVehicleLateralController(
-        PIDController::LateralProportionalTerm,
-        PIDController::LateralDifferentialTerm,
-        PIDController::LateralIntegralTerm);
+    ThrottleController = FAmbitVehicleLongitudinalController(PIDController::LongitudinalProportionalTerm,
+                                                             PIDController::LongitudinalDifferentialTerm,
+                                                             PIDController::LongitudinalIntegralTerm);
+    SteeringController = FAmbitVehicleLateralController(PIDController::LateralProportionalTerm,
+                                                        PIDController::LateralDifferentialTerm,
+                                                        PIDController::LateralIntegralTerm);
 }
 
 void AAmbitWheeledVehicleAIController::OnPossess(APawn* APawn)
@@ -150,8 +148,7 @@ void AAmbitWheeledVehicleAIController::Tick(const float DeltaTime)
     for (int i = 0; i < WaypointsBuffer.Num(); i++)
     {
         if (FVector::Dist(FVector(CurrentLocation.X, CurrentLocation.Y, 0),
-                          FVector(WaypointsBuffer[i].X, WaypointsBuffer[i].Y, 0))
-            < WaypointDistanceThreshold)
+                          FVector(WaypointsBuffer[i].X, WaypointsBuffer[i].Y, 0)) < WaypointDistanceThreshold)
         {
             MaxIndex = i;
         }
@@ -170,8 +167,7 @@ void AAmbitWheeledVehicleAIController::Tick(const float DeltaTime)
     }
 }
 
-void AAmbitWheeledVehicleAIController::SetVehicleRoute(
-    const TArray<FTransform>& Locations)
+void AAmbitWheeledVehicleAIController::SetVehicleRoute(const TArray<FTransform>& Locations)
 {
     for (const FTransform& Transform : Locations)
     {

@@ -19,10 +19,7 @@
 #include "AmbitMode.h"
 #include "AmbitObject.h"
 
-TArray<FString> FGltfFileTypeDropdownMenu::Values = {
-    GltfFileType::KGltf,
-    GltfFileType::KGlb
-};
+TArray<FString> FGltfFileTypeDropdownMenu::Values = {GltfFileType::KGltf, GltfFileType::KGlb};
 
 FString FGltfFileTypeDropdownMenu::GetMenuItem()
 {

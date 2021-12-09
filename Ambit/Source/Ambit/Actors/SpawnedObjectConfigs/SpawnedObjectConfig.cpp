@@ -21,8 +21,7 @@
 
 #include <AmbitUtils/JsonHelpers.h>
 
-TSharedPtr<FJsonObject>
-USpawnedObjectConfig::SerializeToJson() const
+TSharedPtr<FJsonObject> USpawnedObjectConfig::SerializeToJson() const
 {
     TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
 
@@ -33,40 +32,32 @@ USpawnedObjectConfig::SerializeToJson() const
         SpawnedObjects.GenerateKeyArray(ActorsPaths);
         for (const FString& PathName : ActorsPaths)
         {
-            const TArray<FTransform>* PathNameTransforms =
-                    SpawnedObjects.Find(PathName);
+            const TArray<FTransform>* PathNameTransforms = SpawnedObjects.Find(PathName);
             if (PathNameTransforms != nullptr)
             {
                 for (const FTransform& Transform : *PathNameTransforms)
                 {
-                    const TSharedPtr<FJsonObject> TransformJson = MakeShareable(
-                        new FJsonObject);
+                    const TSharedPtr<FJsonObject> TransformJson = MakeShareable(new FJsonObject);
                     // The unit is centimeter
-                    TransformJson->SetStringField(
-                        JsonConstants::AmbitSpawner::KActorToSpawnKey, PathName);
+                    TransformJson->SetStringField(JsonConstants::AmbitSpawner::KActorToSpawnKey, PathName);
                     const FVector& Location = Transform.GetLocation();
-                    TransformJson->SetArrayField(
-                        JsonConstants::KAmbitSpawnerLocationsKey,
-                        FJsonHelpers::SerializeVector3(Location));
+                    TransformJson->SetArrayField(JsonConstants::KAmbitSpawnerLocationsKey,
+                                                 FJsonHelpers::SerializeVector3(Location));
                     const FRotator& Rotation = Transform.Rotator();
-                    TransformJson->SetArrayField(
-                        JsonConstants::KAmbitSpawnerRotationsKey,
-                        FJsonHelpers::SerializeRotation(Rotation));
-                    SpawnTransformsJson.Add(
-                        MakeShareable(new FJsonValueObject(TransformJson)));
+                    TransformJson->SetArrayField(JsonConstants::KAmbitSpawnerRotationsKey,
+                                                 FJsonHelpers::SerializeRotation(Rotation));
+                    SpawnTransformsJson.Add(MakeShareable(new FJsonValueObject(TransformJson)));
                 }
             }
         }
 
-        Json->SetArrayField(JsonConstants::KAmbitSpawnerObjectsKey,
-                            SpawnTransformsJson);
+        Json->SetArrayField(JsonConstants::KAmbitSpawnerObjectsKey, SpawnTransformsJson);
     }
 
     return Json;
 }
 
-void USpawnedObjectConfig::DeserializeFromJson(
-    TSharedPtr<FJsonObject> JsonObject)
+void USpawnedObjectConfig::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 {
     // Does nothing since this class is not supposed to be deserialized
 }

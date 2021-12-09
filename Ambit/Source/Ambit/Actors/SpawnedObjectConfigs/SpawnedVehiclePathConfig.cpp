@@ -20,35 +20,29 @@
 
 #include <AmbitUtils/JsonHelpers.h>
 
-TSharedPtr<FJsonObject>
-USpawnedVehiclePathConfig::SerializeToJson() const
+TSharedPtr<FJsonObject> USpawnedVehiclePathConfig::SerializeToJson() const
 {
     TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
 
     if (Waypoints.Num() > 0 && !SpawnedVehicle.IsEmpty())
     {
-        Json->SetStringField(
-            JsonConstants::AmbitPathGenerator::KVehicleToSpawnKey, SpawnedVehicle);
+        Json->SetStringField(JsonConstants::AmbitPathGenerator::KVehicleToSpawnKey, SpawnedVehicle);
         //unit is cm/s
-        Json->SetNumberField(
-            JsonConstants::AmbitPathGenerator::KSpeedLimit, SpeedLimit);
+        Json->SetNumberField(JsonConstants::AmbitPathGenerator::KSpeedLimit, SpeedLimit);
 
         TArray<TSharedPtr<FJsonValue>> WaypointsJson;
         for (const FVector& Waypoint : Waypoints)
         {
-            WaypointsJson.Add(
-                MakeShareable(new FJsonValueArray(FJsonHelpers::SerializeVector3(Waypoint))));
+            WaypointsJson.Add(MakeShareable(new FJsonValueArray(FJsonHelpers::SerializeVector3(Waypoint))));
         }
 
-        Json->SetArrayField(JsonConstants::AmbitPathGenerator::KWaypoints,
-                            WaypointsJson);
+        Json->SetArrayField(JsonConstants::AmbitPathGenerator::KWaypoints, WaypointsJson);
     }
 
     return Json;
 }
 
-void USpawnedVehiclePathConfig::DeserializeFromJson(
-    TSharedPtr<FJsonObject> JsonObject)
+void USpawnedVehiclePathConfig::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 {
     // Does nothing since this class is not supposed to be deserialized
 }

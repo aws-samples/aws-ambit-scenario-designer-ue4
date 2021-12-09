@@ -24,34 +24,29 @@ struct AMBIT_API FAmbitWeatherParameters
     GENERATED_USTRUCT_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AmbitWeather,
-        meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax =
-            "100.0"))
+        meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax = "100.0"))
     float Cloudiness = 0.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AmbitWeather,
-        meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax =
-            "100.0"))
+        meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax = "100.0"))
     float Precipitation = 0.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AmbitWeather,
-        meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax =
-            "100.0"))
+        meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax = "100.0"))
     float Puddles = 0.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AmbitWeather,
-        meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax =
-            "100.0"))
+        meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax = "100.0"))
     float Wetness = 0.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AmbitWeather,
-        meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax =
-            "100.0"))
+        meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax = "100.0"))
     float FogDensity = 0.0f;
 
     FAmbitWeatherParameters() = default;
 
-    FAmbitWeatherParameters(float NewCloudiness, float NewPrecipitation, float NewPuddles,
-                            float NewWetness, float NewFogDensity);
+    FAmbitWeatherParameters(float NewCloudiness, float NewPrecipitation, float NewPuddles, float NewWetness,
+                            float NewFogDensity);
 
     bool operator==(const FAmbitWeatherParameters& WeatherParameters) const;
 };

@@ -82,35 +82,37 @@ void FSpawnerDetails::AddSpawnerButtonForObject(TWeakObjectPtr<ASpawnWithHoudini
 
     // Obstacle Spawner Buttons
     IDetailCategoryBuilder& SpawnerSettingsCategory = DetailBuilder.
-            EditCategory(KCategoryName);
+        EditCategory(KCategoryName);
 
+    // @formatter:off
     SpawnerSettingsCategory.AddCustomRow(
         FText::FromString(KSpawnerGroup))
-    [
-        SNew(SHorizontalBox)
-        + SHorizontalBox::Slot()
-          .HAlign(HAlign_Center)
-          .AutoWidth()
-          .Padding(KPaddingLeft, KPaddingRemainingSides, KPaddingRemainingSides, KPaddingRemainingSides)
         [
-            SNew(SButton)
-            .ContentPadding(FMargin(KMarginHorizontal, KMarginVertical))
-        .Text(FText::FromString(KGenerate))
-        .OnClicked_Lambda(OnGenerateClicked)
-        .ToolTipText(FText::FromString(KHintTextGenerateObstacles))
-        ]
-        + SHorizontalBox::Slot()
-          .HAlign(HAlign_Center)
-          .AutoWidth()
-          .Padding(KPaddingLeft, KPaddingRemainingSides, KPaddingRemainingSides, KPaddingRemainingSides)
-        [
-            SNew(SButton)
-            .ContentPadding(FMargin(KMarginHorizontal, KMarginVertical))
-        .Text(FText::FromString(KClear))
-        .OnClicked_Lambda(OnClearClicked)
-        .ToolTipText(FText::FromString(KHintTextClearObstacles))
-        ]
-    ];
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .HAlign(HAlign_Center)
+            .AutoWidth()
+            .Padding(KPaddingLeft, KPaddingRemainingSides, KPaddingRemainingSides, KPaddingRemainingSides)
+            [
+                SNew(SButton)
+                .ContentPadding(FMargin(KMarginHorizontal, KMarginVertical))
+                .Text(FText::FromString(KGenerate))
+                .OnClicked_Lambda(OnGenerateClicked)
+                .ToolTipText(FText::FromString(KHintTextGenerateObstacles))
+            ]
+            + SHorizontalBox::Slot()
+            .HAlign(HAlign_Center)
+            .AutoWidth()
+            .Padding(KPaddingLeft, KPaddingRemainingSides, KPaddingRemainingSides, KPaddingRemainingSides)
+            [
+                SNew(SButton)
+                .ContentPadding(FMargin(KMarginHorizontal, KMarginVertical))
+                .Text(FText::FromString(KClear))
+                .OnClicked_Lambda(OnClearClicked)
+                .ToolTipText(FText::FromString(KHintTextClearObstacles))
+            ]
+        ];
+    // @formatter:on
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION

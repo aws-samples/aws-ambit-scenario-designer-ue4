@@ -41,14 +41,12 @@ public:
 
     /** The speed limit of the vehicle running along the path in km/h */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ambit Vehicle Path Generator",
-        meta = (DisplayName = "Speed Limit",
-            ClampMin = "0.1", UIMin = "0.1"))
+        meta = (DisplayName = "Speed Limit", ClampMin = "0.1", UIMin = "0.1"))
     float SpeedLimit = 20.f;
 
     /** The fixed distance between each generated Waypoint in m */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ambit Vehicle Path Generator",
-        meta = (DisplayName = "Distance Between Waypoints",
-            ClampMin = "0.1", UIMin = "0.1"))
+        meta = (DisplayName = "Distance Between Waypoints", ClampMin = "0.1", UIMin = "0.1"))
     float DistanceBetweenWaypoints = 5.f;
 
     /** Whether to render Waypoint out for debugging purpose at runtime*/

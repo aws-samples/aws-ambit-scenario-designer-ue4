@@ -34,26 +34,22 @@ void FTimeOfDayTypes::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 {
     if (JsonObject->HasField(TimeOfDay::KMorning))
     {
-        SetMorning(JsonObject->GetBoolField(
-            TimeOfDay::KMorning));
+        SetMorning(JsonObject->GetBoolField(TimeOfDay::KMorning));
     }
 
     if (JsonObject->HasField(TimeOfDay::KMidDay))
     {
-        SetNoon(JsonObject->GetBoolField(
-            TimeOfDay::KMidDay));
+        SetNoon(JsonObject->GetBoolField(TimeOfDay::KMidDay));
     }
 
     if (JsonObject->HasField(TimeOfDay::KEvening))
     {
-        SetEvening(JsonObject->GetBoolField(
-            TimeOfDay::KEvening));
+        SetEvening(JsonObject->GetBoolField(TimeOfDay::KEvening));
     }
 
     if (JsonObject->HasField(TimeOfDay::KNight))
     {
-        SetNight(JsonObject->GetBoolField(
-            TimeOfDay::KNight));
+        SetNight(JsonObject->GetBoolField(TimeOfDay::KNight));
     }
 }
 

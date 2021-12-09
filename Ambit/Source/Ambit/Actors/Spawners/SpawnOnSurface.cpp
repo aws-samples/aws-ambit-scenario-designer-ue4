@@ -33,8 +33,7 @@ ASpawnOnSurface::ASpawnOnSurface()
     RootComponent = IconComponent;
 }
 
-void ASpawnOnSurface::PostEditChangeProperty(
-    FPropertyChangedEvent& PropertyChangedEvent)
+void ASpawnOnSurface::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);
 
@@ -50,8 +49,7 @@ TSharedPtr<FSpawnerBaseConfig> ASpawnOnSurface::GetConfiguration() const
     return Super::GetConfiguration<FSpawnerBaseConfig>();
 }
 
-void ASpawnOnSurface::Configure(const
-    TSharedPtr<FSpawnerBaseConfig>& Config)
+void ASpawnOnSurface::Configure(const TSharedPtr<FSpawnerBaseConfig>& Config)
 {
     Super::Configure<FSpawnerBaseConfig>(Config);
 }
@@ -73,12 +71,10 @@ TMap<FString, TArray<FTransform>> ASpawnOnSurface::GenerateActors()
     const TArray<AActor*>& SurfaceActors = AmbitWorldHelpers::GetActorsByMatchBy(
         MatchBy, SurfaceNamePattern, SurfaceTags);
 
-    UE_LOG(LogAmbit, Display, TEXT("%s: Matching surface actors: %i"), *this->GetActorLabel(),
-           SurfaceActors.Num());
+    UE_LOG(LogAmbit, Display, TEXT("%s: Matching surface actors: %i"), *this->GetActorLabel(), SurfaceActors.Num());
 
-    const TArray<FTransform>& Transforms =
-            AmbitWorldHelpers::GenerateRandomLocationsFromActors(SurfaceActors, RandomSeed,
-                                                                 DensityMin, DensityMax, RotationMin, RotationMax);
+    const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
+        SurfaceActors, RandomSeed, DensityMin, DensityMax, RotationMin, RotationMax);
 
     if (Transforms.Num() > 0)
     {

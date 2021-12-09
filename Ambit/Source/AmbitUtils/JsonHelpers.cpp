@@ -21,15 +21,13 @@
 
 namespace FJsonHelpers
 {
-    FString SerializeJson(const TSharedPtr<FJsonObject>& JsonObject)
+    FString SerializeJson(TSharedPtr<FJsonObject> JsonObject)
     {
         typedef TJsonWriter<TCHAR, TPrettyJsonPrintPolicy<TCHAR>> FStringWriter;
-        typedef TJsonWriterFactory<TCHAR, TPrettyJsonPrintPolicy<TCHAR>>
-                FStringWriterFactory;
+        typedef TJsonWriterFactory<TCHAR, TPrettyJsonPrintPolicy<TCHAR>> FStringWriterFactory;
 
         FString OutputString;
-        const TSharedRef<FStringWriter> Writer = FStringWriterFactory::Create(
-            &OutputString);
+        const TSharedRef<FStringWriter> Writer = FStringWriterFactory::Create(&OutputString);
         if (!FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer))
         {
             return "";
@@ -41,12 +39,10 @@ namespace FJsonHelpers
     FString SerializeJsonCondense(const TSharedPtr<FJsonObject>& JsonObject)
     {
         typedef TJsonWriter<TCHAR, TCondensedJsonPrintPolicy<TCHAR>> FStringWriter;
-        typedef TJsonWriterFactory<TCHAR, TCondensedJsonPrintPolicy<TCHAR>>
-                FStringWriterFactory;
+        typedef TJsonWriterFactory<TCHAR, TCondensedJsonPrintPolicy<TCHAR>> FStringWriterFactory;
 
         FString OutputString;
-        const TSharedRef<FStringWriter> Writer = FStringWriterFactory::Create(
-            &OutputString);
+        const TSharedRef<FStringWriter> Writer = FStringWriterFactory::Create(&OutputString);
         if (!FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer))
         {
             return "";
@@ -58,8 +54,7 @@ namespace FJsonHelpers
     TSharedPtr<FJsonObject> DeserializeJson(const FString& JsonString)
     {
         TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
-        const TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(
-            JsonString);
+        const TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonString);
 
         if (!FJsonSerializer::Deserialize(Reader, JsonObject))
         {
@@ -85,8 +80,7 @@ namespace FJsonHelpers
         }
         catch (int32 n)
         {
-            FString Message =
-                    "Instead of size 3, the JSON array is of size ";
+            FString Message = "Instead of size 3, the JSON array is of size ";
             Message.AppendInt(n);
             FMenuHelpers::LogErrorAndPopup(Message);
         }
@@ -109,8 +103,7 @@ namespace FJsonHelpers
         }
         catch (const int32 n)
         {
-            FString Message =
-                    "Instead of size 3, the JSON array is of size ";
+            FString Message = "Instead of size 3, the JSON array is of size ";
             Message.AppendInt(n);
             FMenuHelpers::LogErrorAndPopup(Message);
         }

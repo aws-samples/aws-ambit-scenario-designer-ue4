@@ -33,9 +33,8 @@ void FMenuHelpers::LogErrorAndPopup(const FString& Message)
     DisplayMessagePopup(Message, "Error");
 }
 
-void FMenuHelpers::CreateNotification(const FText& MessageText, const FSlateBrush* Image,
-                                      float FadeInDuration, float FadeOutDuration, float ExpireDuration,
-                                      bool bFireAndForget)
+void FMenuHelpers::CreateNotification(const FText& MessageText, const FSlateBrush* Image, float FadeInDuration,
+                                      float FadeOutDuration, float ExpireDuration, bool bFireAndForget)
 {
     FNotificationInfo Info(MessageText);
     Info.bFireAndForget = bFireAndForget;

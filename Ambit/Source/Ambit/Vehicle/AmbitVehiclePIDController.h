@@ -24,8 +24,8 @@ class AMBIT_API FAmbitVehiclePIDController
 public:
     FAmbitVehiclePIDController() = default;
 
-    FAmbitVehiclePIDController(const float P, const float D, const float I)
-        : Proportional(P), Differential(D), Integral(I)
+    FAmbitVehiclePIDController(const float P, const float D, const float I) : Proportional(P), Differential(D),
+                                                                              Integral(I)
     {
     }
 
@@ -59,8 +59,8 @@ class AMBIT_API FAmbitVehicleLongitudinalController : public FAmbitVehiclePIDCon
 public:
     FAmbitVehicleLongitudinalController() = default;
 
-    FAmbitVehicleLongitudinalController(const float P, const float D, const float I)
-        : FAmbitVehiclePIDController(P, D, I)
+    FAmbitVehicleLongitudinalController(const float P, const float D, const float I) : FAmbitVehiclePIDController(
+        P, D, I)
     {
     }
 
@@ -87,8 +87,7 @@ class AMBIT_API FAmbitVehicleLateralController : public FAmbitVehiclePIDControll
 public:
     FAmbitVehicleLateralController() = default;
 
-    FAmbitVehicleLateralController(const float P, const float D, const float I)
-        : FAmbitVehiclePIDController(P, D, I)
+    FAmbitVehicleLateralController(const float P, const float D, const float I) : FAmbitVehiclePIDController(P, D, I)
     {
     }
 

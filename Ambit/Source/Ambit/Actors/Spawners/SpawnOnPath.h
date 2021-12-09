@@ -44,15 +44,13 @@ public:
     /**
      * Rotation of the spawned objects will be relative to the spline orientation.
      */
-    UPROPERTY(EditAnywhere, Category = "Ambit Spawner",
-        meta = (DisplayAfter = "DensityMax"))
+    UPROPERTY(EditAnywhere, Category = "Ambit Spawner", meta = (DisplayAfter = "DensityMax"))
     bool bFollowSplineRotation = false; // Put follow spline checkbox below density fields
 
     /**
      * See https://docs.unrealengine.com/4.26/en-US/API/Runtime/Engine/GameFramework/AActor/PostEditChangeProperty/
      */
-    void PostEditChangeProperty(
-        FPropertyChangedEvent& PropertyChangedEvent) override;
+    void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
     /**
      * @inheritDoc

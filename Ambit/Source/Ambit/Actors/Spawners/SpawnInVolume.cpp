@@ -43,14 +43,12 @@ ASpawnInVolume::ASpawnInVolume()
     IconComponent->SetupAttachment(RootComponent);
 }
 
-void ASpawnInVolume::PostEditChangeProperty(
-    FPropertyChangedEvent& PropertyChangedEvent)
+void ASpawnInVolume::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);
 
     const FRotator& BoxRotation = Box->GetComponentTransform().Rotator();
-    if (!FMath::IsNearlyEqual(BoxRotation.Roll, 0.f) ||
-        !FMath::IsNearlyEqual(BoxRotation.Pitch, 0.f))
+    if (!FMath::IsNearlyEqual(BoxRotation.Roll, 0.f) || !FMath::IsNearlyEqual(BoxRotation.Pitch, 0.f))
     {
         const FString& Message = FString::Printf(
             TEXT(
@@ -65,18 +63,15 @@ void ASpawnInVolume::PostEditChangeProperty(
     }
 }
 
-TSharedPtr<FSpawnInVolumeConfig>
-ASpawnInVolume::GetConfiguration() const
+TSharedPtr<FSpawnInVolumeConfig> ASpawnInVolume::GetConfiguration() const
 {
-    TSharedPtr<FSpawnInVolumeConfig> Config =
-            Super::GetConfiguration<FSpawnInVolumeConfig>();
+    TSharedPtr<FSpawnInVolumeConfig> Config = Super::GetConfiguration<FSpawnInVolumeConfig>();
     Config->BoxExtent = Box->GetScaledBoxExtent();
     Config->bSnapToSurfaceBelow = bSnapToSurfaceBelow;
     return Config;
 }
 
-void ASpawnInVolume::Configure(
-    const TSharedPtr<FSpawnInVolumeConfig>& Config)
+void ASpawnInVolume::Configure(const TSharedPtr<FSpawnInVolumeConfig>& Config)
 {
     Super::Configure<FSpawnInVolumeConfig>(Config);
     Box->SetBoxExtent(Config->BoxExtent);
@@ -94,8 +89,7 @@ TMap<FString, TArray<FTransform>> ASpawnInVolume::GenerateActors()
     }
 
     const FRotator& BoxRotation = Box->GetComponentTransform().Rotator();
-    if (!FMath::IsNearlyEqual(BoxRotation.Roll, 0.f) ||
-        !FMath::IsNearlyEqual(BoxRotation.Pitch, 0.f))
+    if (!FMath::IsNearlyEqual(BoxRotation.Roll, 0.f) || !FMath::IsNearlyEqual(BoxRotation.Pitch, 0.f))
     {
         const FString& Message = FString::Printf(
             TEXT(
@@ -121,8 +115,7 @@ TMap<FString, TArray<FTransform>> ASpawnInVolume::GenerateActors()
     }
 
     const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
-        Box, SurfacesToHit, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax,
-        RotationMin, RotationMax);
+        Box, SurfacesToHit, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax, RotationMin, RotationMax);
 
     if (Transforms.Num() > 0)
     {

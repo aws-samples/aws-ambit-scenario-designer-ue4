@@ -23,10 +23,8 @@
 #include "Ambit/Utils/AmbitWorldHelpers.h"
 
 
-BEGIN_DEFINE_SPEC(SpawnWithHoudiniSpec,
-                  "Ambit.SpawnWithHoudini",
-                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-                  ApplicationContextMask)
+BEGIN_DEFINE_SPEC(SpawnWithHoudiniSpec, "Ambit.SpawnWithHoudini",
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     UWorld* World;
     AStaticMeshActor* SurfaceActor;
@@ -54,8 +52,7 @@ void SpawnWithHoudiniSpec::Define()
         const FRotator Rotation(0, 0, 0);
         const FTransform Transform(Rotation, Location);
 
-        SurfaceActor = World->SpawnActor<AStaticMeshActor>(
-            AStaticMeshActor::StaticClass(), Transform, Params);
+        SurfaceActor = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), Transform, Params);
 
         SurfaceActor->SetActorLabel(SurfaceActorName);
         SurfaceActor->SetMobility(EComponentMobility::Movable);
@@ -239,8 +236,7 @@ void SpawnWithHoudiniSpec::Define()
 
                 TestEqual("GetSpawnedActor reflects AssetDetails SpawnedActors", Spawner->GetSpawnedActors().Num(),
                           InnerSpawnedActorCount);
-                TestEqual("GetSpawnedActor has the correct number of actors",
-                          Spawner->GetSpawnedActors().Num(), 2);
+                TestEqual("GetSpawnedActor has the correct number of actors", Spawner->GetSpawnedActors().Num(), 2);
             });
         });
 
@@ -268,13 +264,12 @@ void SpawnWithHoudiniSpec::Define()
                {
                    Spawner->GenerateObstacles();
 
-                   const int32 InnerSpawnedActorCount = Spawner->HoudiniAssetDetails[0].SpawnedActors.Num() +
-                           Spawner->HoudiniAssetDetails[1].SpawnedActors.Num();
+                   const int32 InnerSpawnedActorCount = Spawner->HoudiniAssetDetails[0].SpawnedActors.Num() + Spawner->
+                           HoudiniAssetDetails[1].SpawnedActors.Num();
 
                    TestEqual("GetSpawnedActor reflects AssetDetails SpawnedActors", Spawner->GetSpawnedActors().Num(),
                              InnerSpawnedActorCount);
-                   TestEqual("GetSpawnedActor has the correct number of actors",
-                             Spawner->GetSpawnedActors().Num(), 2);
+                   TestEqual("GetSpawnedActor has the correct number of actors", Spawner->GetSpawnedActors().Num(), 2);
                });
         });
 
@@ -464,8 +459,7 @@ void SpawnWithHoudiniSpec::Define()
             {
                 Spawner->ClearObstacles();
 
-                TestEqual("Spawned Actors should reset to 0",
-                          Spawner->HoudiniAssetDetails[0].SpawnedActors.Num(), 0);
+                TestEqual("Spawned Actors should reset to 0", Spawner->HoudiniAssetDetails[0].SpawnedActors.Num(), 0);
             });
 
             It("Should reset when all actors even when not available (Destroyed by Houdini Deletion)", [this]()
@@ -479,7 +473,7 @@ void SpawnWithHoudiniSpec::Define()
 
             It("Should reset when all actors even when not available (Destroyed by UE Deletion)", [this]()
             {
-                const EMatchBy MatchBy = NameOrTags;
+                const EMatchBy MatchBy = EMatchBy::NameOrTags;
                 const FString SurfaceNamePattern = "sample_cube";
                 const TArray<FName> SurfaceTags;
 

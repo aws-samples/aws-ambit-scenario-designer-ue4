@@ -32,8 +32,7 @@ void MemoryManagerWrapper::FreeMemory(void* memoryPtr)
     return operator delete(memoryPtr);
 }
 
-FAWSUE4Module::FAWSUE4Module()
-    : SdkOptions(new Aws::SDKOptions)
+FAWSUE4Module::FAWSUE4Module() : SdkOptions(new Aws::SDKOptions)
 {
 }
 

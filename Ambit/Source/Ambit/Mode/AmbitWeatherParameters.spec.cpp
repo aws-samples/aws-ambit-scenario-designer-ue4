@@ -17,8 +17,7 @@
 #include "Misc/AutomationTest.h"
 
 DEFINE_SPEC(AmbitWeatherParametersSpec, "Ambit.AmbitWeatherParameters",
-            EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-            ApplicationContextMask)
+            EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
 void AmbitWeatherParametersSpec::Define()
 {

@@ -60,7 +60,7 @@ TSharedPtr<SWidget> FAmbitModeToolkit::GetInlineContent() const
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
-void SAmbitWidget::Construct(const FArguments& InArgs, const TSharedRef<FAmbitModeToolkit>& InParentToolkit)
+void SAmbitWidget::Construct(const FArguments& InArgs, TSharedRef<FAmbitModeToolkit> InParentToolkit)
 {
     FPropertyEditorModule& PropertyEditorModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>(
         "PropertyEditor");
@@ -81,6 +81,7 @@ void SAmbitWidget::Construct(const FArguments& InArgs, const TSharedRef<FAmbitMo
     const FMargin StandardLeftPadding(6.f, 3.f, 3.f, 3.f);
     const FMargin StandardRightPadding(3.f, 3.f, 6.f, 3.f);
 
+    // @formatter:off
     ChildSlot
     [
         SNew(SVerticalBox)
@@ -88,15 +89,15 @@ void SAmbitWidget::Construct(const FArguments& InArgs, const TSharedRef<FAmbitMo
         .AutoHeight()
         [
             SNew(SHorizontalBox)
-            + SHorizontalBox::Slot()
-              .Padding(StandardLeftPadding)
-              .HAlign(HAlign_Left)
+            +SHorizontalBox::Slot()
+            .Padding(StandardLeftPadding)
+            .HAlign(HAlign_Left)
 
             + SHorizontalBox::Slot()
-              .Padding(StandardRightPadding)
-              .HAlign(HAlign_Right)
-              .VAlign(VAlign_Center)
-              .AutoWidth()
+            .Padding(StandardRightPadding)
+            .HAlign(HAlign_Right)
+            .VAlign(VAlign_Center)
+            .AutoWidth()
             [
                 // Tutorial link
                 IntroTutorials.CreateTutorialsWidget(TEXT("AmbitMode"))
@@ -115,6 +116,8 @@ void SAmbitWidget::Construct(const FArguments& InArgs, const TSharedRef<FAmbitMo
             ]
         ]
     ];
+
+    // @formatter:on
 
     RefreshDetailPanel();
 }

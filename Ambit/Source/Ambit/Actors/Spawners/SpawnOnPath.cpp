@@ -41,8 +41,7 @@ ASpawnOnPath::ASpawnOnPath()
     IconComponent->SetupAttachment(RootComponent);
 }
 
-void ASpawnOnPath::PostEditChangeProperty(
-    FPropertyChangedEvent& PropertyChangedEvent)
+void ASpawnOnPath::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);
     // If the game is running, regenerate actors whenever the user changes parameters.
@@ -52,39 +51,30 @@ void ASpawnOnPath::PostEditChangeProperty(
     }
 }
 
-TSharedPtr<FSpawnOnPathConfig>
-ASpawnOnPath::GetConfiguration() const
+TSharedPtr<FSpawnOnPathConfig> ASpawnOnPath::GetConfiguration() const
 {
-    TSharedPtr<FSpawnOnPathConfig> Config =
-            Super::GetConfiguration<FSpawnOnPathConfig>();
+    TSharedPtr<FSpawnOnPathConfig> Config = Super::GetConfiguration<FSpawnOnPathConfig>();
     Config->bSnapToSurfaceBelow = bSnapToSurfaceBelow;
     TArray<FSplinePoint> SplinePoints;
     const int32 SplinePointCount = Spline->GetNumberOfSplinePoints();
     for (int32 i = 0; i < SplinePointCount; i++)
     {
-        const FVector& ArriveVector = Spline->GetArriveTangentAtSplinePoint(i,
-                                                                            ESplineCoordinateSpace::Local);
-        const float InputKey = Spline->GetInputKeyAtDistanceAlongSpline(
-            Spline->GetDistanceAlongSplineAtSplinePoint(i));
-        const FVector& LeaveVector = Spline->GetLeaveTangentAtSplinePoint(i,
-                                                                          ESplineCoordinateSpace::Local);
-        const FVector& Location = Spline->GetLocationAtSplinePoint(i,
-                                                                   ESplineCoordinateSpace::Local);
-        const FRotator& Rotation = Spline->GetRotationAtSplineInputKey(i,
-                                                                       ESplineCoordinateSpace::Local);
+        const FVector& ArriveVector = Spline->GetArriveTangentAtSplinePoint(i, ESplineCoordinateSpace::Local);
+        const float InputKey = Spline->GetInputKeyAtDistanceAlongSpline(Spline->GetDistanceAlongSplineAtSplinePoint(i));
+        const FVector& LeaveVector = Spline->GetLeaveTangentAtSplinePoint(i, ESplineCoordinateSpace::Local);
+        const FVector& Location = Spline->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::Local);
+        const FRotator& Rotation = Spline->GetRotationAtSplineInputKey(i, ESplineCoordinateSpace::Local);
         const FVector& Scale = Spline->GetScaleAtSplinePoint(i);
         const TEnumAsByte<ESplinePointType::Type>& Type = Spline->GetSplinePointType(i);
 
-        FSplinePoint Point(InputKey, Location, ArriveVector,
-                           LeaveVector, Rotation, Scale, Type);
+        FSplinePoint Point(InputKey, Location, ArriveVector, LeaveVector, Rotation, Scale, Type);
         SplinePoints.Add(Point);
     }
     Config->SplinePoints = SplinePoints;
     return Config;
 }
 
-void ASpawnOnPath::Configure(const
-    TSharedPtr<FSpawnOnPathConfig>& Config)
+void ASpawnOnPath::Configure(const TSharedPtr<FSpawnOnPathConfig>& Config)
 {
     Super::Configure<FSpawnOnPathConfig>(Config);
     Spline->ClearSplinePoints();
@@ -110,8 +100,8 @@ TMap<FString, TArray<FTransform>> ASpawnOnPath::GenerateActors()
         MatchBy, SurfaceNamePattern, SurfaceTags);
 
     const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
-        Spline, SurfacesToHit, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax,
-        RotationMin, RotationMax, bFollowSplineRotation);
+        Spline, SurfacesToHit, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax, RotationMin, RotationMax,
+        bFollowSplineRotation);
 
     if (Transforms.Num() > 0)
     {

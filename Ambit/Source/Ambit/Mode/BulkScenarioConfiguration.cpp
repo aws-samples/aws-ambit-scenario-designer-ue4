@@ -31,19 +31,13 @@ TSharedPtr<FJsonObject> FBulkScenarioConfiguration::SerializeToJson() const
     TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
 
     JsonObject->SetStringField(JsonConstants::KVersionKey, KCurrentVersion);
-    JsonObject->SetStringField(JsonConstants::KConfigurationNameKey,
-                               this->ConfigurationName);
+    JsonObject->SetStringField(JsonConstants::KConfigurationNameKey, this->ConfigurationName);
     JsonObject->SetStringField(JsonConstants::KBatchNameKey, this->BatchName);
-    JsonObject->SetObjectField(JsonConstants::KTimeOfDayTypesKey,
-                               this->TimeOfDayTypes.SerializeToJson());
-    JsonObject->SetObjectField(JsonConstants::KWeatherTypesKey,
-                               this->WeatherTypes.SerializeToJson());
-    JsonObject->SetObjectField(JsonConstants::KBatchPedestrianDensityKey,
-                               this->PedestrianDensity.SerializeToJson());
-    JsonObject->SetObjectField(JsonConstants::KBatchTrafficDensityKey,
-                               this->VehicleDensity.SerializeToJson());
-    JsonObject->SetNumberField(JsonConstants::KNumberOfPermutationsKey,
-                               this->NumberOfPermutations);
+    JsonObject->SetObjectField(JsonConstants::KTimeOfDayTypesKey, this->TimeOfDayTypes.SerializeToJson());
+    JsonObject->SetObjectField(JsonConstants::KWeatherTypesKey, this->WeatherTypes.SerializeToJson());
+    JsonObject->SetObjectField(JsonConstants::KBatchPedestrianDensityKey, this->PedestrianDensity.SerializeToJson());
+    JsonObject->SetObjectField(JsonConstants::KBatchTrafficDensityKey, this->VehicleDensity.SerializeToJson());
+    JsonObject->SetNumberField(JsonConstants::KNumberOfPermutationsKey, this->NumberOfPermutations);
     JsonObject->SetObjectField(JsonConstants::KAllSpawnersConfigsKey, this->AllSpawnersConfigs);
 
     return JsonObject;
@@ -52,8 +46,7 @@ TSharedPtr<FJsonObject> FBulkScenarioConfiguration::SerializeToJson() const
 /**
  *Deserialize the BSC Json object into Unreal engine editor
  */
-void FBulkScenarioConfiguration::DeserializeFromJson(
-    TSharedPtr<FJsonObject> JsonObject)
+void FBulkScenarioConfiguration::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 {
     if (JsonObject->HasField(JsonConstants::KVersionKey))
     {
@@ -71,48 +64,38 @@ void FBulkScenarioConfiguration::DeserializeFromJson(
 
     if (JsonObject->HasField(JsonConstants::KConfigurationNameKey))
     {
-        this->ConfigurationName = JsonObject->GetStringField(
-            JsonConstants::KConfigurationNameKey);
+        this->ConfigurationName = JsonObject->GetStringField(JsonConstants::KConfigurationNameKey);
     }
 
     if (JsonObject->HasField(JsonConstants::KBatchNameKey))
     {
-        this->BatchName = JsonObject->GetStringField(
-            JsonConstants::KBatchNameKey);
+        this->BatchName = JsonObject->GetStringField(JsonConstants::KBatchNameKey);
     }
 
     if (JsonObject->HasField(JsonConstants::KTimeOfDayTypesKey))
     {
-        this->TimeOfDayTypes.DeserializeFromJson(
-            JsonObject->GetObjectField(
-                JsonConstants::KTimeOfDayTypesKey));
+        this->TimeOfDayTypes.DeserializeFromJson(JsonObject->GetObjectField(JsonConstants::KTimeOfDayTypesKey));
     }
 
     if (JsonObject->HasField(JsonConstants::KWeatherTypesKey))
     {
-        this->WeatherTypes.DeserializeFromJson(
-            JsonObject->GetObjectField(
-                JsonConstants::KWeatherTypesKey));
+        this->WeatherTypes.DeserializeFromJson(JsonObject->GetObjectField(JsonConstants::KWeatherTypesKey));
     }
 
     if (JsonObject->HasField(JsonConstants::KBatchPedestrianDensityKey))
     {
         this->PedestrianDensity.DeserializeFromJson(
-            JsonObject->GetObjectField(
-                JsonConstants::KBatchPedestrianDensityKey));
+            JsonObject->GetObjectField(JsonConstants::KBatchPedestrianDensityKey));
     }
 
     if (JsonObject->HasField(JsonConstants::KBatchTrafficDensityKey))
     {
-        this->VehicleDensity.DeserializeFromJson(
-            JsonObject->GetObjectField(
-                JsonConstants::KBatchTrafficDensityKey));
+        this->VehicleDensity.DeserializeFromJson(JsonObject->GetObjectField(JsonConstants::KBatchTrafficDensityKey));
     }
 
     if (JsonObject->HasField(JsonConstants::KNumberOfPermutationsKey))
     {
-        this->NumberOfPermutations = JsonObject->GetNumberField(
-            JsonConstants::KNumberOfPermutationsKey);
+        this->NumberOfPermutations = JsonObject->GetNumberField(JsonConstants::KNumberOfPermutationsKey);
     }
 }
 

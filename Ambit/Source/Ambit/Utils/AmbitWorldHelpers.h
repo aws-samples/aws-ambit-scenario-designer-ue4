@@ -33,8 +33,7 @@ namespace AmbitWorldHelpers
      * @param MaxDistance
      *  the maximum length of the line trace
      */
-    FHitResult LineTraceBelowWorldPoint(const FVector& Location,
-                                        const float MaxDistance = 100000);
+    FHitResult LineTraceBelowWorldPoint(const FVector& Location, const float MaxDistance = 100000);
 
     /**
      * Returns the list of actors that match by Name and/or a list of tags
@@ -50,10 +49,8 @@ namespace AmbitWorldHelpers
      * @return
      *  An array of all actors that match the rules
      */
-    TArray<AActor*> GetActorsByMatchBy(const EMatchBy& MatchBy,
-                                       const FString& NamePattern,
-                                       const TArray<FName>& TagsList,
-                                       const bool bMatchExactName = false);
+    TArray<AActor*> GetActorsByMatchBy(const EMatchBy& MatchBy, const FString& NamePattern,
+                                       const TArray<FName>& TagsList, const bool bMatchExactName = false);
 
     /**
      * Returns a list of locations in the provided actors.
@@ -73,10 +70,9 @@ namespace AmbitWorldHelpers
      * @return
      *  An array of locations within the ActorsToSearch list
      */
-    TArray<FTransform> GenerateRandomLocationsFromActors(
-        const TArray<AActor*>& ActorsToSearch, int32 RandomSeed,
-        float DensityMin = 0.0, float DensityMax = 0.2,
-        float RotationMin = 0.0, float RotationMax = 360.0);
+    TArray<FTransform> GenerateRandomLocationsFromActors(const TArray<AActor*>& ActorsToSearch, int32 RandomSeed,
+                                                         float DensityMin = 0.0, float DensityMax = 0.2,
+                                                         float RotationMin = 0.0, float RotationMax = 360.0);
 
 
     /**
@@ -120,10 +116,11 @@ namespace AmbitWorldHelpers
      * @return
      *  An array of locations within Spline and the ActorsToHit list (if any)
      */
-    TArray<FTransform> GenerateRandomLocationsFromSpline(
-        USplineComponent* Spline, const TArray<AActor*>& ActorsToHit,
-        int32 RandomSeed, bool bSnapToSurfaceBelow, float DensityMin = 0.0, float DensityMax = 0.2,
-        float RotationMin = 0.0, float RotationMax = 360.0, bool bFollowSplineRotation = false);
+    TArray<FTransform> GenerateRandomLocationsFromSpline(USplineComponent* Spline, const TArray<AActor*>& ActorsToHit,
+                                                         int32 RandomSeed, bool bSnapToSurfaceBelow,
+                                                         float DensityMin = 0.0, float DensityMax = 0.2,
+                                                         float RotationMin = 0.0, float RotationMax = 360.0,
+                                                         bool bFollowSplineRotation = false);
 
 
     /**
@@ -149,10 +146,10 @@ namespace AmbitWorldHelpers
      * @return
      *  An array of locations within Spline and the ActorsToHit list (if any)
      */
-    TArray<FTransform> GenerateRandomLocationsFromBox(
-        UBoxComponent* Box, const TArray<AActor*>& ActorsToHit, int32 RandomSeed,
-        bool bSnapToSurfaceBelow, float DensityMin = 0.0, float DensityMax = 0.2,
-        float RotationMin = 0.0, float RotationMax = 360.0);
+    TArray<FTransform> GenerateRandomLocationsFromBox(UBoxComponent* Box, const TArray<AActor*>& ActorsToHit,
+                                                      int32 RandomSeed, bool bSnapToSurfaceBelow,
+                                                      float DensityMin = 0.0, float DensityMax = 0.2,
+                                                      float RotationMin = 0.0, float RotationMax = 360.0);
 
     /**
      * Returns a list of locations separate by fix distance in the provided spline
@@ -164,6 +161,5 @@ namespace AmbitWorldHelpers
      * @return
      *  An array of locations within Spline
      */
-    TArray<FTransform> GenerateFixedLocationsFromSpline(
-        USplineComponent* Spline, float Distance = 1000.0);
+    TArray<FTransform> GenerateFixedLocationsFromSpline(USplineComponent* Spline, float Distance = 1000.0);
 };

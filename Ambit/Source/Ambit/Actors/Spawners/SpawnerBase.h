@@ -44,7 +44,7 @@ public:
      * Select to Match By AND/OR
      */
     UPROPERTY(EditAnywhere, Category = "Ambit Spawner")
-    TEnumAsByte<EMatchBy> MatchBy = NameAndTags;
+    TEnumAsByte<EMatchBy> MatchBy = EMatchBy::NameAndTags;
 
     /**
      * The search string used to find actors representing surfaces to spawn onto.
@@ -56,52 +56,43 @@ public:
     /**
      * The tag name used to find actors representing surfaces to spawn onto.
      */
-    UPROPERTY(EditAnywhere, Category = "Ambit Spawner",
-        meta = (DisplayName = "Surface Tags"))
+    UPROPERTY(EditAnywhere, Category = "Ambit Spawner", meta = (DisplayName = "Surface Tags"))
     TArray<FName> SurfaceTags;
 
     /**
      * The minimum number of items to spawn per square meter on average.
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category =
-        "Ambit Spawner",
-        meta = (DisplayName = "Items Per Meter (Min)", ClampMin = "0.0", UIMin =
-            "0.0"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ambit Spawner",
+        meta = (DisplayName = "Items Per Meter (Min)", ClampMin = "0.0", UIMin = "0.0"))
     float DensityMin = 0.05f;
 
     /**
      * The maximum number of items to spawn per square meter on average.
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category =
-        "Ambit Spawner",
-        meta = (DisplayName = "Items Per Meter (Max)", ClampMin = "0.0", UIMin =
-            "0.0"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ambit Spawner",
+        meta = (DisplayName = "Items Per Meter (Max)", ClampMin = "0.0", UIMin = "0.0"))
     float DensityMax = 0.2f;
 
     /**
      * Automatically sets maximum rotation equal to the minimum.
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category =
-        "Ambit Spawner")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ambit Spawner")
     bool bRestrictToOneRotation = false;
 
     /**
      * The minimum degree of rotation.
      */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category =
-        "Ambit Spawner",
-        meta = (DisplayName = "Degree of Rotation (Min)", ClampMin = "-360.0",
-            ClampMax = "360.0", UIMin = "-360.0", UIMax = "360.0"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ambit Spawner",
+        meta = (DisplayName = "Degree of Rotation (Min)", ClampMin = "-360.0", ClampMax = "360.0", UIMin = "-360.0",
+            UIMax = "360.0"))
     float RotationMin = 0.0f;
 
     /**
      * The maximum degree of rotation.
      */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ambit Spawner",
-        meta = (EditCondition = "!bRestrictToOneRotation", DisplayName =
-            "Degree of Rotation (Max)",
-            ClampMin = "-360.0", ClampMax = "360.0", UIMin = "-360.0", UIMax =
-            "360.0"))
+        meta = (EditCondition = "!bRestrictToOneRotation", DisplayName = "Degree of Rotation (Max)", ClampMin = "-360.0"
+            , ClampMax = "360.0", UIMin = "-360.0", UIMax = "360.0"))
     float RotationMax = 360.0;
 
     /**
@@ -120,15 +111,13 @@ public:
      * Whether or not to remove spawned obstacles
      * that overlap with other obstacles.
      */
-    UPROPERTY(EditAnywhere, AdvancedDisplay, BlueprintReadWrite,
-        Category = "Ambit Spawner")
+    UPROPERTY(EditAnywhere, AdvancedDisplay, BlueprintReadWrite, Category = "Ambit Spawner")
     bool bRemoveOverlaps = true;
 
     /**
      * Change this value to generate different random arrangements.
      */
-    UPROPERTY(EditAnywhere, AdvancedDisplay, Category =
-        "Ambit Spawner")
+    UPROPERTY(EditAnywhere, AdvancedDisplay, Category = "Ambit Spawner")
     int32 RandomSeed = 0;
 
     /**
@@ -153,8 +142,7 @@ public:
     /**
      * See https://docs.unrealengine.com/4.26/en-US/API/Runtime/Engine/GameFramework/AActor/PostEditChangeProperty/
      */
-    void PostEditChangeProperty(
-        FPropertyChangedEvent& PropertyChangedEvent) override;
+    void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
     /**
      * @inheritDoc
@@ -187,18 +175,15 @@ protected:
 
     // Creates no-duplicate version of ActorsToSpawn array and adjusts
     // collision profiles to match ambit spawned obstacles profile
-    void CleanAndSetUpActorsToSpawn(
-        TArray<TSubclassOf<AActor>>& OutArray,
-        TMap<FString, TArray<FCollisionResponseTemplate>>& OutMap);
+    void CleanAndSetUpActorsToSpawn(TArray<TSubclassOf<AActor>>& OutArray,
+                                    TMap<FString, TArray<FCollisionResponseTemplate>>& OutMap);
 
     virtual TMap<FString, TArray<FTransform>> GenerateActors()
-    PURE_VIRTUAL(AmbitSpawnerParent::GenerateActors,
+    PURE_VIRTUAL(AmbitSpawnerParent::GenerateActors, 
                  return TMap<FString, TArray<FTransform>>(););
 
     // Spawns actors using locations and rotations in provided array
-    void SpawnActorsAtTransforms(
-        const TArray<FTransform>& Transforms,
-        TMap<FString, TArray<FTransform>>& OutMap);
+    void SpawnActorsAtTransforms(const TArray<FTransform>& Transforms, TMap<FString, TArray<FTransform>>& OutMap);
 
     // Destroys any actors that were previously generated.
     void DestroyGeneratedActors();

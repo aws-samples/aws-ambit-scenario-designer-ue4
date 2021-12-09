@@ -33,20 +33,17 @@ void FWeatherTypes::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
 {
     if (JsonObject->HasField(Weather::KSunny))
     {
-        SetSunny(JsonObject->GetBoolField(
-            Weather::KSunny));
+        SetSunny(JsonObject->GetBoolField(Weather::KSunny));
     }
 
     if (JsonObject->HasField(Weather::KRainy))
     {
-        SetRainy(JsonObject->GetBoolField(
-            Weather::KRainy));
+        SetRainy(JsonObject->GetBoolField(Weather::KRainy));
     }
 
     if (JsonObject->HasField(Weather::KFoggy))
     {
-        SetFoggy(JsonObject->GetBoolField(
-            Weather::KFoggy));
+        SetFoggy(JsonObject->GetBoolField(Weather::KFoggy));
     }
 }
 

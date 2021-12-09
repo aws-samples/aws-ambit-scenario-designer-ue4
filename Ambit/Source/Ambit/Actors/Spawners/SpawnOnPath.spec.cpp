@@ -23,8 +23,7 @@
 #include "Ambit/Actors/SpawnerConfigs/SpawnOnPathConfig.h"
 
 BEGIN_DEFINE_SPEC(SpawnOnPathConfig, "Ambit.SpawnOnPathConfig",
-                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-                  ApplicationContextMask)
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     ASpawnOnPath* Spawner;
     TSharedPtr<FSpawnOnPathConfig> Config;
@@ -64,31 +63,28 @@ void SpawnOnPathConfig::Define()
                 TestEqual("Rotation", Config->SpawnerRotation, Rotation);
             });
 
-            It("when SpawnOnPathConfigConfiguration.MatchBy is 'NameOrTags', has correct value",
-               [this]()
-               {
-                   Spawner->MatchBy = NameOrTags;
-                   Config = Spawner->GetConfiguration();
+            It("when SpawnOnPathConfigConfiguration.MatchBy is 'NameOrTags', has correct value", [this]()
+            {
+                Spawner->MatchBy = NameOrTags;
+                Config = Spawner->GetConfiguration();
 
-                   TestEqual("MatchBy", Config->MatchBy, NameOrTags);
-               });
+                TestEqual("MatchBy", Config->MatchBy, EMatchBy::NameOrTags);
+            });
 
-            It("when SpawnOnPathConfigConfiguration.MatchBy is 'NameAndTags', has correct value",
-               [this]()
-               {
-                   Spawner->MatchBy = NameAndTags;
-                   Config = Spawner->GetConfiguration();
+            It("when SpawnOnPathConfigConfiguration.MatchBy is 'NameAndTags', has correct value", [this]()
+            {
+                Spawner->MatchBy = NameAndTags;
+                Config = Spawner->GetConfiguration();
 
-                   TestEqual("MatchBy", Config->MatchBy, NameAndTags);
-               });
+                TestEqual("MatchBy", Config->MatchBy, EMatchBy::NameAndTags);
+            });
 
             It("has correct SurfaceNamePattern", [this]()
             {
                 Spawner->SurfaceNamePattern = "SampleName";
                 Config = Spawner->GetConfiguration();
 
-                TestEqual("SurfaceName", Config->SurfaceNamePattern,
-                          "SampleName");
+                TestEqual("SurfaceName", Config->SurfaceNamePattern, "SampleName");
             });
 
             It("has correct SurfaceTags", [this]()
@@ -97,10 +93,8 @@ void SpawnOnPathConfig::Define()
                 Spawner->SurfaceTags.Add(FName("TagB"));
                 Config = Spawner->GetConfiguration();
 
-                TestTrue("contains TagA",
-                         Config->SurfaceTags.Contains(FName("TagA")));
-                TestTrue("contains TagB",
-                         Config->SurfaceTags.Contains(FName("TagB")));
+                TestTrue("contains TagA", Config->SurfaceTags.Contains(FName("TagA")));
+                TestTrue("contains TagB", Config->SurfaceTags.Contains(FName("TagB")));
             });
 
             It("has correct DensityMin", [this]()
@@ -146,52 +140,42 @@ void SpawnOnPathConfig::Define()
             It("has correct ActorsToSpawn when it has only one value", [this]()
             {
                 // Set a known AActor subclass as the ActorsToSpawn value.
-                const FString ExpectedValue =
-                        "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+                const FString ExpectedValue = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
                 const FSoftClassPath ClassPath(ExpectedValue);
 
                 TArray<TSubclassOf<AActor>> ExpectedActors;
-                const TSubclassOf<AActor> ExpectedActor =
-                        ClassPath.TryLoadClass<UObject>();
+                const TSubclassOf<AActor> ExpectedActor = ClassPath.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActor);
                 Spawner->ActorsToSpawn = ExpectedActors;
                 Config = Spawner->GetConfiguration();
 
-                TestEqual("ActorsToSpawn", Config->ActorsToSpawn.Num(),
-                          ExpectedActors.Num());
+                TestEqual("ActorsToSpawn", Config->ActorsToSpawn.Num(), ExpectedActors.Num());
                 for (int32 i = 0; i < ExpectedActors.Num(); i++)
                 {
-                    TestEqual("ActorsToSpawn", Config->ActorsToSpawn[i],
-                              ExpectedActors[i]);
+                    TestEqual("ActorsToSpawn", Config->ActorsToSpawn[i], ExpectedActors[i]);
                 }
             });
 
             It("has correct ActorsToSpawn when it has multiple values", [this]()
             {
                 // Set known AActor subclasses as the ActorsToSpawn value.
-                const FString ExpectedValueOne =
-                        "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+                const FString ExpectedValueOne = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
                 const FSoftClassPath ClassPathOne(ExpectedValueOne);
 
                 TArray<TSubclassOf<AActor>> ExpectedActors;
-                const TSubclassOf<AActor> ExpectedActorOne =
-                        ClassPathOne.TryLoadClass<UObject>();
+                const TSubclassOf<AActor> ExpectedActorOne = ClassPathOne.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActorOne);
-                const FString ExpectedValueTwo =
-                        "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
+                const FString ExpectedValueTwo = "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
                 const FSoftClassPath ClassPathTwo(ExpectedValueTwo);
-                const TSubclassOf<AActor> ExpectedActorTwo =
-                        ClassPathTwo.TryLoadClass<UObject>();
+                const TSubclassOf<AActor> ExpectedActorTwo = ClassPathTwo.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActorTwo);
                 Spawner->ActorsToSpawn = ExpectedActors;
                 Config = Spawner->GetConfiguration();
 
-                TestEqual("ActorsToSpawn", Config->ActorsToSpawn.Num(),
-                          ExpectedActors.Num());
+                TestEqual("ActorsToSpawn", Config->ActorsToSpawn.Num(), ExpectedActors.Num());
                 for (int32 i = 0; i < ExpectedActors.Num(); i++)
                 {
-                    TestEqual("ActorsToSpawn", Config->ActorsToSpawn[i],
-                              ExpectedActors[i]);
+                    TestEqual("ActorsToSpawn", Config->ActorsToSpawn[i], ExpectedActors[i]);
                 }
             });
 
@@ -222,8 +206,7 @@ void SpawnOnPathConfig::Define()
                 Points.Add(LocationTwo);
 
                 Spawner->Spline->ClearSplinePoints();
-                Spawner->Spline->SetSplinePoints(Points,
-                                                 ESplineCoordinateSpace::Local);
+                Spawner->Spline->SetSplinePoints(Points, ESplineCoordinateSpace::Local);
                 Config = Spawner->GetConfiguration();
 
                 int32 i = 0;
@@ -252,11 +235,11 @@ void SpawnOnPathConfig::Define()
 
         It("sets MatchBy", [this]()
         {
-            Config->MatchBy = NameOrTags;
+            Config->MatchBy = EMatchBy::NameOrTags;
 
             Spawner->Configure(Config);
 
-            TestEqual("MatchBy", Spawner->MatchBy, NameOrTags);
+            TestEqual("MatchBy", Spawner->MatchBy, EMatchBy::NameOrTags);
         });
 
         It("sets SurfaceNamePattern", [this]()
@@ -265,8 +248,7 @@ void SpawnOnPathConfig::Define()
 
             Spawner->Configure(Config);
 
-            TestEqual("SurfaceNamePattern", Spawner->SurfaceNamePattern,
-                      "SampleName");
+            TestEqual("SurfaceNamePattern", Spawner->SurfaceNamePattern, "SampleName");
         });
 
         It("sets SurfaceTags", [this]()
@@ -279,8 +261,7 @@ void SpawnOnPathConfig::Define()
             const int32 TagCount = Spawner->SurfaceTags.Num();
             if (TagCount != 2)
             {
-                const FString Message = "Expected tag count of 2 but was " +
-                        FString::FromInt(TagCount);
+                const FString Message = "Expected tag count of 2 but was " + FString::FromInt(TagCount);
                 AddError(Message);
             }
             else
@@ -337,51 +318,41 @@ void SpawnOnPathConfig::Define()
         It("sets ActorsToSpawn when it has one value", [this]()
         {
             // Set a known AActor subclass as the ActorsToSpawn value.
-            const FString ExpectedValue =
-                    "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+            const FString ExpectedValue = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
             const FSoftClassPath ClassPath(ExpectedValue);
             TArray<TSubclassOf<AActor>> ExpectedActors;
-            const TSubclassOf<AActor>& ExpectedActor =
-                    ClassPath.TryLoadClass<UObject>();
+            const TSubclassOf<AActor>& ExpectedActor = ClassPath.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActor);
             Config->ActorsToSpawn = ExpectedActors;
 
             Spawner->Configure(Config);
-            TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn.Num(),
-                      ExpectedActors.Num());
+            TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn.Num(), ExpectedActors.Num());
             for (int32 i = 0; i < ExpectedActors.Num(); i++)
             {
-                TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn[i],
-                          ExpectedActors[i]);
+                TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn[i], ExpectedActors[i]);
             }
         });
 
         It("sets correct ActorsToSpawn when it has multiple values", [this]()
         {
             // Set known AActor subclasses as the ActorsToSpawn value.
-            const FString ExpectedValueOne =
-                    "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+            const FString ExpectedValueOne = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
             const FSoftClassPath ClassPathOne(ExpectedValueOne);
 
             TArray<TSubclassOf<AActor>> ExpectedActors;
-            const TSubclassOf<AActor> ExpectedActorOne =
-                    ClassPathOne.TryLoadClass<UObject>();
+            const TSubclassOf<AActor> ExpectedActorOne = ClassPathOne.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActorOne);
-            const FString ExpectedValueTwo =
-                    "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
+            const FString ExpectedValueTwo = "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
             const FSoftClassPath ClassPathTwo(ExpectedValueTwo);
-            const TSubclassOf<AActor> ExpectedActorTwo =
-                    ClassPathTwo.TryLoadClass<UObject>();
+            const TSubclassOf<AActor> ExpectedActorTwo = ClassPathTwo.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActorTwo);
 
             Config->ActorsToSpawn = ExpectedActors;
             Spawner->Configure(Config);
-            TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn.Num(),
-                      ExpectedActors.Num());
+            TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn.Num(), ExpectedActors.Num());
             for (int32 i = 0; i < ExpectedActors.Num(); i++)
             {
-                TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn[i],
-                          ExpectedActors[i]);
+                TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn[i], ExpectedActors[i]);
             }
         });
 
@@ -411,11 +382,9 @@ void SpawnOnPathConfig::Define()
             const FRotator Rotation(0);
             const FVector Scale(1);
 
-            SplinePoints.Add(FSplinePoint(0, LocationOne, Tangents,
-                                          Tangents, Rotation, Scale,
+            SplinePoints.Add(FSplinePoint(0, LocationOne, Tangents, Tangents, Rotation, Scale,
                                           ESplinePointType::CurveCustomTangent));
-            SplinePoints.Add(FSplinePoint(1, LocationTwo, Tangents,
-                                          Tangents, Rotation, Scale,
+            SplinePoints.Add(FSplinePoint(1, LocationTwo, Tangents, Tangents, Rotation, Scale,
                                           ESplinePointType::CurveCustomTangent));
 
             Config->SplinePoints = SplinePoints;
@@ -427,19 +396,16 @@ void SpawnOnPathConfig::Define()
             for (const FSplinePoint& Point : Config->SplinePoints)
             {
                 TestEqual("InputKey", Spline->GetInputKeyAtDistanceAlongSpline(
-                              Spline->GetDistanceAlongSplineAtSplinePoint(i)),
-                          Point.InputKey);
-                TestEqual("Location", Spline->GetLocationAtSplinePoint(i,
-                                                                       ESplineCoordinateSpace::Local), Point.Position);
-                TestEqual("ArriveTangent", Spline->GetArriveTangentAtSplinePoint(i,
-                              ESplineCoordinateSpace::Local), Point.ArriveTangent);
-                TestEqual("LeaveTangent", Spline->GetLeaveTangentAtSplinePoint(i,
-                                                                               ESplineCoordinateSpace::Local),
+                              Spline->GetDistanceAlongSplineAtSplinePoint(i)), Point.InputKey);
+                TestEqual("Location", Spline->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::Local),
+                          Point.Position);
+                TestEqual("ArriveTangent", Spline->GetArriveTangentAtSplinePoint(i, ESplineCoordinateSpace::Local),
+                          Point.ArriveTangent);
+                TestEqual("LeaveTangent", Spline->GetLeaveTangentAtSplinePoint(i, ESplineCoordinateSpace::Local),
                           Point.LeaveTangent);
-                TestEqual("Rotation", Spline->GetRotationAtSplinePoint(
-                              i, ESplineCoordinateSpace::Local), Point.Rotation);
-                TestEqual("Scale", Spline->GetScaleAtSplinePoint(i),
-                          Point.Scale);
+                TestEqual("Rotation", Spline->GetRotationAtSplinePoint(i, ESplineCoordinateSpace::Local),
+                          Point.Rotation);
+                TestEqual("Scale", Spline->GetScaleAtSplinePoint(i), Point.Scale);
                 TestEqual("Type", Spline->GetSplinePointType(i), Point.Type);
                 i++;
             }

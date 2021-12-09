@@ -26,10 +26,8 @@
 #include <aws/s3/model/GetBucketEncryptionRequest.h>
 #include <aws/s3/model/PutObjectRequest.h>
 
-BEGIN_DEFINE_SPEC(S3UEClientSpec,
-                  "AWSUE4Module.S3UEClient",
-                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-                  ApplicationContextMask)
+BEGIN_DEFINE_SPEC(S3UEClientSpec, "AWSUE4Module.S3UEClient",
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags:: ApplicationContextMask)
 
     FString Region;
     FString BucketName;
@@ -77,8 +75,7 @@ void S3UEClientSpec::Define()
 
             CreateRequest_1.SetCreateBucketConfiguration(BucketConfig_1);
 
-            Aws::S3::Model::CreateBucketOutcome CreateOutcome_1 =
-                    S3Client.CreateBucket(CreateRequest_1);
+            Aws::S3::Model::CreateBucketOutcome CreateOutcome_1 = S3Client.CreateBucket(CreateRequest_1);
             if (!CreateOutcome_1.IsSuccess())
             {
                 auto Err = CreateOutcome_1.GetError();
@@ -95,14 +92,12 @@ void S3UEClientSpec::Define()
 
             CreateRequest_2.SetCreateBucketConfiguration(BucketConfig_2);
 
-            Aws::S3::Model::CreateBucketOutcome CreateOutcome_2 =
-                    S3Client.CreateBucket(CreateRequest_2);
+            Aws::S3::Model::CreateBucketOutcome CreateOutcome_2 = S3Client.CreateBucket(CreateRequest_2);
             if (!CreateOutcome_2.IsSuccess())
             {
                 auto Err = CreateOutcome_2.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Creating bucket_2 fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
 
             // Create BucketName_3
@@ -114,14 +109,12 @@ void S3UEClientSpec::Define()
 
             CreateRequest_3.SetCreateBucketConfiguration(BucketConfig_3);
 
-            Aws::S3::Model::CreateBucketOutcome CreateOutcome_3 =
-                    S3Client.CreateBucket(CreateRequest_3);
+            Aws::S3::Model::CreateBucketOutcome CreateOutcome_3 = S3Client.CreateBucket(CreateRequest_3);
             if (!CreateOutcome_3.IsSuccess())
             {
                 auto Err = CreateOutcome_3.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Creating bucket_3 fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
 
@@ -153,45 +146,39 @@ void S3UEClientSpec::Define()
             Aws::S3::Model::DeleteBucketRequest DeleteRequest_1;
             DeleteRequest_1.SetBucket(BucketNameAwsString_1);
 
-            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome_1 =
-                    S3Client.DeleteBucket(DeleteRequest_1);
+            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome_1 = S3Client.DeleteBucket(DeleteRequest_1);
 
             if (!DeleteBucketOutcome_1.IsSuccess())
             {
                 auto Err = DeleteBucketOutcome_1.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting bucket_1 fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
 
             //Delete BucketName_2
             Aws::S3::Model::DeleteBucketRequest DeleteRequest_2;
             DeleteRequest_2.SetBucket(BucketNameAwsString_2);
 
-            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome_2 =
-                    S3Client.DeleteBucket(DeleteRequest_2);
+            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome_2 = S3Client.DeleteBucket(DeleteRequest_2);
 
             if (!DeleteBucketOutcome_2.IsSuccess())
             {
                 auto Err = DeleteBucketOutcome_2.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting bucket_2 fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
 
             //Delete BucketName_3
             Aws::S3::Model::DeleteBucketRequest DeleteRequest_3;
             DeleteRequest_3.SetBucket(BucketNameAwsString_3);
 
-            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome_3 =
-                    S3Client.DeleteBucket(DeleteRequest_3);
+            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome_3 = S3Client.DeleteBucket(DeleteRequest_3);
 
             if (!DeleteBucketOutcome_3.IsSuccess())
             {
                 auto Err = DeleteBucketOutcome_3.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting bucket_3 fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
     });
@@ -208,9 +195,7 @@ void S3UEClientSpec::Define()
         {
             It("should return true which represents creating bucket successfully", [this]()
             {
-                TestTrue(
-                    TEXT("CreateBucket"),
-                    S3UEClient::CreateBucket(Region, BucketName));
+                TestTrue(TEXT("CreateBucket"), S3UEClient::CreateBucket(Region, BucketName));
             });
 
             AfterEach([this]()
@@ -230,15 +215,13 @@ void S3UEClientSpec::Define()
                 Aws::S3::Model::DeleteBucketRequest DeleteRequest;
                 DeleteRequest.SetBucket(BucketNameAwsString);
 
-                Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome =
-                        S3Client.DeleteBucket(DeleteRequest);
+                Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome = S3Client.DeleteBucket(DeleteRequest);
 
                 if (!DeleteBucketOutcome.IsSuccess())
                 {
                     auto Err = DeleteBucketOutcome.GetError();
                     UE_LOG(LogTemp, Error, TEXT("Deleting bucket fails: %s, %s"),
-                           *FString(Err.GetExceptionName().c_str()),
-                           *FString(Err.GetMessage().c_str()));
+                           *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
                 }
             });
         });
@@ -259,10 +242,8 @@ void S3UEClientSpec::Define()
                 {
                     const FString Err = Re.what();
                     TestEqual(
-                        TEXT("The BucketAlreadyExist exception should be equal"),
-                        Err,
-                        "The requested bucket name is not available. The bucket namespace is shared by all users of the system. Please select a different name and try again."
-                    );
+                        TEXT("The BucketAlreadyExist exception should be equal"), Err,
+                        "The requested bucket name is not available. The bucket namespace is shared by all users of the system. Please select a different name and try again.");
                 }
             });
         });
@@ -282,10 +263,8 @@ void S3UEClientSpec::Define()
                 {
                     const FString Err = Ia.what();
                     TestEqual(
-                        TEXT("The invalid argument exception should be equal"),
-                        Err,
-                        "The bucket name or region is empty. Please check them again."
-                    );
+                        TEXT("The invalid argument exception should be equal"), Err,
+                        "The bucket name or region is empty. Please check them again.");
                 }
             });
 
@@ -302,10 +281,8 @@ void S3UEClientSpec::Define()
                 {
                     const FString Err = Ia.what();
                     TestEqual(
-                        TEXT("The invalid argument exception should be equal"),
-                        Err,
-                        "The bucket name or region is empty. Please check them again."
-                    );
+                        TEXT("The invalid argument exception should be equal"), Err,
+                        "The bucket name or region is empty. Please check them again.");
                 }
             });
         });
@@ -338,15 +315,13 @@ void S3UEClientSpec::Define()
 
             CreateRequest.SetCreateBucketConfiguration(BucketConfig);
 
-            Aws::S3::Model::CreateBucketOutcome CreateOutcome =
-                    S3Client.CreateBucket(CreateRequest);
+            Aws::S3::Model::CreateBucketOutcome CreateOutcome = S3Client.CreateBucket(CreateRequest);
 
             if (!CreateOutcome.IsSuccess())
             {
                 auto Err = CreateOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Creating put-bucket-encryption-test fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
 
@@ -359,8 +334,7 @@ void S3UEClientSpec::Define()
 
             BucketEncryptionRequest.WithBucket(BucketAwsString);
             const Aws::S3::S3Client S3Client;
-            TestTrue(TEXT("GetBucketEncryption"),
-                     S3Client.GetBucketEncryption(BucketEncryptionRequest).IsSuccess());
+            TestTrue(TEXT("GetBucketEncryption"), S3Client.GetBucketEncryption(BucketEncryptionRequest).IsSuccess());
         });
 
         It("should catch the exception because the bucket was not exist and cannot be put encryption", [this]()
@@ -372,16 +346,16 @@ void S3UEClientSpec::Define()
             }
             try
             {
-                AddExpectedError(TEXT("Put Bucket Encryption: NoSuchBucket : The specified bucket does not exist"),
-                                 EAutomationExpectedErrorFlags::Exact, 1);
+                AddExpectedError(
+                    TEXT("Put Bucket Encryption: NoSuchBucket : The specified bucket does not exist"),
+                    EAutomationExpectedErrorFlags::Exact, 1);
                 S3UEClient::PutBucketEncryption(NotExistingBucketName);
             }
             catch (const std::runtime_error& Re)
             {
                 const FString Err = Re.what();
                 TestEqual(
-                    TEXT("The catched exception should be equal to expected"),
-                    Err,
+                    TEXT("The catched exception should be equal to expected"), Err,
                     "The specified bucket does not exist");
             }
         });
@@ -403,14 +377,12 @@ void S3UEClientSpec::Define()
             Aws::S3::Model::DeleteBucketRequest DeleteRequest;
             DeleteRequest.SetBucket(BucketNameAwsString);
 
-            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome =
-                    S3Client.DeleteBucket(DeleteRequest);
+            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome = S3Client.DeleteBucket(DeleteRequest);
 
             if (!DeleteBucketOutcome.IsSuccess())
             {
                 auto Err = DeleteBucketOutcome.GetError();
-                UE_LOG(LogTemp, Error, TEXT("Deleting bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
+                UE_LOG(LogTemp, Error, TEXT("Deleting bucket fails: %s, %s"), *FString(Err.GetExceptionName().c_str()),
                        *FString(Err.GetMessage().c_str()));
             }
         });
@@ -448,15 +420,13 @@ void S3UEClientSpec::Define()
 
             CreateRequest.SetCreateBucketConfiguration(BucketConfig);
 
-            Aws::S3::Model::CreateBucketOutcome CreateOutcome =
-                    S3Client.CreateBucket(CreateRequest);
+            Aws::S3::Model::CreateBucketOutcome CreateOutcome = S3Client.CreateBucket(CreateRequest);
 
             if (!CreateOutcome.IsSuccess())
             {
                 auto Err = CreateOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Creating list-objects-test fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
 
             // Put an object into the bucket
@@ -465,8 +435,7 @@ void S3UEClientSpec::Define()
             PutObjectRequest.SetKey(ObjectNameAwsString);
             std::string ObjectContentString = std::string(TCHAR_TO_UTF8(*ObjectContent));
 
-            const std::shared_ptr<Aws::IOStream> Input_Data =
-                    Aws::MakeShared<Aws::StringStream>("");
+            const std::shared_ptr<Aws::IOStream> Input_Data = Aws::MakeShared<Aws::StringStream>("");
             *Input_Data << ObjectContentString.c_str();
 
             PutObjectRequest.SetBody(Input_Data);
@@ -477,16 +446,13 @@ void S3UEClientSpec::Define()
             {
                 auto Err = PutObjectOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Putting object into ambit-listobjects-test bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
 
         It("should contain objects after uploading them with right region and bucket name.", [this]()
         {
-            TestTrue(
-                TEXT("ListObjects"),
-                S3UEClient::ListObjects(Region, BucketName).Contains(ObjectName));
+            TestTrue(TEXT("ListObjects"), S3UEClient::ListObjects(Region, BucketName).Contains(ObjectName));
         });
 
         It("should catch exception about NetworkError when using wrong region", [this]()
@@ -502,8 +468,7 @@ void S3UEClientSpec::Define()
             {
                 const FString Err = Re.what();
                 TestEqual(
-                    TEXT("The catched exception should be equal to expected"),
-                    Err,
+                    TEXT("The catched exception should be equal to expected"), Err,
                     "Encountered network error when sending http request");
             }
         });
@@ -521,8 +486,7 @@ void S3UEClientSpec::Define()
             {
                 const FString Err = Re.what();
                 TestEqual(
-                    TEXT("The catched exception should be equal to expected"),
-                    Err,
+                    TEXT("The catched exception should be equal to expected"), Err,
                     "The specified bucket does not exist");
             }
         });
@@ -542,10 +506,8 @@ void S3UEClientSpec::Define()
                 {
                     const FString Err = Ia.what();
                     TestEqual(
-                        TEXT("The invalid argument exception should be equal"),
-                        Err,
-                        "The bucket name or region is empty. Please check them again."
-                    );
+                        TEXT("The invalid argument exception should be equal"), Err,
+                        "The bucket name or region is empty. Please check them again.");
                 }
             });
 
@@ -562,10 +524,8 @@ void S3UEClientSpec::Define()
                 {
                     const FString Err = Ia.what();
                     TestEqual(
-                        TEXT("The invalid argument exception should be equal"),
-                        Err,
-                        "The bucket name or region is empty. Please check them again."
-                    );
+                        TEXT("The invalid argument exception should be equal"), Err,
+                        "The bucket name or region is empty. Please check them again.");
                 }
             });
         });
@@ -588,33 +548,28 @@ void S3UEClientSpec::Define()
             // Delete Object
             Aws::S3::Model::DeleteObjectRequest DeleteObjectRequest;
 
-            DeleteObjectRequest.WithKey(ObjectNameAwsString)
-                               .WithBucket(BucketNameAwsString);
+            DeleteObjectRequest.WithKey(ObjectNameAwsString).WithBucket(BucketNameAwsString);
 
-            Aws::S3::Model::DeleteObjectOutcome DeleteObjectOutcome =
-                    S3Client.DeleteObject(DeleteObjectRequest);
+            Aws::S3::Model::DeleteObjectOutcome DeleteObjectOutcome = S3Client.DeleteObject(DeleteObjectRequest);
 
             if (!DeleteObjectOutcome.IsSuccess())
             {
                 auto Err = DeleteObjectOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting the object in ambit-listobjects-bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
 
             //Delete Bucket
             Aws::S3::Model::DeleteBucketRequest DeleteRequest;
             DeleteRequest.SetBucket(BucketNameAwsString);
 
-            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome =
-                    S3Client.DeleteBucket(DeleteRequest);
+            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome = S3Client.DeleteBucket(DeleteRequest);
 
             if (!DeleteBucketOutcome.IsSuccess())
             {
                 auto Err = DeleteBucketOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting ambit-listobjects-bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
     });
@@ -651,15 +606,13 @@ void S3UEClientSpec::Define()
 
             CreateRequest.SetCreateBucketConfiguration(BucketConfig);
 
-            Aws::S3::Model::CreateBucketOutcome CreateOutcome =
-                    S3Client.CreateBucket(CreateRequest);
+            Aws::S3::Model::CreateBucketOutcome CreateOutcome = S3Client.CreateBucket(CreateRequest);
 
             if (!CreateOutcome.IsSuccess())
             {
                 auto Err = CreateOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Creating ambit-getobject-test fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
 
             // Put an object into the bucket
@@ -668,8 +621,7 @@ void S3UEClientSpec::Define()
             PutObjectRequest.SetKey(ObjectNameAwsString);
             std::string ObjectContentString = std::string(TCHAR_TO_UTF8(*ObjectContent));
 
-            const std::shared_ptr<Aws::IOStream> Input_Data =
-                    Aws::MakeShared<Aws::StringStream>("");
+            const std::shared_ptr<Aws::IOStream> Input_Data = Aws::MakeShared<Aws::StringStream>("");
             *Input_Data << ObjectContentString.c_str();
 
             PutObjectRequest.SetBody(Input_Data);
@@ -680,17 +632,14 @@ void S3UEClientSpec::Define()
             {
                 auto Err = PutObjectOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Putting object into ambit-getobject-test bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
 
         It("should return the text content with right Region, BucketName and ObjectName.", [this]()
         {
-            TestEqual(
-                TEXT("GetObjectAsString"),
-                S3UEClient::GetObjectAsString(Region, BucketName, ObjectName),
-                "This is the test file for S3UEClient.");
+            TestEqual(TEXT("GetObjectAsString"), S3UEClient::GetObjectAsString(Region, BucketName, ObjectName),
+                      "This is the test file for S3UEClient.");
         });
 
         It("should return the text content with right Region, BucketName and ObjectName from the encrypted bucket.",
@@ -716,8 +665,7 @@ void S3UEClientSpec::Define()
             {
                 const FString Err = Re.what();
                 TestEqual(
-                    TEXT("The catched exception should be equal to expected"),
-                    Err,
+                    TEXT("The catched exception should be equal to expected"), Err,
                     "Encountered network error when sending http request");
             }
         });
@@ -735,8 +683,7 @@ void S3UEClientSpec::Define()
             {
                 const FString Err = Re.what();
                 TestEqual(
-                    TEXT("The catched exception should be equal to expected"),
-                    Err,
+                    TEXT("The catched exception should be equal to expected"), Err,
                     "The specified bucket does not exist");
             }
         });
@@ -754,8 +701,7 @@ void S3UEClientSpec::Define()
             {
                 const FString Err = Re.what();
                 TestEqual(
-                    TEXT("The catched exception should be equal to expected"),
-                    Err,
+                    TEXT("The catched exception should be equal to expected"), Err,
                     "The specified key does not exist.");
             }
         });
@@ -775,10 +721,8 @@ void S3UEClientSpec::Define()
                 {
                     const FString Err = Ia.what();
                     TestEqual(
-                        TEXT("The invalid argument exception should be equal"),
-                        Err,
-                        "The region, bucket name or object name is empty. Please check them again."
-                    );
+                        TEXT("The invalid argument exception should be equal"), Err,
+                        "The region, bucket name or object name is empty. Please check them again.");
                 }
             });
 
@@ -795,10 +739,8 @@ void S3UEClientSpec::Define()
                 {
                     const FString Err = Ia.what();
                     TestEqual(
-                        TEXT("The invalid argument exception should be equal"),
-                        Err,
-                        "The region, bucket name or object name is empty. Please check them again."
-                    );
+                        TEXT("The invalid argument exception should be equal"), Err,
+                        "The region, bucket name or object name is empty. Please check them again.");
                 }
             });
 
@@ -815,10 +757,8 @@ void S3UEClientSpec::Define()
                 {
                     const FString Err = Ia.what();
                     TestEqual(
-                        TEXT("The invalid argument exception should be equal"),
-                        Err,
-                        "The region, bucket name or object name is empty. Please check them again."
-                    );
+                        TEXT("The invalid argument exception should be equal"), Err,
+                        "The region, bucket name or object name is empty. Please check them again.");
                 }
             });
         });
@@ -841,33 +781,28 @@ void S3UEClientSpec::Define()
             // Delete Object
             Aws::S3::Model::DeleteObjectRequest DeleteObjectRequest;
 
-            DeleteObjectRequest.WithKey(ObjectNameAwsString)
-                               .WithBucket(BucketNameAwsString);
+            DeleteObjectRequest.WithKey(ObjectNameAwsString).WithBucket(BucketNameAwsString);
 
-            Aws::S3::Model::DeleteObjectOutcome DeleteObjectOutcome =
-                    S3Client.DeleteObject(DeleteObjectRequest);
+            Aws::S3::Model::DeleteObjectOutcome DeleteObjectOutcome = S3Client.DeleteObject(DeleteObjectRequest);
 
             if (!DeleteObjectOutcome.IsSuccess())
             {
                 auto Err = DeleteObjectOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting the object in ambit-getobject-bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
 
             //Delete Bucket
             Aws::S3::Model::DeleteBucketRequest DeleteRequest;
             DeleteRequest.SetBucket(BucketNameAwsString);
 
-            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome =
-                    S3Client.DeleteBucket(DeleteRequest);
+            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome = S3Client.DeleteBucket(DeleteRequest);
 
             if (!DeleteBucketOutcome.IsSuccess())
             {
                 auto Err = DeleteBucketOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting ambit-getobject-bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
     });
@@ -904,24 +839,19 @@ void S3UEClientSpec::Define()
 
             CreateRequest.SetCreateBucketConfiguration(BucketConfig);
 
-            Aws::S3::Model::CreateBucketOutcome CreateOutcome =
-                    S3Client.CreateBucket(CreateRequest);
+            Aws::S3::Model::CreateBucketOutcome CreateOutcome = S3Client.CreateBucket(CreateRequest);
 
             if (!CreateOutcome.IsSuccess())
             {
                 auto Err = CreateOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Creating ambit-putobject-test fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
 
         It("should return true which represents putting object into the bucket successfully.", [this]()
         {
-            TestEqual(
-                TEXT(
-                    "PutObject"),
-                S3UEClient::PutObject(Region, BucketName, ObjectName, ObjectContent), true);
+            TestEqual(TEXT("PutObject"), S3UEClient::PutObject(Region, BucketName, ObjectName, ObjectContent), true);
         });
 
         It("should catch exception about NetworkError when using wrong region", [this]()
@@ -937,8 +867,7 @@ void S3UEClientSpec::Define()
             {
                 const FString Err = Re.what();
                 TestEqual(
-                    TEXT("The catched exception should be equal to expected"),
-                    Err,
+                    TEXT("The catched exception should be equal to expected"), Err,
                     "Encountered network error when sending http request");
             }
         });
@@ -956,8 +885,7 @@ void S3UEClientSpec::Define()
             {
                 const FString Err = Re.what();
                 TestEqual(
-                    TEXT("The catched exception should be equal to expected"),
-                    Err,
+                    TEXT("The catched exception should be equal to expected"), Err,
                     "The specified bucket does not exist");
             }
         });
@@ -975,10 +903,8 @@ void S3UEClientSpec::Define()
             {
                 const FString Err = Ia.what();
                 TestEqual(
-                    TEXT("The invalid argument exception should be equal"),
-                    Err,
-                    "The region, bucket name or object name is empty. Please check them again."
-                );
+                    TEXT("The invalid argument exception should be equal"), Err,
+                    "The region, bucket name or object name is empty. Please check them again.");
             }
         });
 
@@ -995,10 +921,8 @@ void S3UEClientSpec::Define()
             {
                 const FString Err = Ia.what();
                 TestEqual(
-                    TEXT("The invalid argument exception should be equal"),
-                    Err,
-                    "The region, bucket name or object name is empty. Please check them again."
-                );
+                    TEXT("The invalid argument exception should be equal"), Err,
+                    "The region, bucket name or object name is empty. Please check them again.");
             }
         });
 
@@ -1015,10 +939,8 @@ void S3UEClientSpec::Define()
             {
                 const FString Err = Ia.what();
                 TestEqual(
-                    TEXT("The invalid argument exception should be equal"),
-                    Err,
-                    "The region, bucket name or object name is empty. Please check them again."
-                );
+                    TEXT("The invalid argument exception should be equal"), Err,
+                    "The region, bucket name or object name is empty. Please check them again.");
             }
         });
 
@@ -1041,33 +963,28 @@ void S3UEClientSpec::Define()
             //Delete Object
             Aws::S3::Model::DeleteObjectRequest DeleteObjectRequest;
 
-            DeleteObjectRequest.WithKey(ObjectNameAwsString)
-                               .WithBucket(BucketNameAwsString);
+            DeleteObjectRequest.WithKey(ObjectNameAwsString).WithBucket(BucketNameAwsString);
 
-            Aws::S3::Model::DeleteObjectOutcome DeleteObjectOutcome =
-                    S3Client.DeleteObject(DeleteObjectRequest);
+            Aws::S3::Model::DeleteObjectOutcome DeleteObjectOutcome = S3Client.DeleteObject(DeleteObjectRequest);
 
             if (!DeleteObjectOutcome.IsSuccess())
             {
                 auto Err = DeleteObjectOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting the object in ambit-putobject-bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
 
             //Delete Bucket
             Aws::S3::Model::DeleteBucketRequest DeleteRequest;
             DeleteRequest.SetBucket(BucketNameAwsString);
 
-            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome =
-                    S3Client.DeleteBucket(DeleteRequest);
+            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome = S3Client.DeleteBucket(DeleteRequest);
 
             if (!DeleteBucketOutcome.IsSuccess())
             {
                 auto Err = DeleteBucketOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting ambit-putobject-bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
     });
@@ -1091,10 +1008,8 @@ void S3UEClientSpec::Define()
             FString FileContent = "Test PutLocalObject";
             ObjectName = "PutLocalObjectTest.txt";
             FilePath = FPaths::Combine(*FPaths::ProjectIntermediateDir(), *ObjectName);
-            FFileHelper::SaveStringToFile(FileContent, *FilePath,
-                                          FFileHelper::EEncodingOptions::AutoDetect,
-                                          &IFileManager::Get(),
-                                          FILEWRITE_None);
+            FFileHelper::SaveStringToFile(FileContent, *FilePath, FFileHelper::EEncodingOptions::AutoDetect,
+                                          &IFileManager::Get(), FILEWRITE_None);
 
             Aws::S3::S3Client S3Client;
 
@@ -1107,24 +1022,20 @@ void S3UEClientSpec::Define()
 
             CreateRequest.SetCreateBucketConfiguration(BucketConfig);
 
-            Aws::S3::Model::CreateBucketOutcome CreateOutcome =
-                    S3Client.CreateBucket(CreateRequest);
+            Aws::S3::Model::CreateBucketOutcome CreateOutcome = S3Client.CreateBucket(CreateRequest);
 
             if (!CreateOutcome.IsSuccess())
             {
                 auto Err = CreateOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Creating ambit-putlocalobject-test fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
 
         It("should return true which represents putting local object into the bucket successfully.", [this]()
         {
-            TestEqual(
-                TEXT(
-                    "PutLocalObject"),
-                S3UEClient::PutLocalObject(Region, BucketName, ObjectName, FilePath), true);
+            TestEqual(TEXT("PutLocalObject"), S3UEClient::PutLocalObject(Region, BucketName, ObjectName, FilePath),
+                      true);
         });
 
         AfterEach([this]()
@@ -1149,33 +1060,28 @@ void S3UEClientSpec::Define()
             //Delete Object
             Aws::S3::Model::DeleteObjectRequest DeleteObjectRequest;
 
-            DeleteObjectRequest.WithKey(ObjectNameAwsString)
-                               .WithBucket(BucketNameAwsString);
+            DeleteObjectRequest.WithKey(ObjectNameAwsString).WithBucket(BucketNameAwsString);
 
-            Aws::S3::Model::DeleteObjectOutcome DeleteObjectOutcome =
-                    S3Client.DeleteObject(DeleteObjectRequest);
+            Aws::S3::Model::DeleteObjectOutcome DeleteObjectOutcome = S3Client.DeleteObject(DeleteObjectRequest);
 
             if (!DeleteObjectOutcome.IsSuccess())
             {
                 auto Err = DeleteObjectOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting the object in ambit-putobject-bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
 
             //Delete Bucket
             Aws::S3::Model::DeleteBucketRequest DeleteRequest;
             DeleteRequest.SetBucket(BucketNameAwsString);
 
-            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome =
-                    S3Client.DeleteBucket(DeleteRequest);
+            Aws::S3::Model::DeleteBucketOutcome DeleteBucketOutcome = S3Client.DeleteBucket(DeleteRequest);
 
             if (!DeleteBucketOutcome.IsSuccess())
             {
                 auto Err = DeleteBucketOutcome.GetError();
                 UE_LOG(LogTemp, Error, TEXT("Deleting ambit-putobject-bucket fails: %s, %s"),
-                       *FString(Err.GetExceptionName().c_str()),
-                       *FString(Err.GetMessage().c_str()));
+                       *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
             }
         });
     });

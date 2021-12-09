@@ -39,7 +39,7 @@ struct AMBIT_API FSpawnWithHoudiniConfig : FConfigJsonSerializer
     /**
      * The Match By Tag of the Spawner.
      */
-    TEnumAsByte<EMatchBy> MatchBy = NameAndTags;
+    TEnumAsByte<EMatchBy> MatchBy = EMatchBy::NameAndTags;
 
     /**
      * The search string used to find actors representing surfaces to spawn onto.

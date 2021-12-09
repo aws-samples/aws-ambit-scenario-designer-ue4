@@ -54,9 +54,8 @@ ASpawnWithHoudini::~ASpawnWithHoudini()
     // If we generated from the editor, we don't destroy when leaving play.
     // If we generated from the runtime, we let the EndPlay function handle
     // this clearing as to not disrupt other lifecycles.
-    if (CurrentGeneration == NotGenerated
-        || CurrentGeneration == FromEditor
-        && (World != nullptr && (World->IsPlayInEditor() || World->IsPlayInPreview())))
+    if (CurrentGeneration == NotGenerated || CurrentGeneration == FromEditor && (World != nullptr && (World->
+        IsPlayInEditor() || World->IsPlayInPreview())))
     {
         ResetObstacleSpawner();
     }
@@ -64,11 +63,11 @@ ASpawnWithHoudini::~ASpawnWithHoudini()
 
 bool ASpawnWithHoudini::HasActorsToSpawn() const
 {
-    const TArray<FHoudiniLoadableAsset> FilteredActorsToSpawn =
-            HoudiniAssetDetails.FilterByPredicate([](const FHoudiniLoadableAsset& AssetDetails)
-            {
-                return AssetDetails.HDAToLoad != nullptr;
-            });
+    const TArray<FHoudiniLoadableAsset> FilteredActorsToSpawn = HoudiniAssetDetails.FilterByPredicate(
+        [](const FHoudiniLoadableAsset& AssetDetails)
+        {
+            return AssetDetails.HDAToLoad != nullptr;
+        });
     return FilteredActorsToSpawn.Num() > 0;
 }
 
@@ -84,12 +83,10 @@ void ASpawnWithHoudini::GenerateObstacles()
     const TArray<AActor*> SurfaceActors = AmbitWorldHelpers::GetActorsByMatchBy(
         MatchBy, SurfaceNamePattern, SurfaceTags);
 
-    UE_LOG(LogAmbit, Display, TEXT("Matching surface actors: %i"),
-           SurfaceActors.Num());
+    UE_LOG(LogAmbit, Display, TEXT("Matching surface actors: %i"), SurfaceActors.Num());
 
-    TArray<FTransform> LocationsToSpawn =
-            AmbitWorldHelpers::GenerateRandomLocationsFromActors(
-                SurfaceActors, RandomSeed, DensityMin, DensityMax);
+    TArray<FTransform> LocationsToSpawn = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
+        SurfaceActors, RandomSeed, DensityMin, DensityMax);
 
     UWorld* World = GetWorld();
 
@@ -115,8 +112,7 @@ void ASpawnWithHoudini::GenerateObstacles()
         {
             FString BakePath = GetBakePathRelative();
             UHoudiniPublicAPIAssetWrapper* SpawnedActor = HoudiniApi->InstantiateAsset(
-                IndividualHDA, Transform, World, nullptr
-                , false, false, BakePath);
+                IndividualHDA, Transform, World, nullptr, false, false, BakePath);
             if (SpawnedActor != nullptr)
             {
                 SpawnedActor->GetOnPreInstantiationDelegate().AddUniqueDynamic(
@@ -169,8 +165,8 @@ void ASpawnWithHoudini::PopulateParameters(UHoudiniPublicAPIAssetWrapper* Spawne
 {
     if (SpawnedActor->IsValidLowLevel())
     {
-        const int32 FoundAsset = HoudiniAssetDetails.IndexOfByPredicate([SpawnedActor](const FHoudiniLoadableAsset&
-        asset)
+        const int32 FoundAsset = HoudiniAssetDetails.IndexOfByPredicate(
+            [SpawnedActor](const FHoudiniLoadableAsset& asset)
             {
                 return asset.SpawnedActors.Contains(SpawnedActor);
             });
@@ -200,8 +196,8 @@ void ASpawnWithHoudini::RandomizeActor(UHoudiniPublicAPIAssetWrapper* SpawnedAct
     if (SpawnedActor->IsValidLowLevel())
     {
         int32 AssetIndexInList = INDEX_NONE;
-        const int32 ListNumber = HoudiniAssetDetails.IndexOfByPredicate([SpawnedActor, &AssetIndexInList](
-        const FHoudiniLoadableAsset& asset)
+        const int32 ListNumber = HoudiniAssetDetails.IndexOfByPredicate(
+            [SpawnedActor, &AssetIndexInList](const FHoudiniLoadableAsset& asset)
             {
                 AssetIndexInList = asset.SpawnedActors.IndexOfByKey(SpawnedActor);
                 return AssetIndexInList != INDEX_NONE;
@@ -305,8 +301,7 @@ void ASpawnWithHoudini::RandomizeActor(UHoudiniPublicAPIAssetWrapper* SpawnedAct
             {
                 UE_LOG(LogAmbit, Warning,
                        TEXT("Houdini Asset could not be fully cooked for spawner %s and object %s. Invalid option set."
-                       ),
-                       *this->GetActorLabel(), *SpawnedActor->GetName());
+                       ), *this->GetActorLabel(), *SpawnedActor->GetName());
             }
         }
     }
@@ -361,8 +356,7 @@ void ASpawnWithHoudini::GenerateSpawnedObjectConfiguration(int32 Seed)
 
 TSharedPtr<FSpawnWithHoudiniConfig> ASpawnWithHoudini::GetConfiguration() const
 {
-    TSharedPtr<FSpawnWithHoudiniConfig> Config =
-            MakeShareable(new FSpawnWithHoudiniConfig);
+    TSharedPtr<FSpawnWithHoudiniConfig> Config = MakeShareable(new FSpawnWithHoudiniConfig);
     Config->SpawnerLocation = this->GetActorLocation();
     Config->SpawnerRotation = this->GetActorRotation();
     Config->MatchBy = MatchBy;
@@ -477,7 +471,7 @@ void ASpawnWithHoudini::CreateSpawnedObjectConfiguration()
         const FString PathSuffix = TEXT("uasset");
         IFileManager::Get().FindFiles(Result, *GetBakePathFull(), *PathSuffix);
 
-        const EMatchBy MatchName = NameOrTags;
+        const EMatchBy MatchName = EMatchBy::NameOrTags;
         const TArray<FName> TagsT;
         for (const FString& FoundBake : Result)
         {
@@ -507,8 +501,7 @@ void ASpawnWithHoudini::CreateSpawnedObjectConfiguration()
     }
     catch (const std::runtime_error& Re)
     {
-        UE_LOG(LogAmbit, Error, TEXT("Failed to bake properly. Error: %i"),
-               Re.what());
+        UE_LOG(LogAmbit, Error, TEXT("Failed to bake properly. Error: %i"), Re.what());
     }
 
     auto FinalConfig = TScriptInterface<IConfigJsonSerializer>(Config);

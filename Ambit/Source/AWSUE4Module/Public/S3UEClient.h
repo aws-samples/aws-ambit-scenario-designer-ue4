@@ -65,8 +65,8 @@ namespace S3UEClient
      *  Returns a Boolean variable indicating whether successfully writing the object into the bucket by given bucket name,
      *  object name, object content and region
      */
-    AWSUE4MODULE_API bool PutObject(const FString& Region, const FString& BucketName,
-                                    const FString& ObjectName, const FString& ObjectContent);
+    AWSUE4MODULE_API bool PutObject(const FString& Region, const FString& BucketName, const FString& ObjectName,
+                                    const FString& ObjectContent);
 
     /**
      * Upload a local file to the bucket
@@ -78,6 +78,6 @@ namespace S3UEClient
      * @return Returns a Boolean variable indicating whether successfully uploading the file onto the bucket by given bucket name,
      *  object name, file name and region
      */
-    AWSUE4MODULE_API bool PutLocalObject(const FString& Region, const FString& BucketName,
-                                         const FString& ObjectName, const FString& LocalFilePath);
+    AWSUE4MODULE_API bool PutLocalObject(const FString& Region, const FString& BucketName, const FString& ObjectName,
+                                         const FString& LocalFilePath);
 };

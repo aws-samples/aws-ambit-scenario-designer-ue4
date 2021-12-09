@@ -26,9 +26,7 @@ struct AMBIT_API FExportPlatforms
 {
     GENERATED_BODY()
 
-    FExportPlatforms()
-        : bLinux(false)
-          , bWindows(false)
+    FExportPlatforms() : bLinux(false), bWindows(false)
     {
     }
 

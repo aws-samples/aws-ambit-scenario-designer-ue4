@@ -28,7 +28,7 @@ struct AMBIT_API FSpawnOnPathConfig : FSpawnerBaseConfig
 
     bool bSnapToSurfaceBelow = false;
 
-    TEnumAsByte<EMatchBy> MatchBy = NameAndTags;
+    TEnumAsByte<EMatchBy> MatchBy = EMatchBy::NameAndTags;
 
     ~FSpawnOnPathConfig() = default;
 

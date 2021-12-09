@@ -33,11 +33,7 @@ struct AMBIT_API FTimeOfDayTypes
 {
     GENERATED_BODY()
 
-    FTimeOfDayTypes()
-        : bMorning(false)
-          , bNoon(false)
-          , bEvening(false)
-          , bNight(false)
+    FTimeOfDayTypes() : bMorning(false), bNoon(false), bEvening(false), bNight(false)
     {
     }
 

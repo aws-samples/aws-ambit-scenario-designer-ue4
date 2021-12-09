@@ -63,7 +63,7 @@ public:
 
     SLATE_END_ARGS()
 
-    void Construct(const FArguments& InArgs, const TSharedRef<FAmbitModeToolkit>& InParentToolkit);
+    void Construct(const FArguments& InArgs, TSharedRef<FAmbitModeToolkit> InParentToolkit);
 
     void RefreshDetailPanel() const;
 

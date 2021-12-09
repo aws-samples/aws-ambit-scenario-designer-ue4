@@ -19,8 +19,7 @@ void AAmbitWeather::ApplyTimeOfDay(float InTimeOfDay)
     RefreshTimeOfDay(InTimeOfDay);
 }
 
-void AAmbitWeather::ApplyWeather(
-    const FAmbitWeatherParameters& InWeatherParams)
+void AAmbitWeather::ApplyWeather(const FAmbitWeatherParameters& InWeatherParams)
 {
     RefreshWeather(InWeatherParams);
 }

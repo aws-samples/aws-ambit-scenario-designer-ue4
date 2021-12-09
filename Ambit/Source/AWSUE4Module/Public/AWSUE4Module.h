@@ -30,9 +30,7 @@ public:
     /**
      * Allocate the memory with the block size by using Unreal Engine override new
      */
-    void* AllocateMemory(
-        std::size_t blockSize, std::size_t alignment,
-        const char* allocationTag = nullptr) override;
+    void* AllocateMemory(std::size_t blockSize, std::size_t alignment, const char* allocationTag = nullptr) override;
 
     /**
      * Free the memory pointed to by pointer by using Unreal Engine override delete

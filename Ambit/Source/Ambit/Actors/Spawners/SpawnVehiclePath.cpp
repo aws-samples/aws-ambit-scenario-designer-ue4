@@ -55,8 +55,7 @@ bool ASpawnVehiclePath::AreParametersValid() const
 {
     if (!IsValid(VehicleToSpawn))
     {
-        const FString& Message =
-                "Vehicle to spawn is not specified, which is not allowed.";
+        const FString& Message = "Vehicle to spawn is not specified, which is not allowed.";
         FMenuHelpers::DisplayMessagePopup(Message, "Warning");
         return false;
     }
@@ -150,30 +149,22 @@ void ASpawnVehiclePath::GenerateSpawnedObjectConfiguration()
     OnSpawnedObjectConfigCompleted.ExecuteIfBound(FinalConfig, true);
 }
 
-TSharedPtr<FSpawnVehiclePathConfig>
-ASpawnVehiclePath::GetConfiguration() const
+TSharedPtr<FSpawnVehiclePathConfig> ASpawnVehiclePath::GetConfiguration() const
 {
-    TSharedPtr<FSpawnVehiclePathConfig> Config =
-            MakeShareable(new FSpawnVehiclePathConfig);
+    TSharedPtr<FSpawnVehiclePathConfig> Config = MakeShareable(new FSpawnVehiclePathConfig);
     TArray<FSplinePoint> SplinePoints;
     const int32 SplinePointCount = Spline->GetNumberOfSplinePoints();
     for (int32 i = 0; i < SplinePointCount; i++)
     {
-        const FVector& ArriveVector = Spline->GetArriveTangentAtSplinePoint(i,
-                                                                            ESplineCoordinateSpace::Local);
-        const float InputKey = Spline->GetInputKeyAtDistanceAlongSpline(
-            Spline->GetDistanceAlongSplineAtSplinePoint(i));
-        const FVector& LeaveVector = Spline->GetLeaveTangentAtSplinePoint(i,
-                                                                          ESplineCoordinateSpace::Local);
-        const FVector& Location = Spline->GetLocationAtSplinePoint(i,
-                                                                   ESplineCoordinateSpace::Local);
-        const FRotator& Rotation = Spline->GetRotationAtSplineInputKey(i,
-                                                                       ESplineCoordinateSpace::Local);
+        const FVector& ArriveVector = Spline->GetArriveTangentAtSplinePoint(i, ESplineCoordinateSpace::Local);
+        const float InputKey = Spline->GetInputKeyAtDistanceAlongSpline(Spline->GetDistanceAlongSplineAtSplinePoint(i));
+        const FVector& LeaveVector = Spline->GetLeaveTangentAtSplinePoint(i, ESplineCoordinateSpace::Local);
+        const FVector& Location = Spline->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::Local);
+        const FRotator& Rotation = Spline->GetRotationAtSplineInputKey(i, ESplineCoordinateSpace::Local);
         const FVector& Scale = Spline->GetScaleAtSplinePoint(i);
         const TEnumAsByte<ESplinePointType::Type>& Type = Spline->GetSplinePointType(i);
 
-        FSplinePoint Point(InputKey, Location, ArriveVector,
-                           LeaveVector, Rotation, Scale, Type);
+        FSplinePoint Point(InputKey, Location, ArriveVector, LeaveVector, Rotation, Scale, Type);
         SplinePoints.Add(Point);
     }
     Config->SplinePoints = SplinePoints;
@@ -189,8 +180,7 @@ ASpawnVehiclePath::GetConfiguration() const
     return Config;
 }
 
-void ASpawnVehiclePath::Configure(const
-    TSharedPtr<FSpawnVehiclePathConfig>& Config)
+void ASpawnVehiclePath::Configure(const TSharedPtr<FSpawnVehiclePathConfig>& Config)
 {
     Spline->ClearSplinePoints();
     Spline->AddPoints(Config->SplinePoints);

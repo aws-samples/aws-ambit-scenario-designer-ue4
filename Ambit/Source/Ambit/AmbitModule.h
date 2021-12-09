@@ -55,9 +55,9 @@ public:
     * @param ExpireDuration The duration before a fadeout for this element
     * @param bFireAndForget When true the notification will automatically time out after the expire duration.
     */
-    static void CreateAmbitNotification(const FText& MessageText,
-                                        float FadeInDuration = 0.0f, float FadeOutDuration = 2.0f,
-                                        float ExpireDuration = 5.0f, bool bFireAndForget = true);
+    static void CreateAmbitNotification(const FText& MessageText, float FadeInDuration = 0.0f,
+                                        float FadeOutDuration = 2.0f, float ExpireDuration = 5.0f,
+                                        bool bFireAndForget = true);
 
 private:
     // adding mode

@@ -19,12 +19,7 @@
 #include "AmbitMode.h"
 #include "AmbitObject.h"
 
-TArray<FString> FWeatherDropdownMenu::Values = {
-    Weather::KCustom,
-    Weather::KSunny,
-    Weather::KRainy,
-    Weather::KFoggy
-};
+TArray<FString> FWeatherDropdownMenu::Values = {Weather::KCustom, Weather::KSunny, Weather::KRainy, Weather::KFoggy};
 
 FString FWeatherDropdownMenu::GetMenuItem()
 {

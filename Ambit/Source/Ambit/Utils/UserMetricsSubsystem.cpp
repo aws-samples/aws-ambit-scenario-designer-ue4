@@ -56,7 +56,8 @@ void UUserMetricsSubsystem::Deinitialize()
     }
 }
 
-void UUserMetricsSubsystem::Track(const FString& EventName, const FString& NameSpace, TSharedPtr<FJsonObject> Data)
+void UUserMetricsSubsystem::Track(const FString& EventName, const FString& NameSpace,
+                                  TSharedPtr<FJsonObject> Data)
 {
     const TSharedPtr<FJsonObject> Json = MakeShareable(new FJsonObject);
 

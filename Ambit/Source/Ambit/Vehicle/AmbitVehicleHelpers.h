@@ -28,7 +28,5 @@ namespace AmbitVehicleHelpers
      * @param MiddleLocation second point location
      * @param LastLocation third point location
      */
-    float GetThreePointCircleRadius(FVector FirstLocation,
-                                    FVector MiddleLocation,
-                                    FVector LastLocation);
+    float GetThreePointCircleRadius(FVector FirstLocation, FVector MiddleLocation, FVector LastLocation);
 }

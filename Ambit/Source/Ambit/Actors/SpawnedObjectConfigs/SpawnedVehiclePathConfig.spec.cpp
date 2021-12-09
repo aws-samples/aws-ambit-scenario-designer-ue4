@@ -19,10 +19,8 @@
 
 #include <AmbitUtils/JsonHelpers.h>
 
-BEGIN_DEFINE_SPEC(SpawnedVehiclePathConfigSpec,
-                  "Ambit.SpawnedVehiclePathConfig",
-                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-                  ApplicationContextMask)
+BEGIN_DEFINE_SPEC(SpawnedVehiclePathConfigSpec, "Ambit.SpawnedVehiclePathConfig",
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     USpawnedVehiclePathConfig* Config;
 
@@ -39,60 +37,51 @@ void SpawnedVehiclePathConfigSpec::Define()
 
         Describe("the returned JsonObject", [this]()
         {
-            It(
-                "sets spawned vehicle value correctly",
-                [this]()
+            It("sets spawned vehicle value correctly", [this]()
+            {
+                const FString& Path = "TestPath";
+                TArray<FVector> Locations;
+                Locations.Add(FVector());
+
+                Config->SpawnedVehicle = Path;
+                Config->Waypoints = Locations;
+                Config->SpeedLimit = 800;
+                const FString& ResultPath = Config->SerializeToJson()->GetStringField("VehicleToSpawn");
+                TestEqual("Vehicle Asset Path", ResultPath, Path);
+            });
+
+            It("sets speed limit value correctly", [this]()
+            {
+                const FString& Path = "TestPath";
+                TArray<FVector> Locations;
+                Locations.Add(FVector());
+
+                Config->SpawnedVehicle = Path;
+                Config->Waypoints = Locations;
+                Config->SpeedLimit = 800;
+                const float Result = Config->SerializeToJson()->GetNumberField("SpeedLimit");
+                TestEqual("Speed Limit", Result, 800.f);
+            });
+
+            It("sets waypoints values correctly", [this]()
+            {
+                const FString& Path = "TestPath";
+                TArray<FVector> Locations;
+                const FVector Vector2(100, 100, 0);
+                Locations.Add(FVector());
+                Locations.Add(Vector2);
+
+                Config->SpawnedVehicle = Path;
+                Config->Waypoints = Locations;
+                Config->SpeedLimit = 800;
+                const TArray<TSharedPtr<FJsonValue>> ResultsArray = Config->SerializeToJson()->GetArrayField(
+                    "Waypoints");
+                for (int32 i = 0; i < ResultsArray.Num(); i++)
                 {
-                    const FString& Path = "TestPath";
-                    TArray<FVector> Locations;
-                    Locations.Add(FVector());
-
-                    Config->SpawnedVehicle = Path;
-                    Config->Waypoints = Locations;
-                    Config->SpeedLimit = 800;
-                    const FString& ResultPath = Config->
-                                                SerializeToJson()->GetStringField("VehicleToSpawn");
-                    TestEqual("Vehicle Asset Path", ResultPath, Path);
-                });
-
-            It(
-                "sets speed limit value correctly",
-                [this]()
-                {
-                    const FString& Path = "TestPath";
-                    TArray<FVector> Locations;
-                    Locations.Add(FVector());
-
-                    Config->SpawnedVehicle = Path;
-                    Config->Waypoints = Locations;
-                    Config->SpeedLimit = 800;
-                    const float Result = Config->
-                                         SerializeToJson()->GetNumberField("SpeedLimit");
-                    TestEqual("Speed Limit", Result, 800.f);
-                });
-
-            It(
-                "sets waypoints values correctly",
-                [this]()
-                {
-                    const FString& Path = "TestPath";
-                    TArray<FVector> Locations;
-                    const FVector Vector2(100, 100, 0);
-                    Locations.Add(FVector());
-                    Locations.Add(Vector2);
-
-                    Config->SpawnedVehicle = Path;
-                    Config->Waypoints = Locations;
-                    Config->SpeedLimit = 800;
-                    const TArray<TSharedPtr<FJsonValue>> ResultsArray = Config->
-                                                                        SerializeToJson()->GetArrayField("Waypoints");
-                    for (int32 i = 0; i < ResultsArray.Num(); i++)
-                    {
-                        const TArray<TSharedPtr<FJsonValue>>& Location = ResultsArray[i]->AsArray();
-                        TestTrue("Waypoint", Locations[i].Equals(
-                                     FJsonHelpers::DeserializeToVector3(Location)));
-                    }
-                });
+                    const TArray<TSharedPtr<FJsonValue>>& Location = ResultsArray[i]->AsArray();
+                    TestTrue("Waypoint", Locations[i].Equals(FJsonHelpers::DeserializeToVector3(Location)));
+                }
+            });
         });
     });
 }

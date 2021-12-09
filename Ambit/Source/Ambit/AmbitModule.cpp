@@ -148,11 +148,11 @@ FAmbitModule& FAmbitModule::Get()
     return *FAmbitModuleInstance;
 }
 
-void FAmbitModule::CreateAmbitNotification(const FText& MessageText, float FadeInDuration,
-                                           float FadeOutDuration, float ExpireDuration, bool bFireAndForget)
+void FAmbitModule::CreateAmbitNotification(const FText& MessageText, float FadeInDuration, float FadeOutDuration,
+                                           float ExpireDuration, bool bFireAndForget)
 {
-    FMenuHelpers::CreateNotification(MessageText, Get().GetAmbitNotificationBrush(),
-                                     FadeInDuration, FadeOutDuration, ExpireDuration, bFireAndForget);
+    FMenuHelpers::CreateNotification(MessageText, Get().GetAmbitNotificationBrush(), FadeInDuration, FadeOutDuration,
+                                     ExpireDuration, bFireAndForget);
 }
 
 void FAmbitModule::StartupModule()
@@ -164,20 +164,16 @@ void FAmbitModule::StartupModule()
     AmbitNotificationBrush = FSlateIcon(GetStyleSetName(), "Notification.Ambit").GetIcon();
 
     //register mode
-    FEditorModeRegistry::Get().RegisterMode<FAmbitMode>(
-        FAmbitMode::EM_AmbitModeId,
-        LOCTEXT("AmbitMode", "AWS Ambit Scenario Mode"),
-        FSlateIcon(GetStyleSetName(), "LevelEditor.Ambit", "LevelEditor.Ambit.Small"),
-        true
-    );
+    FEditorModeRegistry::Get().RegisterMode<FAmbitMode>(FAmbitMode::EM_AmbitModeId,
+                                                        LOCTEXT("AmbitMode", "AWS Ambit Scenario Mode"),
+                                                        FSlateIcon(GetStyleSetName(), "LevelEditor.Ambit",
+                                                                   "LevelEditor.Ambit.Small"), true);
 
     //register place actors category
     IPlacementModeModule& PlacementModeModule = IPlacementModeModule::Get();
     //Register Ambit Spawner Types
     const int32 Priority = 43; // Position of category tab in Place Actors panel
-    const FPlacementCategoryInfo AwsAmbit(LOCTEXT("AwsAmbit",
-                                                  "AWS Ambit"), "AwsAmbit",
-                                          TEXT("AwsAmbit"), Priority);
+    const FPlacementCategoryInfo AwsAmbit(LOCTEXT("AwsAmbit", "AWS Ambit"), "AwsAmbit", TEXT("AwsAmbit"), Priority);
     PlacementModeModule.RegisterPlacementCategory(AwsAmbit);
 
     //register actors to category

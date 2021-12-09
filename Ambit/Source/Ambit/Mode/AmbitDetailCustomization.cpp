@@ -53,8 +53,7 @@ void FAmbitDetailCustomization::PendingDelete()
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
-void FAmbitDetailCustomization::CustomizeDetails(
-    IDetailLayoutBuilder& DetailBuilder)
+void FAmbitDetailCustomization::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 {
     TSet<UClass*> Classes;
 
@@ -77,473 +76,475 @@ void FAmbitDetailCustomization::CustomizeDetails(
     // Build Scenario Settings Menu
     // The order that you add properties here is the order they actually appear
     IDetailCategoryBuilder& ScenarioSettingsCategory = DetailBuilder.
-            EditCategory("Scenario Settings");
+        EditCategory("Scenario Settings");
 
     // Format Scenario Name and Import Button
     const FString KHintTextScenarioName = "Import Scenario Definition File or Type Name for New Scenario";
     TSharedRef<IPropertyHandle> PropertyHandle_ScenarioName = DetailBuilder.
-            GetProperty(GET_MEMBER_NAME_CHECKED(UAmbitObject, ScenarioName));
+        GetProperty(GET_MEMBER_NAME_CHECKED(UAmbitObject, ScenarioName));
+
+    // @formatter:off
     ScenarioSettingsCategory.AddProperty(PropertyHandle_ScenarioName)
-                            .CustomWidget()
-                            .NameContent()
+        .CustomWidget()
+        .NameContent()
+        [
+            PropertyHandle_ScenarioName->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        .MinDesiredWidth(200.0f)
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .FillWidth(1)
             [
-                PropertyHandle_ScenarioName->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            .MinDesiredWidth(200.0f)
-            [
-                SNew(SHorizontalBox)
-                + SHorizontalBox::Slot()
-                .FillWidth(1)
-                [
-                    SNew(SEditableTextBox)
+                SNew(SEditableTextBox)
                 .Text_Static(&GetPropertyValueText, PropertyHandle_ScenarioName)
                 .OnTextCommitted_Static(&SetPropertyValueString,
                                         PropertyHandle_ScenarioName)
                 .HintText(FText::FromString(KHintTextScenarioName))
                 .ToolTipText(FText::FromString(KHintTextScenarioName))
-                ]
-                + SHorizontalBox::Slot()
-                  .AutoWidth()
-                  .Padding(1, 0, 0, 0)
-                [
-                    SNew(SButton)
+            ]
+            + SHorizontalBox::Slot()
+              .AutoWidth()
+              .Padding(1, 0, 0, 0)
+            [
+                SNew(SButton)
                 .ContentPadding(FMargin(4, 0))
                 .Text(NSLOCTEXT("UnrealEd", "GenericOpenDialog", "..."))
                 .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnImportSdf)
-                ]
-            ];
+            ]
+        ];
 
     // Handle PresetTimeOfDay Dropdown Menu
     TSharedRef<IPropertyHandle> PropertyHandle_PresetTimeOfDay = DetailBuilder.
-            GetProperty(GET_MEMBER_NAME_CHECKED(UAmbitObject, PresetTimeOfDay));
+        GetProperty(GET_MEMBER_NAME_CHECKED(UAmbitObject, PresetTimeOfDay));
     ScenarioSettingsCategory.AddProperty(PropertyHandle_PresetTimeOfDay)
-                            .CustomWidget()
-                            .NameContent()
+        .CustomWidget()
+        .NameContent()
+        [
+            PropertyHandle_PresetTimeOfDay->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        .MinDesiredWidth(150.0f)
+        .MaxDesiredWidth(150.0f)
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .VAlign(VAlign_Center)
+            .FillWidth(1.1f)
             [
-                PropertyHandle_PresetTimeOfDay->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            .MinDesiredWidth(150.0f)
-            .MaxDesiredWidth(150.0f)
-            [
-                SNew(SHorizontalBox)
-                + SHorizontalBox::Slot()
-                  .VAlign(VAlign_Center)
-                  .FillWidth(1.1f)
-                [
-                    SNew(SComboButton)
+                SNew(SComboButton)
                 .OnGetMenuContent_Static(&FTimeOfDayDropdownMenu::GetMenu,
-                                         PropertyHandle_PresetTimeOfDay)
+                    PropertyHandle_PresetTimeOfDay)
                 .ContentPadding(2)
                 .ButtonContent()
-                    [
-                        SNew(STextBlock)
+                [
+                    SNew(STextBlock)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text_Static(&FTimeOfDayDropdownMenu::GetCurrentValueAsText,
-                                 PropertyHandle_PresetTimeOfDay)
+                        PropertyHandle_PresetTimeOfDay)
                     .ToolTipText(PropertyHandle_PresetTimeOfDay->GetToolTipText())
-                    ]
                 ]
-            ];
+            ]
+        ];
 
     // Time of day slider
     TSharedRef<IPropertyHandle> PropertyHandle_TimeOfDay = DetailBuilder
-            .GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, TimeOfDay));
+        .GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, TimeOfDay));
     ScenarioSettingsCategory.AddProperty(PropertyHandle_TimeOfDay)
-                            .CustomWidget()
-                            .NameContent()
-            [
-                PropertyHandle_TimeOfDay->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            .MinDesiredWidth(150.0f)
-            .MaxDesiredWidth(150.0f)
-            [
-                PropertyHandle_TimeOfDay->CreatePropertyValueWidget()
-            ];
+        .CustomWidget()
+        .NameContent()
+        [
+            PropertyHandle_TimeOfDay->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        .MinDesiredWidth(150.0f)
+        .MaxDesiredWidth(150.0f)
+        [
+            PropertyHandle_TimeOfDay->CreatePropertyValueWidget()
+        ];
 
     // Add Weather Dropdown
     TSharedRef<IPropertyHandle> PropertyHandle_PresetWeather = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, PresetWeather));
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, PresetWeather));
     ScenarioSettingsCategory.AddProperty(PropertyHandle_PresetWeather)
-                            .CustomWidget()
-                            .NameContent()
+        .CustomWidget()
+        .NameContent()
+        [
+            PropertyHandle_PresetWeather->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        .MinDesiredWidth(150.0f)
+        .MaxDesiredWidth(150.0f)
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .VAlign(VAlign_Center)
+            .FillWidth(1.1f)
             [
-                PropertyHandle_PresetWeather->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            .MinDesiredWidth(150.0f)
-            .MaxDesiredWidth(150.0f)
-            [
-                SNew(SHorizontalBox)
-                + SHorizontalBox::Slot()
-                  .VAlign(VAlign_Center)
-                  .FillWidth(1.1f)
-                [
-                    SNew(SComboButton)
+                SNew(SComboButton)
                 .OnGetMenuContent_Static(&FWeatherDropdownMenu::GetMenu,
-                                         PropertyHandle_PresetWeather)
+                    PropertyHandle_PresetWeather)
                 .ContentPadding(2)
                 .ButtonContent()
-                    [
-                        SNew(STextBlock)
+                [
+                    SNew(STextBlock)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text_Static(&FWeatherDropdownMenu::GetCurrentValueAsText,
-                                 PropertyHandle_PresetWeather)
+                        PropertyHandle_PresetWeather)
                     .ToolTipText(PropertyHandle_PresetWeather->GetToolTipText())
-                    ]
                 ]
-            ];
+            ]
+        ];
 
     // Format Weather Parameters
     TSharedRef<IPropertyHandle> PropertyHandle_WeatherParams = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, WeatherParameters));
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, WeatherParameters));
     ScenarioSettingsCategory.AddProperty(PropertyHandle_WeatherParams);
 
     // Format Pedestrian Density
     TSharedRef<IPropertyHandle> PropertyHandle_PedestrianDensity = DetailBuilder
-            .GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, PedestrianDensity));
+        .GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, PedestrianDensity));
     ScenarioSettingsCategory.AddProperty(PropertyHandle_PedestrianDensity)
-                            .CustomWidget()
-                            .NameContent()
-            [
-                PropertyHandle_PedestrianDensity->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            .MinDesiredWidth(150.0f)
-            .MaxDesiredWidth(150.0f)
-            [
-                PropertyHandle_PedestrianDensity->CreatePropertyValueWidget()
-            ];
+        .CustomWidget()
+        .NameContent()
+        [
+            PropertyHandle_PedestrianDensity->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        .MinDesiredWidth(150.0f)
+        .MaxDesiredWidth(150.0f)
+        [
+            PropertyHandle_PedestrianDensity->CreatePropertyValueWidget()
+        ];
 
     // Format Vehicle Density
     TSharedRef<IPropertyHandle> PropertyHandle_VehicleDensity = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, VehicleDensity));
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, VehicleDensity));
     ScenarioSettingsCategory.AddProperty(PropertyHandle_VehicleDensity)
-                            .CustomWidget()
-                            .NameContent()
-            [
-                PropertyHandle_VehicleDensity->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            .MinDesiredWidth(150.0f)
-            .MaxDesiredWidth(150.0f)
-            [
-                PropertyHandle_VehicleDensity->CreatePropertyValueWidget()
-            ];
+        .CustomWidget()
+        .NameContent()
+        [
+            PropertyHandle_VehicleDensity->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        .MinDesiredWidth(150.0f)
+        .MaxDesiredWidth(150.0f)
+        [
+            PropertyHandle_VehicleDensity->CreatePropertyValueWidget()
+        ];
 
     // Format Export Button
     const FString KHintTextExportButton = "Export the Scenario Definition File";
     ScenarioSettingsCategory.AddCustomRow(FText::FromString("Export Scenario"))
-                            .ValueContent()
-                            .MinDesiredWidth(200.0f)
-    [
-        SNew(SHorizontalBox)
-        + SHorizontalBox::Slot()
-          .AutoWidth()
-          .Padding(1, 0, 0, 0)
+        .ValueContent()
+        .MinDesiredWidth(200.0f)
         [
-            SNew(SButton)
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .AutoWidth()
+            .Padding(1, 0, 0, 0)
+            [
+                SNew(SButton)
                 .ContentPadding(FMargin(4, 0))
                 .Text(FText::FromString("Export Scenario"))
                 .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnExportSdf)
                 .ToolTipText(FText::FromString(KHintTextExportButton))
-        ]
-    ];
-
+            ]
+        ];
+    
     // Build AWS Settings Menu
     IDetailCategoryBuilder& AWSSettingsCategory = DetailBuilder.
-            EditCategory("AWS Settings");
+        EditCategory("AWS Settings");
 
     // AWS Region
     TSharedRef<IPropertyHandle> PropertyHandle_Region = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, AwsRegion));
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, AwsRegion));
 
     AWSSettingsCategory.AddProperty(PropertyHandle_Region)
-                       .CustomWidget()
-                       .NameContent()
+        .CustomWidget()
+        .NameContent()
+        [
+            PropertyHandle_Region->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        .MinDesiredWidth(150.0f)
+        .MaxDesiredWidth(150.0f)
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .VAlign(VAlign_Center)
+            .FillWidth(1.1f)
             [
-                PropertyHandle_Region->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            .MinDesiredWidth(150.0f)
-            .MaxDesiredWidth(150.0f)
-            [
-                SNew(SHorizontalBox)
-                + SHorizontalBox::Slot()
-                  .VAlign(VAlign_Center)
-                  .FillWidth(1.1f)
-                [
-                    SNew(SComboButton)
+                SNew(SComboButton)
                 .OnGetMenuContent_Static(&FAWSRegionDropdownMenu::GetMenu,
-                                         PropertyHandle_Region)
+                    PropertyHandle_Region)
                 .ContentPadding(2)
                 .ButtonContent()
-                    [
-                        SNew(STextBlock)
+                [
+                    SNew(STextBlock)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text_Static(&FAWSRegionDropdownMenu::GetCurrentValueAsText,
-                                 PropertyHandle_Region)
+                        PropertyHandle_Region)
                     .ToolTipText(PropertyHandle_Region->GetToolTipText())
-                    ]
                 ]
-            ];
+            ]
+        ];
 
     // S3 Bucket Name
     TSharedRef<IPropertyHandle> PropertyHandle_BucketName = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, S3BucketName));
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, S3BucketName));
     AWSSettingsCategory.AddProperty(PropertyHandle_BucketName);
 
     // Build Permutations Settings Menu
     IDetailCategoryBuilder& PermutationsSettingsCategory = DetailBuilder.
-            EditCategory("Permutation Settings");
+        EditCategory("Permutation Settings");
 
     // Configuration Name
     const FString KHintTextConfigurationName =
-            "Import Bulk Scenario Configuration File or Type Name for New Bulk Configuration";
+        "Import Bulk Scenario Configuration File or Type Name for New Bulk Configuration";
 
     // Format Permutation name and import json file
     TSharedRef<IPropertyHandle> PropertyHandle_ConfigName = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, ConfigurationName));
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, ConfigurationName));
     PermutationsSettingsCategory.AddProperty(PropertyHandle_ConfigName)
-                                .CustomWidget()
-                                .NameContent()
+        .CustomWidget()
+        .NameContent()
+        [
+            PropertyHandle_ConfigName->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        .MinDesiredWidth(200.0f)
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .FillWidth(1)
             [
-                PropertyHandle_ConfigName->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            .MinDesiredWidth(200.0f)
-            [
-                SNew(SHorizontalBox)
-                + SHorizontalBox::Slot()
-                .FillWidth(1)
-                [
-                    SNew(SEditableTextBox)
+                SNew(SEditableTextBox)
                 .Text_Static(&GetPropertyValueText, PropertyHandle_ConfigName)
                 .OnTextCommitted_Static(&SetPropertyValueString,
-                                        PropertyHandle_ConfigName)
+                    PropertyHandle_ConfigName)
                 .HintText(FText::FromString(KHintTextConfigurationName))
                 .ToolTipText(FText::FromString(KHintTextConfigurationName))
-                ]
-                + SHorizontalBox::Slot()
-                  .AutoWidth()
-                  .Padding(1, 0, 0, 0)
-                [
-                    SNew(SButton)
+            ]
+            + SHorizontalBox::Slot()
+            .AutoWidth()
+            .Padding(1, 0, 0, 0)
+            [
+                SNew(SButton)
                 .ContentPadding(FMargin(4, 0))
                 .Text(NSLOCTEXT("UnrealEd", "GenericOpenDialog", "..."))
                 .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnReadFromS3Bucket)
-                ]
-            ];
-
+            ]
+         ];
+    
     // Handle Batch name
     TSharedRef<IPropertyHandle> PropertyHandle_BatchName = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, BatchName));
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, BatchName));
     PermutationsSettingsCategory.AddProperty(PropertyHandle_BatchName);
 
     // Handle Time of Day types
     TSharedRef<IPropertyHandle> PropertyHandle_TimeOfDayTypes = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, TimeOfDayTypes));
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, TimeOfDayTypes));
 
     PermutationsSettingsCategory.AddProperty(PropertyHandle_TimeOfDayTypes)
-                                .CustomWidget()
-                                .NameContent()
+        .CustomWidget()
+        .NameContent()
+        [
+            PropertyHandle_TimeOfDayTypes->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .VAlign(VAlign_Center)
+            .Padding(KStandardPadding)
             [
-                PropertyHandle_TimeOfDayTypes->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            [
-                SNew(SHorizontalBox)
-                + SHorizontalBox::Slot()
-                  .VAlign(VAlign_Center)
-                  .Padding(KStandardPadding)
-                [
-                    SNew(SWrapBox)
+                SNew(SWrapBox)
                 .UseAllottedWidth(true)
                 .InnerSlotPadding({6, 5})
-                    + SWrapBox::Slot()
+                + SWrapBox::Slot()
+                [
+                    SNew(SBox)
+                    .MinDesiredWidth(91)
                     [
-                        SNew(SBox)
-                        .MinDesiredWidth(91)
-                        [
-                            SNew(SCheckBox)
+                        SNew(SCheckBox)
                         .IsChecked_Static(&GetCheckState_Morning)
                         .OnCheckStateChanged_Static(&OnCheckStateChanged_Morning)
                         .ToolTipText(FText::FromString("Select Morning for Time of Day type"))
-                            [
-                                SNew(STextBlock)
-                                .Text(LOCTEXT("Morning", "Morning"))
-                            ]
+                        [
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("Morning", "Morning"))
                         ]
                     ]
+                ]
 
-                    + SWrapBox::Slot()
+                + SWrapBox::Slot()
+                [
+                    SNew(SBox)
+                    .MinDesiredWidth(91)
                     [
-                        SNew(SBox)
-                        .MinDesiredWidth(91)
-                        [
-                            SNew(SCheckBox)
+                        SNew(SCheckBox)
                         .IsChecked_Static(&GetCheckState_Noon)
                         .OnCheckStateChanged_Static(&OnCheckStateChanged_Noon)
                         .ToolTipText(FText::FromString("Select Noon for Time of Day type"))
-                            [
-                                SNew(STextBlock)
-                                .Text(LOCTEXT("Noon", "Noon"))
-                            ]
+                        [
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("Noon", "Noon"))
                         ]
                     ]
+                ]
 
-                    + SWrapBox::Slot()
+                + SWrapBox::Slot()
+                [
+                    SNew(SBox)
+                    .MinDesiredWidth(91)
                     [
-                        SNew(SBox)
-                        .MinDesiredWidth(91)
-                        [
-                            SNew(SCheckBox)
+                        SNew(SCheckBox)
                         .IsChecked_Static(&GetCheckState_Evening)
                         .OnCheckStateChanged_Static(&OnCheckStateChanged_Evening)
                         .ToolTipText(FText::FromString("Select Evening for Time of Day type"))
-                            [
-                                SNew(STextBlock)
-                                .Text(LOCTEXT("Evening", "Evening"))
-                            ]
+                        [
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("Evening", "Evening"))
                         ]
                     ]
+                ]
 
-                    + SWrapBox::Slot()
+                + SWrapBox::Slot()
+                [
+                    SNew(SBox)
+                    .MinDesiredWidth(91)
                     [
-                        SNew(SBox)
-                        .MinDesiredWidth(91)
-                        [
-                            SNew(SCheckBox)
+                        SNew(SCheckBox)
                         .IsChecked_Static(&GetCheckState_Night)
                         .OnCheckStateChanged_Static(&OnCheckStateChanged_Night)
                         .ToolTipText(FText::FromString("Select Night for Time of Day type"))
-                            [
-                                SNew(STextBlock)
-                                .Text(LOCTEXT("Night", "Night"))
-                            ]
+                        [
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("Night", "Night"))
                         ]
                     ]
                 ]
-            ];
+            ]
+        ];
 
     // Handle weather types
     TSharedRef<IPropertyHandle> PropertyHandle_WeatherTypes = DetailBuilder.
-            GetProperty(GET_MEMBER_NAME_CHECKED(UAmbitObject, WeatherTypes));
+        GetProperty(GET_MEMBER_NAME_CHECKED(UAmbitObject, WeatherTypes));
 
     PermutationsSettingsCategory.AddProperty(PropertyHandle_WeatherTypes)
-                                .CustomWidget()
-                                .NameContent()
+                .CustomWidget()
+                .NameContent()
+        [
+            PropertyHandle_WeatherTypes->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .VAlign(VAlign_Center)
+            .Padding(KStandardPadding)
             [
-                PropertyHandle_WeatherTypes->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            [
-                SNew(SHorizontalBox)
-                + SHorizontalBox::Slot()
-                  .VAlign(VAlign_Center)
-                  .Padding(KStandardPadding)
-                [
-                    SNew(SWrapBox)
+                SNew(SWrapBox)
                 .UseAllottedWidth(true)
                 .InnerSlotPadding({6, 5})
-                    + SWrapBox::Slot()
+                + SWrapBox::Slot()
+                [
+                    SNew(SBox)
+                    .MinDesiredWidth(91)
                     [
-                        SNew(SBox)
-                        .MinDesiredWidth(91)
-                        [
-                            SNew(SCheckBox)
+                        SNew(SCheckBox)
                         .IsChecked_Static(&GetCheckState_Sunny)
                         .OnCheckStateChanged_Static(&OnCheckStateChanged_Sunny)
                         .ToolTipText(FText::FromString("Select Sunny weather type"))
-                            [
-                                SNew(STextBlock)
-                                .Text(LOCTEXT("Sunny", "Sunny"))
-                            ]
-                        ]
-                    ]
-
-                    + SWrapBox::Slot()
-                    [
-                        SNew(SBox)
-                        .MinDesiredWidth(91)
                         [
-                            SNew(SCheckBox)
-                        .IsChecked_Static(&GetCheckState_Rainy)
-                        .OnCheckStateChanged_Static(&OnCheckStateChanged_Rainy)
-                        .ToolTipText(FText::FromString("Select Rainy weather type"))
-                            [
-                                SNew(STextBlock)
-                                .Text(LOCTEXT("Rainy", "Rainy"))
-                            ]
-                        ]
-                    ]
-
-                    + SWrapBox::Slot()
-                    [
-                        SNew(SBox)
-                        .MinDesiredWidth(91)
-                        [
-                            SNew(SCheckBox)
-                        .IsChecked_Static(&GetCheckState_Foggy)
-                        .OnCheckStateChanged_Static(&OnCheckStateChanged_Foggy)
-                        .ToolTipText(FText::FromString("Select Foggy weather type"))
-                            [
-                                SNew(STextBlock)
-                                .Text(LOCTEXT("Foggy", "Foggy"))
-                            ]
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("Sunny", "Sunny"))
                         ]
                     ]
                 ]
-            ];
+
+                + SWrapBox::Slot()
+                [
+                    SNew(SBox)
+                    .MinDesiredWidth(91)
+                    [
+                        SNew(SCheckBox)
+                        .IsChecked_Static(&GetCheckState_Rainy)
+                        .OnCheckStateChanged_Static(&OnCheckStateChanged_Rainy)
+                        .ToolTipText(FText::FromString("Select Rainy weather type"))
+                        [
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("Rainy", "Rainy"))
+                        ]
+                    ]
+                ]
+
+                + SWrapBox::Slot()
+                [
+                    SNew(SBox)
+                    .MinDesiredWidth(91)
+                    [
+                        SNew(SCheckBox)
+                        .IsChecked_Static(&GetCheckState_Foggy)
+                        .OnCheckStateChanged_Static(&OnCheckStateChanged_Foggy)
+                        .ToolTipText(FText::FromString("Select Foggy weather type"))
+                        [
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("Foggy", "Foggy"))
+                        ]
+                    ]
+                ]
+            ]
+        ];
 
     // Handle Bulk Pedestrian Density
     TSharedRef<IPropertyHandle> PropertyHandle_BulkPedDensity = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, BulkPedestrianTraffic));
+    GetProperty(
+        GET_MEMBER_NAME_CHECKED(UAmbitObject, BulkPedestrianTraffic));
 
     PermutationsSettingsCategory.AddProperty(PropertyHandle_BulkPedDensity)
                                 .CustomWidget()
                                 .NameContent()
+        [
+            PropertyHandle_BulkPedDensity->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        .MinDesiredWidth(125.0f * 2.0f)
+        .MaxDesiredWidth(125.0f * 2.0f)
+        [
+            SNew(SVerticalBox)
+            + SVerticalBox::Slot()
+            .AutoHeight()
             [
-                PropertyHandle_BulkPedDensity->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            .MinDesiredWidth(125.0f * 2.0f)
-            .MaxDesiredWidth(125.0f * 2.0f)
-            [
-                SNew(SVerticalBox)
-                + SVerticalBox::Slot()
-                .AutoHeight()
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .FillWidth(0.2f)
+                .VAlign(VAlign_Center)
                 [
-                    SNew(SHorizontalBox)
-                    + SHorizontalBox::Slot()
-                      .FillWidth(0.2f)
-                      .VAlign(VAlign_Center)
-                    [
-                        SNew(STextBlock)
+                    SNew(STextBlock)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("DensityMin", "DensityMin"))
                     .ToolTipText(LOCTEXT("BulkPedestrianMin",
                                          "The minimum percentage of pedestrian density in the range of [0.0, 1.0]"))
-                    ]
-                    + SHorizontalBox::Slot()
-                      .VAlign(VAlign_Center)
-                      .FillWidth(0.3f)
-                      .Padding(2, 0, 0, 2)
-                    [
-                        SNew(SNumericEntryBox<float>)
+                ]
+                + SHorizontalBox::Slot()
+                .VAlign(VAlign_Center)
+                .FillWidth(0.3f)
+                .Padding(2, 0, 0, 2)
+                [
+                    SNew(SNumericEntryBox<float>)
                     .AllowSpin(true)
                     .MinValue(0.0f)
                     .MaxValue(1.0f)
@@ -552,28 +553,28 @@ void FAmbitDetailCustomization::CustomizeDetails(
                     .Delta(0.1f)
                     .Value_Static(&GetBulkPedestrianDensityMin)
                     .OnValueChanged_Static(&SetBulkPedestrianDensityMin)
-                    ]
                 ]
-                + SVerticalBox::Slot()
-                .AutoHeight()
+            ]
+            + SVerticalBox::Slot()
+            .AutoHeight()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .FillWidth(0.2f)
+                .VAlign(VAlign_Center)
                 [
-                    SNew(SHorizontalBox)
-                    + SHorizontalBox::Slot()
-                      .FillWidth(0.2f)
-                      .VAlign(VAlign_Center)
-                    [
-                        SNew(STextBlock)
+                    SNew(STextBlock)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("DensityMax", "DensityMax"))
                     .ToolTipText(LOCTEXT("BulkPedestrianMax",
                                          "The maximum percentage of pedestrian density in the range of [0.0, 1.0]"))
-                    ]
-                    + SHorizontalBox::Slot()
-                      .VAlign(VAlign_Center)
-                      .FillWidth(0.3f)
-                      .Padding(2, 0, 0, 2)
-                    [
-                        SNew(SNumericEntryBox<float>)
+                ]
+                + SHorizontalBox::Slot()
+                .VAlign(VAlign_Center)
+                .FillWidth(0.3f)
+                .Padding(2, 0, 0, 2)
+                [
+                    SNew(SNumericEntryBox<float>)
                     .AllowSpin(true)
                     .MinValue(0.0f)
                     .MaxValue(1.0f)
@@ -582,69 +583,69 @@ void FAmbitDetailCustomization::CustomizeDetails(
                     .Delta(0.1f)
                     .Value_Static(&GetBulkPedestrianDensityMax)
                     .OnValueChanged_Static(&SetBulkPedestrianDensityMax)
-                    ]
                 ]
-                + SVerticalBox::Slot()
-                .AutoHeight()
+            ]
+            + SVerticalBox::Slot()
+            .AutoHeight()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .FillWidth(0.2f)
+                .VAlign(VAlign_Center)
                 [
-                    SNew(SHorizontalBox)
-                    + SHorizontalBox::Slot()
-                      .FillWidth(0.2f)
-                      .VAlign(VAlign_Center)
-                    [
-                        SNew(STextBlock)
+                    SNew(STextBlock)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("Increment", "Increment"))
-                    ]
-                    + SHorizontalBox::Slot()
-                      .VAlign(VAlign_Center)
-                      .FillWidth(0.3f)
-                      .Padding(2, 0, 0, 2)
-                    [
-                        SNew(SEditableTextBox)
+                ]
+                + SHorizontalBox::Slot()
+                .VAlign(VAlign_Center)
+                .FillWidth(0.3f)
+                .Padding(2, 0, 0, 2)
+                [
+                    SNew(SEditableTextBox)
                     .IsReadOnly(true)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("0.1", "0.1"))
-                    ]
                 ]
-            ];
+            ]
+        ];
 
     // Handle Bulk Vehicle Density
     TSharedRef<IPropertyHandle> PropertyHandle_VehDensity = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, BulkVehicleTraffic));
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, BulkVehicleTraffic));
 
     PermutationsSettingsCategory.AddProperty(PropertyHandle_VehDensity)
-                                .CustomWidget()
-                                .NameContent()
+        .CustomWidget()
+        .NameContent()
+        [
+            PropertyHandle_VehDensity->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        .MinDesiredWidth(125.0f * 2.0f)
+        .MaxDesiredWidth(125.0f * 2.0f)
+        [
+            SNew(SVerticalBox)
+            + SVerticalBox::Slot()
+            .AutoHeight()
             [
-                PropertyHandle_VehDensity->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            .MinDesiredWidth(125.0f * 2.0f)
-            .MaxDesiredWidth(125.0f * 2.0f)
-            [
-                SNew(SVerticalBox)
-                + SVerticalBox::Slot()
-                .AutoHeight()
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .FillWidth(0.2f)
+                .VAlign(VAlign_Center)
                 [
-                    SNew(SHorizontalBox)
-                    + SHorizontalBox::Slot()
-                      .FillWidth(0.2f)
-                      .VAlign(VAlign_Center)
-                    [
-                        SNew(STextBlock)
+                    SNew(STextBlock)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("DensityMin", "DensityMin"))
                     .ToolTipText(LOCTEXT("BulkVehicleMin",
                                          "The minimum percentage of vehicle density in the range of [0.0, 1.0]"))
-                    ]
-                    + SHorizontalBox::Slot()
-                      .VAlign(VAlign_Center)
-                      .FillWidth(0.3f)
-                      .Padding(2, 0, 0, 2)
-                    [
-                        SNew(SNumericEntryBox<float>)
+                ]
+                + SHorizontalBox::Slot()
+                .VAlign(VAlign_Center)
+                .FillWidth(0.3f)
+                .Padding(2, 0, 0, 2)
+                [
+                    SNew(SNumericEntryBox<float>)
                     .AllowSpin(true)
                     .MinValue(0.0f)
                     .MaxValue(1.0f)
@@ -653,28 +654,28 @@ void FAmbitDetailCustomization::CustomizeDetails(
                     .Delta(0.1f)
                     .Value_Static(&GetBulkTrafficDensityMin)
                     .OnValueChanged_Static(&SetBulkTrafficDensityMin)
-                    ]
                 ]
-                + SVerticalBox::Slot()
-                .AutoHeight()
+            ]
+            + SVerticalBox::Slot()
+            .AutoHeight()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .FillWidth(0.2f)
+                .VAlign(VAlign_Center)
                 [
-                    SNew(SHorizontalBox)
-                    + SHorizontalBox::Slot()
-                      .FillWidth(0.2f)
-                      .VAlign(VAlign_Center)
-                    [
-                        SNew(STextBlock)
+                    SNew(STextBlock)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("DensityMax", "DensityMax"))
                     .ToolTipText(LOCTEXT("BulkVehicleMax",
                                          "The maximum percentage of vehicle density in the range of [0.0, 1.0]"))
-                    ]
-                    + SHorizontalBox::Slot()
-                      .VAlign(VAlign_Center)
-                      .FillWidth(0.3f)
-                      .Padding(2, 0, 0, 2)
-                    [
-                        SNew(SNumericEntryBox<float>)
+                ]
+                + SHorizontalBox::Slot()
+                .VAlign(VAlign_Center)
+                .FillWidth(0.3f)
+                .Padding(2, 0, 0, 2)
+                [
+                    SNew(SNumericEntryBox<float>)
                     .AllowSpin(true)
                     .MinValue(0.0f)
                     .MaxValue(1.0f)
@@ -683,43 +684,43 @@ void FAmbitDetailCustomization::CustomizeDetails(
                     .Delta(0.1f)
                     .Value_Static(&GetBulkTrafficDensityMax)
                     .OnValueChanged_Static(&SetBulkTrafficDensityMax)
-                    ]
                 ]
-                + SVerticalBox::Slot()
-                .AutoHeight()
+            ]
+            + SVerticalBox::Slot()
+            .AutoHeight()
+            [
+                SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .FillWidth(0.2f)
+                .VAlign(VAlign_Center)
                 [
-                    SNew(SHorizontalBox)
-                    + SHorizontalBox::Slot()
-                      .FillWidth(0.2f)
-                      .VAlign(VAlign_Center)
-                    [
-                        SNew(STextBlock)
+                    SNew(STextBlock)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("Increment", "Increment"))
-                    ]
-                    + SHorizontalBox::Slot()
-                      .VAlign(VAlign_Center)
-                      .FillWidth(0.3f)
-                      .Padding(2, 0, 0, 2)
-                    [
-                        SNew(SEditableTextBox)
+                ]
+                + SHorizontalBox::Slot()
+                .VAlign(VAlign_Center)
+                .FillWidth(0.3f)
+                .Padding(2, 0, 0, 2)
+                [
+                    SNew(SEditableTextBox)
                     .IsReadOnly(true)
                     .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("0.1", "0.1"))
-                    ]
                 ]
-            ];
+            ]
+        ];
 
     // The number of permutation, read-only
     TSharedRef<IPropertyHandle> PropertyHandle_NumberOfPermutations =
-            DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, NumberOfPermutations));
+        DetailBuilder.
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, NumberOfPermutations));
     PermutationsSettingsCategory.AddProperty(PropertyHandle_NumberOfPermutations);
 
     // Format Generate Button
-    const FString KHintTextGeneratePermutations =
-            "Select Location to Export Bulk Scenario Configuration and Generate Permutations of Scenario Definition Files";
+    const FString KHintTextGeneratePermutations = 
+        "Select Location to Export Bulk Scenario Configuration and Generate Permutations of Scenario Definition Files";
     PermutationsSettingsCategory.AddCustomRow(
                                     FText::FromString("Generate Permutations"))
                                 .ValueContent()
@@ -727,8 +728,8 @@ void FAmbitDetailCustomization::CustomizeDetails(
     [
         SNew(SHorizontalBox)
         + SHorizontalBox::Slot()
-          .AutoWidth()
-          .Padding(1, 0, 0, 0)
+        .AutoWidth()
+        .Padding(1, 0, 0, 0)
         [
             SNew(SButton)
             .ContentPadding(FMargin(4, 0))
@@ -737,94 +738,94 @@ void FAmbitDetailCustomization::CustomizeDetails(
             .ToolTipText(FText::FromString(KHintTextGeneratePermutations))
         ]
     ];
-
+    
     // Map Export Menu
     IDetailCategoryBuilder& MapExportSettingsCategory = DetailBuilder.
-            EditCategory("Map Export Settings");
+        EditCategory("Map Export Settings");
 
     // Handle export platforms
     TSharedRef<IPropertyHandle> PropertyHandle_ExportPlatforms = DetailBuilder.
-            GetProperty(
-                GET_MEMBER_NAME_CHECKED(UAmbitObject, ExportPlatforms));
+        GetProperty(
+            GET_MEMBER_NAME_CHECKED(UAmbitObject, ExportPlatforms));
 
     MapExportSettingsCategory.AddProperty(PropertyHandle_ExportPlatforms)
-                             .CustomWidget()
-                             .NameContent()
+                .CustomWidget()
+                .NameContent()
+        [
+            PropertyHandle_ExportPlatforms->CreatePropertyNameWidget()
+        ]
+        .ValueContent()
+        [
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .VAlign(VAlign_Center)
+            .Padding(KStandardPadding)
             [
-                PropertyHandle_ExportPlatforms->CreatePropertyNameWidget()
-            ]
-            .ValueContent()
-            [
-                SNew(SHorizontalBox)
-                + SHorizontalBox::Slot()
-                  .VAlign(VAlign_Center)
-                  .Padding(KStandardPadding)
-                [
-                    SNew(SWrapBox)
+                SNew(SWrapBox)
                 .UseAllottedWidth(true)
                 .InnerSlotPadding({6, 5})
-                    + SWrapBox::Slot()
+                + SWrapBox::Slot()
+                [
+                    SNew(SBox)
+                    .MinDesiredWidth(91)
                     [
-                        SNew(SBox)
-                        .MinDesiredWidth(91)
-                        [
-                            SNew(SCheckBox)
+                        SNew(SCheckBox)
                         .IsChecked_Static(&GetCheckState_Linux)
                         .OnCheckStateChanged_Static(&OnCheckStateChanged_Linux)
                         .ToolTipText(FText::FromString("Select standalone Linux export platform"))
-                            [
-                                SNew(STextBlock)
-                                .Text(LOCTEXT("Linux", "Linux"))
-                            ]
-                        ]
-                    ]
-
-                    + SWrapBox::Slot()
-                    [
-                        SNew(SBox)
-                        .MinDesiredWidth(91)
                         [
-                            SNew(SCheckBox)
-                        .IsChecked_Static(&GetCheckState_Windows)
-                        .OnCheckStateChanged_Static(&OnCheckStateChanged_Windows)
-                        .ToolTipText(FText::FromString("Select standalone Windows export platform"))
-                            [
-                                SNew(STextBlock)
-                                .Text(LOCTEXT("Windows", "Windows"))
-                            ]
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("Linux", "Linux"))
                         ]
                     ]
                 ]
-            ];
+
+                + SWrapBox::Slot()
+                [
+                    SNew(SBox)
+                    .MinDesiredWidth(91)
+                    [
+                        SNew(SCheckBox)
+                        .IsChecked_Static(&GetCheckState_Windows)
+                        .OnCheckStateChanged_Static(&OnCheckStateChanged_Windows)
+                        .ToolTipText(FText::FromString("Select standalone Windows export platform"))
+                        [
+                            SNew(STextBlock)
+                            .Text(LOCTEXT("Windows", "Windows"))
+                        ]
+                    ]
+                ]
+            ]
+        ];
 
     // Format Export Button
     const FString KHintTextExportMap = "Select target platform to export map";
     MapExportSettingsCategory.AddCustomRow(
-                                 FText::FromString("Export Map"))
-                             .ValueContent()
-                             .MinDesiredWidth(200.0f)
-    [
-        SNew(SHorizontalBox)
-        + SHorizontalBox::Slot()
-          .AutoWidth()
-          .Padding(1, 0, 0, 0)
+        FText::FromString("Export Map"))
+        .ValueContent()
+        .MinDesiredWidth(200.0f)
         [
-            SNew(SButton)
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .AutoWidth()
+            .Padding(1, 0, 0, 0)
+            [
+                SNew(SButton)
                 .ContentPadding(FMargin(4, 0))
                 .Text(FText::FromString("Export Map"))
                 .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnExportMap)
                 .ToolTipText(FText::FromString(KHintTextExportMap))
                 .IsEnabled_Static(&GetExportButtonEnabled)
-        ]
-    ];
+            ]
+        ];
 
     // glTF File Type Selection
     TSharedRef<IPropertyHandle> PropertyHandle_GltfExportType = DetailBuilder.
-            GetProperty(GET_MEMBER_NAME_CHECKED(UAmbitObject, GltfType));
+        GetProperty(GET_MEMBER_NAME_CHECKED(UAmbitObject, GltfType));
 
     MapExportSettingsCategory.AddProperty(PropertyHandle_GltfExportType)
-                             .CustomWidget()
-                             .NameContent()
+            .CustomWidget()
+            .NameContent()
             [
                 PropertyHandle_GltfExportType->CreatePropertyNameWidget()
             ]
@@ -834,19 +835,19 @@ void FAmbitDetailCustomization::CustomizeDetails(
             [
                 SNew(SHorizontalBox)
                 + SHorizontalBox::Slot()
-                  .VAlign(VAlign_Center)
-                  .FillWidth(1.1f)
+                .VAlign(VAlign_Center)
+                .FillWidth(1.1f)
                 [
                     SNew(SComboButton)
                     .OnGetMenuContent_Static(&FGltfFileTypeDropdownMenu::GetMenu,
-                                             PropertyHandle_GltfExportType)
+                        PropertyHandle_GltfExportType)
                     .ContentPadding(2)
                     .ButtonContent()
                     [
                         SNew(STextBlock)
                         .Font(IDetailLayoutBuilder::GetDetailFont())
                         .Text_Static(&FGltfFileTypeDropdownMenu::GetCurrentValueAsText,
-                                     PropertyHandle_GltfExportType)
+                            PropertyHandle_GltfExportType)
                         .ToolTipText(PropertyHandle_GltfExportType->GetToolTipText())
                     ]
                 ]
@@ -855,22 +856,23 @@ void FAmbitDetailCustomization::CustomizeDetails(
     // glTF Export Button
     const FString GltfExportButtonText = "Export glTF";
     MapExportSettingsCategory.AddCustomRow(
-                                 FText::FromString(GltfExportButtonText))
-                             .ValueContent()
-                             .MinDesiredWidth(200.0f)
-    [
-        SNew(SHorizontalBox)
-        + SHorizontalBox::Slot()
-          .AutoWidth()
-          .Padding(1, 0, 0, 0)
+        FText::FromString(GltfExportButtonText))
+        .ValueContent()
+        .MinDesiredWidth(200.0f)
         [
-            SNew(SButton)
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .AutoWidth()
+            .Padding(1, 0, 0, 0)
+            [
+                SNew(SButton)
                 .ContentPadding(FMargin(4, 0))
                 .Text(FText::FromString(GltfExportButtonText))
                 .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnExportGltf)
                 .IsEnabled_Static(&GetExportButtonEnabled)
-        ]
-    ];
+            ]
+        ];
+    // @formatter:on
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -878,8 +880,7 @@ END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 FText FAmbitDetailCustomization::GetPropertyValueText(TSharedRef<IPropertyHandle> PropertyHandle)
 {
     FString Value;
-    if (PropertyHandle->GetValueAsFormattedString(Value) ==
-        FPropertyAccess::Success)
+    if (PropertyHandle->GetValueAsFormattedString(Value) == FPropertyAccess::Success)
     {
         return FText::FromString(Value);
     }
@@ -887,9 +888,8 @@ FText FAmbitDetailCustomization::GetPropertyValueText(TSharedRef<IPropertyHandle
     return FText();
 }
 
-void FAmbitDetailCustomization::SetPropertyValueString(
-    const FText& NewValue, ETextCommit::Type CommitInfo,
-    TSharedRef<IPropertyHandle> PropertyHandle)
+void FAmbitDetailCustomization::SetPropertyValueString(const FText& NewValue, ETextCommit::Type CommitInfo,
+                                                       TSharedRef<IPropertyHandle> PropertyHandle)
 {
     const FString Name = NewValue.ToString();
     ensure(PropertyHandle->SetValue(Name) == FPropertyAccess::Success);

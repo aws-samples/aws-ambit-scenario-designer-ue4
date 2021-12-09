@@ -465,8 +465,7 @@ void ConfigImportExportSpec::Define()
                 {
                     bool bHitS3 = false;
                     auto MockWriteToS3 = [&bHitS3](const FString& Region, const FString& BucketName,
-                                                   const FString& ObjectName,
-                                                   const FString& Content) -> bool
+                                                   const FString& ObjectName, const FString& Content) -> bool
                     {
                         bHitS3 = true;
                         return true;
@@ -494,9 +493,8 @@ void ConfigImportExportSpec::Define()
                     const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
                     AmbitMode->UISettings->AwsRegion = Aws::Region::US_EAST_1;
                     AmbitMode->UISettings->S3BucketName = "test--config-import-export--process-sdf-for-export";
-                    AmbitMode->UISettings->BatchName = "AmbitTest"
-                            + FDateTime::UtcNow().ToString()
-                            + "ProcessSdfForExport";
+                    AmbitMode->UISettings->BatchName = "AmbitTest" + FDateTime::UtcNow().ToString() +
+                            "ProcessSdfForExport";
                 });
 
                 Describe("When an Error Occurs During Put", [this]()
@@ -504,8 +502,7 @@ void ConfigImportExportSpec::Define()
                     It("Should Catch and Log Error (Invalid Argument)", [this]()
                     {
                         auto MockWriteToS3 = [](const FString& Region, const FString& BucketName,
-                                                const FString& ObjectName,
-                                                const FString& Content) -> bool
+                                                const FString& ObjectName, const FString& Content) -> bool
                         {
                             throw std::invalid_argument("Test Fail");
                         };
@@ -524,8 +521,7 @@ void ConfigImportExportSpec::Define()
                     It("Should Catch and Log Error (Runtime Argument)", [this]()
                     {
                         auto MockWriteToS3 = [](const FString& Region, const FString& BucketName,
-                                                const FString& ObjectName,
-                                                const FString& Content) -> bool
+                                                const FString& ObjectName, const FString& Content) -> bool
                         {
                             throw std::runtime_error("Test Fail");
                         };
@@ -544,8 +540,7 @@ void ConfigImportExportSpec::Define()
                     It("Should Throw Other Error To Caller", [this]()
                     {
                         auto MockWriteToS3 = [](const FString& Region, const FString& BucketName,
-                                                const FString& ObjectName,
-                                                const FString& Content) -> bool
+                                                const FString& ObjectName, const FString& Content) -> bool
                         {
                             throw std::domain_error("Test Fail");
                         };
@@ -620,8 +615,7 @@ void ConfigImportExportSpec::Define()
 
                     FString ActualPathName;
                     auto MockWriteToS3 = [&ActualPathName](const FString& Region, const FString& BucketName,
-                                                           const FString& ObjectName,
-                                                           const FString& Content) -> bool
+                                                           const FString& ObjectName, const FString& Content) -> bool
                     {
                         ActualPathName = ObjectName;
                         return true;
@@ -762,8 +756,7 @@ void ConfigImportExportSpec::Define()
                 if (FoundField)
                 {
                     const bool FoundItems = AmbitSpawnerSection->Get()->TryGetArrayField(
-                        JsonConstants::KAmbitSpawnerObjectsKey,
-                        OutputArray);
+                        JsonConstants::KAmbitSpawnerObjectsKey, OutputArray);
                 }
 
                 TestEqual("Spawned Object count should be consistent", OutputArray->Num(), 1);
@@ -809,8 +802,7 @@ void ConfigImportExportSpec::Define()
             {
                 return "Test";
             };
-            auto MockWriteToS3 = [](const FString& Region, const FString& BucketName,
-                                    const FString& ObjectName,
+            auto MockWriteToS3 = [](const FString& Region, const FString& BucketName, const FString& ObjectName,
                                     const FString& Content) -> bool
             {
                 return true;
@@ -842,15 +834,14 @@ void ConfigImportExportSpec::Define()
                 };
                 Spawner->LambdaGenerateSpawnedObjectConfiguration = SpawnedConfig;
 
-                UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher =
-                        NewObject<UAmbitExporterDelegateWatcher>();
+                UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher = NewObject<
+                    UAmbitExporterDelegateWatcher>();
                 ConfigurationDelegateWatcher->SpawnerCount = 1;
                 ConfigurationDelegateWatcher->bSendToS3 = false;
                 ConfigurationDelegateWatcher->Parent = Exporter;
 
-                Spawner->GetOnSpawnedObjectConfigCompletedDelegate()
-                       .BindUObject(ConfigurationDelegateWatcher,
-                                    &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
+                Spawner->GetOnSpawnedObjectConfigCompletedDelegate().BindUObject(
+                    ConfigurationDelegateWatcher, &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
 
                 // Assert
                 AddExpectedError("One of the SDF configurations have failed to generate properly",
@@ -890,15 +881,15 @@ void ConfigImportExportSpec::Define()
                     };
                     Spawner->LambdaGenerateSpawnedObjectConfiguration = SpawnedConfig;
 
-                    UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher =
-                            NewObject<UAmbitExporterDelegateWatcher>();
+                    UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher = NewObject<
+                        UAmbitExporterDelegateWatcher>();
                     ConfigurationDelegateWatcher->SpawnerCount = 1;
                     ConfigurationDelegateWatcher->bSendToS3 = false;
                     ConfigurationDelegateWatcher->Parent = Exporter;
 
-                    Spawner->GetOnSpawnedObjectConfigCompletedDelegate()
-                           .BindUObject(ConfigurationDelegateWatcher,
-                                        &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
+                    Spawner->GetOnSpawnedObjectConfigCompletedDelegate().BindUObject(
+                        ConfigurationDelegateWatcher,
+                        &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
 
                     Spawner->GenerateSpawnedObjectConfiguration();
                 });
@@ -954,19 +945,19 @@ void ConfigImportExportSpec::Define()
                     };
                     Spawner2->LambdaGenerateSpawnedObjectConfiguration = SpawnedConfig2;
 
-                    UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher =
-                            NewObject<UAmbitExporterDelegateWatcher>();
+                    UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher = NewObject<
+                        UAmbitExporterDelegateWatcher>();
                     ConfigurationDelegateWatcher->SpawnerCount = 2;
                     ConfigurationDelegateWatcher->bSendToS3 = false;
                     ConfigurationDelegateWatcher->Parent = Exporter;
 
-                    Spawner->GetOnSpawnedObjectConfigCompletedDelegate()
-                           .BindUObject(ConfigurationDelegateWatcher,
-                                        &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
+                    Spawner->GetOnSpawnedObjectConfigCompletedDelegate().BindUObject(
+                        ConfigurationDelegateWatcher,
+                        &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
 
-                    Spawner2->GetOnSpawnedObjectConfigCompletedDelegate()
-                            .BindUObject(ConfigurationDelegateWatcher,
-                                         &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
+                    Spawner2->GetOnSpawnedObjectConfigCompletedDelegate().BindUObject(
+                        ConfigurationDelegateWatcher,
+                        &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
 
                     Spawner->GenerateSpawnedObjectConfiguration();
                     Spawner2->GenerateSpawnedObjectConfiguration();

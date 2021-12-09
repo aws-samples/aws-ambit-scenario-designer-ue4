@@ -32,10 +32,7 @@ struct AMBIT_API FWeatherTypes
 {
     GENERATED_BODY()
 
-    FWeatherTypes()
-        : bSunny(false)
-          , bRainy(false)
-          , bFoggy(false)
+    FWeatherTypes() : bSunny(false), bRainy(false), bFoggy(false)
     {
     }
 

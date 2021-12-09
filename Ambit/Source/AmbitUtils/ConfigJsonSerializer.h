@@ -47,7 +47,7 @@ public:
     /**
     * Deserialize the Json object into Unreal Engine editor
     */
-    virtual void DeserializeFromJson(TSharedPtr<FJsonObject>)
+    virtual void DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
     {
     };
 
@@ -67,9 +67,7 @@ public:
  */
 struct AMBITUTILS_API FConfigJsonSerializer
 {
-    virtual ~FConfigJsonSerializer()
-    {
-    }
+    virtual ~FConfigJsonSerializer() = default;
 
     /**
      * Serialize the struct information into a Json object
@@ -79,5 +77,5 @@ struct AMBITUTILS_API FConfigJsonSerializer
     /**
     * Deserialize the Json object into Unreal Engine editor
     */
-    virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) = 0;
+    virtual void DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject) = 0;
 };

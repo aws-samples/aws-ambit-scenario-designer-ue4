@@ -20,10 +20,8 @@
 #include <AmbitUtils/JsonHelpers.h>
 
 
-BEGIN_DEFINE_SPEC(SpawnedObjectConfigSpec,
-                  "Ambit.SpawnedObjectConfig",
-                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-                  ApplicationContextMask)
+BEGIN_DEFINE_SPEC(SpawnedObjectConfigSpec, "Ambit.SpawnedObjectConfig",
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     USpawnedObjectConfig* Config;
     TSharedPtr<FJsonObject> Json;
@@ -42,104 +40,79 @@ void SpawnedObjectConfigSpec::Define()
 
         Describe("the returned JsonObject", [this]()
         {
-            It(
-                "sets values correctly when there is one ActorToSpawn pathname and one transform",
-                [this]()
+            It("sets values correctly when there is one ActorToSpawn pathname and one transform", [this]()
+            {
+                TMap<FString, TArray<FTransform>> Expected;
+                const FString& Path = "TestPath";
+                TArray<FTransform> Transforms;
+                Transforms.Add(FTransform());
+                Expected.Add(Path, Transforms);
+
+                Config->SpawnedObjects = Expected;
+                const TArray<TSharedPtr<FJsonValue>> ResultsArray = Config->SerializeToJson()->GetArrayField(
+                    "SpawnedObjects");
+                const auto& Object = ResultsArray[0]->AsObject();
+                TestEqual("Path Name", Object->GetStringField("ActorToSpawn"), Path);
+                TestTrue("Location", Transforms[0].GetLocation().Equals(
+                             FJsonHelpers::DeserializeToVector3(Object->GetArrayField("Location"))));
+                TestTrue("Rotation", Transforms[0].Rotator().Equals(
+                             FJsonHelpers::DeserializeToRotation(Object->GetArrayField("Rotation"))));
+            });
+
+            It("sets values correctly when there is one ActorToSpawn pathname and multiple transforms", [this]()
+            {
+                TMap<FString, TArray<FTransform>> Expected;
+                const FString& Path = "TestPath";
+                TArray<FTransform> Transforms;
+                const FTransform TransformTwo(FRotator(), FVector(100, 100, 0));
+                Transforms.Add(FTransform());
+                Transforms.Add(TransformTwo);
+                Expected.Add(Path, Transforms);
+
+                Config->SpawnedObjects = Expected;
+                const TArray<TSharedPtr<FJsonValue>> ResultsArray = Config->SerializeToJson()->GetArrayField(
+                    "SpawnedObjects");
+                for (int32 i = 0; i < ResultsArray.Num(); i++)
                 {
-                    TMap<FString, TArray<FTransform>> Expected;
-                    const FString& Path = "TestPath";
-                    TArray<FTransform> Transforms;
-                    Transforms.Add(FTransform());
-                    Expected.Add(Path, Transforms);
+                    const TSharedPtr<FJsonObject>& Object = ResultsArray[i]->AsObject();
+                    TestEqual("Path Name", Object->GetStringField("ActorToSpawn"), Path);
+                    TestTrue("Location", Transforms[i].GetLocation().Equals(
+                                 FJsonHelpers::DeserializeToVector3(Object->GetArrayField("Location"))));
+                    TestTrue("Rotation", Transforms[i].Rotator().Equals(
+                                 FJsonHelpers::DeserializeToRotation(Object->GetArrayField("Rotation"))));
+                }
+            });
 
-                    Config->SpawnedObjects = Expected;
-                    const TArray<TSharedPtr<FJsonValue>> ResultsArray = Config->
-                                                                        SerializeToJson()->GetArrayField(
-                                                                            "SpawnedObjects");
-                    const auto& Object = ResultsArray[0]->AsObject();
-                    TestEqual("Path Name",
-                              Object->GetStringField("ActorToSpawn"), Path);
-                    TestTrue("Location", Transforms[0].GetLocation().Equals(
-                                 FJsonHelpers::DeserializeToVector3(
-                                     Object->GetArrayField("Location"))));
-                    TestTrue("Rotation", Transforms[0].Rotator().Equals(
-                                 FJsonHelpers::DeserializeToRotation(
-                                     Object->GetArrayField("Rotation"))));
-                });
+            It("sets values correctly when there are multiple ActorToSpawn pathnames and multiple transforms", [this]()
+            {
+                TMap<FString, TArray<FTransform>> Expected;
+                const FString& Path = "TestPath";
+                const FString& OtherPath = "AnotherTestPath";
+                TArray<FTransform> TransformsOne;
+                const FTransform TransformTwo(FRotator(), FVector(100, 100, 0));
+                TransformsOne.Add(FTransform());
+                TArray<FTransform> TransformsTwo;
+                TransformsTwo.Add(TransformTwo);
 
-            It(
-                "sets values correctly when there is one ActorToSpawn pathname and multiple transforms",
-                [this]()
+                Expected.Add(Path, TransformsOne);
+                Expected.Add(OtherPath, TransformsTwo);
+
+                Config->SpawnedObjects = Expected;
+
+                const TArray<TSharedPtr<FJsonValue>> ResultsArray = Config->SerializeToJson()->GetArrayField(
+                    "SpawnedObjects");
+                for (const TSharedPtr<FJsonValue>& Result : ResultsArray)
                 {
-                    TMap<FString, TArray<FTransform>> Expected;
-                    const FString& Path = "TestPath";
-                    TArray<FTransform> Transforms;
-                    const FTransform TransformTwo(
-                        FRotator(), FVector(100, 100, 0));
-                    Transforms.Add(FTransform());
-                    Transforms.Add(TransformTwo);
-                    Expected.Add(Path, Transforms);
-
-                    Config->SpawnedObjects = Expected;
-                    const TArray<TSharedPtr<FJsonValue>> ResultsArray = Config->
-                                                                        SerializeToJson()->GetArrayField(
-                                                                            "SpawnedObjects");
-                    for (int32 i = 0; i < ResultsArray.Num(); i++)
-                    {
-                        const TSharedPtr<FJsonObject>& Object = ResultsArray[i]
-                                ->AsObject();
-                        TestEqual("Path Name",
-                                  Object->GetStringField("ActorToSpawn"), Path);
-                        TestTrue("Location", Transforms[i].GetLocation().Equals(
-                                     FJsonHelpers::DeserializeToVector3(
-                                         Object->GetArrayField("Location"))));
-                        TestTrue("Rotation", Transforms[i].Rotator().Equals(
-                                     FJsonHelpers::DeserializeToRotation(
-                                         Object->GetArrayField("Rotation"))));
-                    }
-                });
-
-            It(
-                "sets values correctly when there are multiple ActorToSpawn pathnames and multiple transforms",
-                [this]()
-                {
-                    TMap<FString, TArray<FTransform>> Expected;
-                    const FString& Path = "TestPath";
-                    const FString& OtherPath = "AnotherTestPath";
-                    TArray<FTransform> TransformsOne;
-                    const FTransform TransformTwo(
-                        FRotator(), FVector(100, 100, 0));
-                    TransformsOne.Add(FTransform());
-                    TArray<FTransform> TransformsTwo;
-                    TransformsTwo.Add(TransformTwo);
-
-                    Expected.Add(Path, TransformsOne);
-                    Expected.Add(OtherPath, TransformsTwo);
-
-                    Config->SpawnedObjects = Expected;
-
-                    const TArray<TSharedPtr<FJsonValue>> ResultsArray = Config->
-                                                                        SerializeToJson()->GetArrayField(
-                                                                            "SpawnedObjects");
-                    for (const TSharedPtr<FJsonValue>& Result : ResultsArray)
-                    {
-                        const TSharedPtr<FJsonObject>& Object = Result->
-                                AsObject();
-                        TestTrue("Path Name",
-                                 Expected.Contains(
-                                     Object->GetStringField("ActorToSpawn")));
-                        const TArray<FTransform>& ExpectedTransforms = *Expected
-                                .Find(Object->GetStringField("ActorToSpawn"));
-                        TestTrue("Location",
-                                 ExpectedTransforms[0].GetLocation().Equals(
-                                     FJsonHelpers::DeserializeToVector3(
-                                         Object->GetArrayField("Location"))));
-                        TestTrue("Rotation",
-                                 ExpectedTransforms[0].Rotator().Equals(
-                                     FJsonHelpers::DeserializeToRotation(
-                                         Object->GetArrayField("Rotation"))));
-                    }
-                });
+                    const TSharedPtr<FJsonObject>& Object = Result->AsObject();
+                    TestTrue("Path Name", Expected.Contains(Object->GetStringField("ActorToSpawn")));
+                    const TArray<FTransform>& ExpectedTransforms = *Expected.Find(
+                        Object->GetStringField("ActorToSpawn"));
+                    TestTrue("Location", ExpectedTransforms[0].GetLocation().Equals(
+                                 FJsonHelpers::DeserializeToVector3(Object->GetArrayField("Location"))));
+                    TestTrue("Rotation", ExpectedTransforms[0].Rotator().Equals(
+                                 FJsonHelpers::DeserializeToRotation(Object->GetArrayField("Rotation"))));
+                }
+            });
         });
     });
 }

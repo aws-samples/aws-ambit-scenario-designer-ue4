@@ -39,10 +39,8 @@ void FVehicleTraffic::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
     {
         FString TempMessage;
 
-        const float IncomingMin = JsonObject->GetNumberField(
-            JsonConstants::KMinKey);
-        this->Min = FMathHelpers::ClampBoundary(IncomingMin, 0.f, 1.f,
-                                                TEXT("vehicle density min"), TempMessage);
+        const float IncomingMin = JsonObject->GetNumberField(JsonConstants::KMinKey);
+        this->Min = FMathHelpers::ClampBoundary(IncomingMin, 0.f, 1.f, TEXT("vehicle density min"), TempMessage);
 
         if (!TempMessage.IsEmpty())
         {
@@ -54,10 +52,8 @@ void FVehicleTraffic::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
     {
         FString TempMessage;
 
-        const float IncomingMax = JsonObject->GetNumberField(
-            JsonConstants::KMaxKey);
-        this->Max = FMathHelpers::ClampBoundary(IncomingMax, 0.f, 1.f,
-                                                TEXT("vehicle density max"), TempMessage);
+        const float IncomingMax = JsonObject->GetNumberField(JsonConstants::KMaxKey);
+        this->Max = FMathHelpers::ClampBoundary(IncomingMax, 0.f, 1.f, TEXT("vehicle density max"), TempMessage);
 
         if (!TempMessage.IsEmpty())
         {
@@ -69,10 +65,9 @@ void FVehicleTraffic::DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
     {
         FString TempMessage;
 
-        const float IncomingIncrement = JsonObject->GetNumberField(
-            JsonConstants::KIncrementKey);
-        this->Increment = FMathHelpers::ClampBoundary(IncomingIncrement, 0.1f, 0.1f,
-                                                      TEXT("vehicle density increment"), TempMessage);
+        const float IncomingIncrement = JsonObject->GetNumberField(JsonConstants::KIncrementKey);
+        this->Increment = FMathHelpers::ClampBoundary(IncomingIncrement, 0.1f, 0.1f, TEXT("vehicle density increment"),
+                                                      TempMessage);
 
         if (!TempMessage.IsEmpty())
         {
@@ -96,8 +91,7 @@ int32 FVehicleTraffic::GetVariantCount()
     return FMath::FloorToInt((Max - Min) / Increment) + 1;
 }
 
-void FVehicleTraffic::ApplyVariant(int32 VariantIndex,
-                                   FScenarioDefinition& Scenario)
+void FVehicleTraffic::ApplyVariant(int32 VariantIndex, FScenarioDefinition& Scenario)
 {
     // Configure traffic density-related properties.
     Scenario.VehicleDensity = Min + Increment * VariantIndex;

@@ -87,9 +87,8 @@ void FAmbitMode::Tick(FEditorViewportClient* ViewportClient, float DeltaTime)
         {
             Weather->ApplyTimeOfDay(UISettings->TimeOfDay);
             Weather->ApplyWeather(UISettings->WeatherParameters);
-            if (UISettings->TimeOfDay != TimeOfDay::KDefaultMorningSolarTime &&
-                UISettings->TimeOfDay != TimeOfDay::KDefaultMidDaySolarTime &&
-                UISettings->TimeOfDay != TimeOfDay::KDefaultEveningSolarTime &&
+            if (UISettings->TimeOfDay != TimeOfDay::KDefaultMorningSolarTime && UISettings->TimeOfDay !=
+                TimeOfDay::KDefaultMidDaySolarTime && UISettings->TimeOfDay != TimeOfDay::KDefaultEveningSolarTime &&
                 UISettings->TimeOfDay != TimeOfDay::KDefaultNightSolarTime)
             {
                 UISettings->PresetTimeOfDay = TimeOfDay::KCustom;

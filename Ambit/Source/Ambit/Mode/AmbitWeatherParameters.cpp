@@ -14,23 +14,17 @@
 
 #include "AmbitWeatherParameters.h"
 
-FAmbitWeatherParameters::FAmbitWeatherParameters(float NewCloudiness, float NewPrecipitation,
-                                                 float NewPuddles, float NewWetness, float NewFogDensity)
-    : Cloudiness(NewCloudiness)
-      , Precipitation(NewPrecipitation)
-      , Puddles(NewPuddles)
-      , Wetness(NewWetness)
-      , FogDensity(NewFogDensity)
+FAmbitWeatherParameters::FAmbitWeatherParameters(float NewCloudiness, float NewPrecipitation, float NewPuddles,
+                                                 float NewWetness, float NewFogDensity) : Cloudiness(NewCloudiness),
+    Precipitation(NewPrecipitation), Puddles(NewPuddles), Wetness(NewWetness), FogDensity(NewFogDensity)
 {
 }
 
 bool FAmbitWeatherParameters::operator==(const FAmbitWeatherParameters& WeatherParameters) const
 {
-    return Cloudiness == WeatherParameters.Cloudiness &&
-            Precipitation == WeatherParameters.Precipitation &&
-            Puddles == WeatherParameters.Puddles &&
-            Wetness == WeatherParameters.Wetness &&
-            FogDensity == WeatherParameters.FogDensity;
+    return Cloudiness == WeatherParameters.Cloudiness && Precipitation == WeatherParameters.Precipitation && Puddles ==
+            WeatherParameters.Puddles && Wetness == WeatherParameters.Wetness && FogDensity == WeatherParameters.
+            FogDensity;
 }
 
 void AmbitWeatherParameters::GetWeatherParametersFromPresetWeatherType(const FString& WeatherType,

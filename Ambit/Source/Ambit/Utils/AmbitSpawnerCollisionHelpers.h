@@ -32,8 +32,7 @@ namespace AmbitSpawnerCollisionHelpers
      * @param bReset
      *  whether the function is called to reset values to original settings
      */
-    void SetGenerateOverlapEventsForActor(
-        const AActor* Actor, TArray<bool>& Original, const bool bReset = false);
+    void SetGenerateOverlapEventsForActor(const AActor* Actor, TArray<bool>& Original, const bool bReset = false);
 
     /**
      * Populates the provided array with all of the
@@ -44,8 +43,7 @@ namespace AmbitSpawnerCollisionHelpers
      * @param OutArray
      *  the array to populate with all default static mesh components
      */
-    void FindDefaultStaticMeshComponents(UClass* Actor,
-                                         TArray<UStaticMeshComponent*>& OutArray);
+    void FindDefaultStaticMeshComponents(UClass* Actor, TArray<UStaticMeshComponent*>& OutArray);
 
     /**
      * Sets collision profiles of all static mesh components
@@ -56,9 +54,8 @@ namespace AmbitSpawnerCollisionHelpers
      * @param bRemoveOverlaps
      *  whether collision profiles should block other spawned obstacles
      */
-    void SetCollisionForAllStaticMeshComponents(
-        const TArray<UStaticMeshComponent*>& StaticMeshComponents,
-        bool bRemoveOverlaps = true);
+    void SetCollisionForAllStaticMeshComponents(const TArray<UStaticMeshComponent*>& StaticMeshComponents,
+                                                bool bRemoveOverlaps = true);
 
     /**
      * Checks if the actor at provided ActorLocation is
@@ -72,9 +69,7 @@ namespace AmbitSpawnerCollisionHelpers
      * @param SpawnedActor
      *  the spawned obstacle with overlaps
      */
-    bool IsPenetratingOverlap(
-        UPrimitiveComponent* OverlappingComponent,
-        AActor* SpawnedActor);
+    bool IsPenetratingOverlap(UPrimitiveComponent* OverlappingComponent, AActor* SpawnedActor);
 
     /**
      * Stores collision profiles of the provided StaticMeshComponents
@@ -90,10 +85,8 @@ namespace AmbitSpawnerCollisionHelpers
      *  A Map where the collision profiles for these static mesh components will
      *  be stored using the PathName as the key
      */
-    void StoreCollisionProfiles(
-        const FString& PathName,
-        const TArray<UStaticMeshComponent*>& StaticMeshComponents,
-        TMap<FString, TArray<FCollisionResponseTemplate>>& OutMap);
+    void StoreCollisionProfiles(const FString& PathName, const TArray<UStaticMeshComponent*>& StaticMeshComponents,
+                                TMap<FString, TArray<FCollisionResponseTemplate>>& OutMap);
 
     /**
      * Restores collision profiles of ActorsToSpawn asset CDOs
@@ -105,7 +98,6 @@ namespace AmbitSpawnerCollisionHelpers
      * @param ActorsToSpawnClean
      *  Array of ActorsToSpawn without any duplicates
      */
-    void ResetCollisionProfiles(
-        const TMap<FString, TArray<FCollisionResponseTemplate>>& OriginalCollisionProfiles,
-        const TArray<TSubclassOf<AActor>>& ActorsToSpawnClean);
+    void ResetCollisionProfiles(const TMap<FString, TArray<FCollisionResponseTemplate>>& OriginalCollisionProfiles,
+                                const TArray<TSubclassOf<AActor>>& ActorsToSpawnClean);
 }

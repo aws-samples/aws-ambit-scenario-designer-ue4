@@ -62,8 +62,7 @@ FReply UConfigImportExport::OnImportSdf()
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
 
-    const FString FullContents = AmbitFileHelpers::LoadSingleFileFromPopup(
-        "Json Files (*.json)|*.JSON");
+    const FString FullContents = AmbitFileHelpers::LoadSingleFileFromPopup("Json Files (*.json)|*.JSON");
 
     if (FullContents.IsEmpty())
     {
@@ -71,13 +70,11 @@ FReply UConfigImportExport::OnImportSdf()
     }
 
     // Parse JSON file
-    const TSharedPtr<FJsonObject> DeserializedSdf = FJsonHelpers::DeserializeJson(
-        FullContents);
+    const TSharedPtr<FJsonObject> DeserializedSdf = FJsonHelpers::DeserializeJson(FullContents);
 
     if (!DeserializedSdf)
     {
-        FMenuHelpers::LogErrorAndPopup(
-            "Error Parsing Scenario Definition File.");
+        FMenuHelpers::LogErrorAndPopup("Error Parsing Scenario Definition File.");
         return FReply::Handled();
     }
 
@@ -87,8 +84,7 @@ FReply UConfigImportExport::OnImportSdf()
     // if the scenario name is empty, something went wrong with deserialization. Throw an error.
     if (SdfScenario.ScenarioName.IsEmpty())
     {
-        FMenuHelpers::LogErrorAndPopup(
-            "Unable to Load Scenario Definition File. Please Check File and Try Again.");
+        FMenuHelpers::LogErrorAndPopup("Unable to Load Scenario Definition File. Please Check File and Try Again.");
         return FReply::Handled();
     }
 
@@ -138,12 +134,12 @@ bool UConfigImportExport::ProcessSdfForExport(const TMap<FString, TSharedPtr<FJs
     if (ScenarioToProcess.IsValid())
     {
         ScenarioToProcess->AllSpawnersConfigs = MakeShareable(new FJsonObject);
-        SerializeSpawnerConfigs<ASpawnOnSurface, FSpawnerBaseConfig>(
-            ScenarioToProcess->AllSpawnersConfigs, JsonConstants::KSpawnerSurfaceKey);
-        SerializeSpawnerConfigs<ASpawnInVolume, FSpawnInVolumeConfig>(
-            ScenarioToProcess->AllSpawnersConfigs, JsonConstants::KSpawnerVolumeKey);
-        SerializeSpawnerConfigs<ASpawnOnPath, FSpawnOnPathConfig>(
-            ScenarioToProcess->AllSpawnersConfigs, JsonConstants::KSpawnerPathKey);
+        SerializeSpawnerConfigs<ASpawnOnSurface, FSpawnerBaseConfig>(ScenarioToProcess->AllSpawnersConfigs,
+                                                                     JsonConstants::KSpawnerSurfaceKey);
+        SerializeSpawnerConfigs<ASpawnInVolume, FSpawnInVolumeConfig>(ScenarioToProcess->AllSpawnersConfigs,
+                                                                      JsonConstants::KSpawnerVolumeKey);
+        SerializeSpawnerConfigs<ASpawnOnPath, FSpawnOnPathConfig>(ScenarioToProcess->AllSpawnersConfigs,
+                                                                  JsonConstants::KSpawnerPathKey);
         SerializeSpawnerConfigs<ASpawnWithHoudini, FSpawnWithHoudiniConfig>(
             ScenarioToProcess->AllSpawnersConfigs, JsonConstants::KSpawnerSurfaceHoudiniKey);
         SerializeSpawnerConfigs<ASpawnVehiclePath, FSpawnVehiclePathConfig>(
@@ -185,8 +181,7 @@ FReply UConfigImportExport::OnImportBsc()
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
 
-    const FString FullContents = AmbitFileHelpers::LoadSingleFileFromPopup(
-        "Json Files (*.json)|*.JSON");
+    const FString FullContents = AmbitFileHelpers::LoadSingleFileFromPopup("Json Files (*.json)|*.JSON");
 
     if (FullContents.IsEmpty())
     {
@@ -198,8 +193,7 @@ FReply UConfigImportExport::OnImportBsc()
 
     if (!DeserializedBsc)
     {
-        FMenuHelpers::LogErrorAndPopup(
-            "Error Parsing Bulk Scenario Configuration.");
+        FMenuHelpers::LogErrorAndPopup("Error Parsing Bulk Scenario Configuration.");
         return FReply::Handled();
     }
 
@@ -208,8 +202,7 @@ FReply UConfigImportExport::OnImportBsc()
 
     if (BscScenario.ConfigurationName.IsEmpty())
     {
-        FMenuHelpers::LogErrorAndPopup(
-            "Unable to Load Bulk Scenario Configuration. Please Check File and Try Again.");
+        FMenuHelpers::LogErrorAndPopup("Unable to Load Bulk Scenario Configuration. Please Check File and Try Again.");
         return FReply::Handled();
     }
 
@@ -255,16 +248,16 @@ FReply UConfigImportExport::OnGeneratePermutations()
     BscScenario.NumberOfPermutations = AmbitMode->UISettings->NumberOfPermutations;
 
     BscScenario.AllSpawnersConfigs = MakeShareable(new FJsonObject);
-    SerializeSpawnerConfigs<ASpawnOnSurface, FSpawnerBaseConfig>(
-        BscScenario.AllSpawnersConfigs, JsonConstants::KSpawnerSurfaceKey);
-    SerializeSpawnerConfigs<ASpawnInVolume, FSpawnInVolumeConfig>(
-        BscScenario.AllSpawnersConfigs, JsonConstants::KSpawnerVolumeKey);
-    SerializeSpawnerConfigs<ASpawnOnPath, FSpawnOnPathConfig>(
-        BscScenario.AllSpawnersConfigs, JsonConstants::KSpawnerPathKey);
-    SerializeSpawnerConfigs<ASpawnWithHoudini, FSpawnWithHoudiniConfig>(
-        BscScenario.AllSpawnersConfigs, JsonConstants::KSpawnerSurfaceHoudiniKey);
-    SerializeSpawnerConfigs<ASpawnVehiclePath, FSpawnVehiclePathConfig>(
-        BscScenario.AllSpawnersConfigs, JsonConstants::KSpawnerVehiclePathKey);
+    SerializeSpawnerConfigs<ASpawnOnSurface, FSpawnerBaseConfig>(BscScenario.AllSpawnersConfigs,
+                                                                 JsonConstants::KSpawnerSurfaceKey);
+    SerializeSpawnerConfigs<ASpawnInVolume, FSpawnInVolumeConfig>(BscScenario.AllSpawnersConfigs,
+                                                                  JsonConstants::KSpawnerVolumeKey);
+    SerializeSpawnerConfigs<ASpawnOnPath, FSpawnOnPathConfig>(BscScenario.AllSpawnersConfigs,
+                                                              JsonConstants::KSpawnerPathKey);
+    SerializeSpawnerConfigs<ASpawnWithHoudini, FSpawnWithHoudiniConfig>(BscScenario.AllSpawnersConfigs,
+                                                                        JsonConstants::KSpawnerSurfaceHoudiniKey);
+    SerializeSpawnerConfigs<ASpawnVehiclePath, FSpawnVehiclePathConfig>(BscScenario.AllSpawnersConfigs,
+                                                                        JsonConstants::KSpawnerVehiclePathKey);
 
     // Serialize the whole object into Json format
     TSharedPtr<FJsonObject> JsonObject = BscScenario.SerializeToJson();
@@ -385,13 +378,11 @@ FReply UConfigImportExport::OnReadFromS3Bucket()
     }
 
     // Parse JSON file
-    TSharedPtr<FJsonObject> DeserializedBsc = FJsonHelpers::DeserializeJson(
-        FullContents);
+    TSharedPtr<FJsonObject> DeserializedBsc = FJsonHelpers::DeserializeJson(FullContents);
 
     if (!DeserializedBsc)
     {
-        FMenuHelpers::LogErrorAndPopup(
-            "Error Parsing Bulk Scenario Configuration.");
+        FMenuHelpers::LogErrorAndPopup("Error Parsing Bulk Scenario Configuration.");
         return FReply::Handled();
     }
 
@@ -400,8 +391,7 @@ FReply UConfigImportExport::OnReadFromS3Bucket()
 
     if (BscScenario.ConfigurationName.IsEmpty())
     {
-        FMenuHelpers::LogErrorAndPopup(
-            "Unable to Load Bulk Scenario Configuration. Please Check File and Try Again.");
+        FMenuHelpers::LogErrorAndPopup("Unable to Load Bulk Scenario Configuration. Please Check File and Try Again.");
         return FReply::Handled();
     }
 
@@ -447,10 +437,8 @@ FReply UConfigImportExport::OnExportMap()
         {
             const FString& OutputDir = FPaths::Combine(*FPaths::ProjectDir(), TEXT("Saved"), TEXT("Cooked"), *MapName,
                                                        *TargetPlatform);
-            FString Arguments = FPaths::GetProjectFilePath()
-                    + " -run=cook -map=" + MapPath
-                    + " -cooksinglepackage -targetplatform=" + TargetPlatform
-                    + " -OutputDir=" + OutputDir;
+            FString Arguments = FPaths::GetProjectFilePath() + " -run=cook -map=" + MapPath +
+                    " -cooksinglepackage -targetplatform=" + TargetPlatform + " -OutputDir=" + OutputDir;
             int32 ReturnCode = 0;
             FProcHandle ProcHandle = FPlatformProcess::CreateProc(*Executable, *Arguments, false, false, false, nullptr,
                                                                   0, nullptr, nullptr);
@@ -539,7 +527,7 @@ FReply UConfigImportExport::OnExportGltf()
         // AStaticMeshActor or AHoudiniAssetActor but not be associated with a World object,
         // (e.g) AInteractiveFoliageActor, which derives from AStaticMeshActor but doesn't point to a World object.
         UWorld* ParentWorld = Parent->GetWorld();
-        if ((ParentWorld != nullptr) && ParentWorld == CurrentWorldContext)
+        if (ParentWorld != nullptr && ParentWorld == CurrentWorldContext)
         {
             bFoundWorld = true;
             break;
@@ -598,8 +586,7 @@ FReply UConfigImportExport::OnExportGltf()
                                FPaths::Combine(*FPaths::ProjectIntermediateDir(), *CompressedFile));
     }
 
-    const FText NotificationText = NSLOCTEXT("Ambit", "MapUploadComplete",
-                                             "Successfully uploaded to S3.");
+    const FText NotificationText = NSLOCTEXT("Ambit", "MapUploadComplete", "Successfully uploaded to S3.");
     FAmbitModule::CreateAmbitNotification(NotificationText);
 
     return FReply::Handled();
@@ -609,9 +596,8 @@ void UConfigImportExport::PrepareAllSpawnersObjectConfigs(bool bToS3)
 {
     TArray<AActor*> AllActorsToSerialize;
     // Further reading: https://exiin.com/blog/unreal-c-interface-and-what-to-do-with-it/
-    UGameplayStatics::GetAllActorsWithInterface(
-        GEngine->GetWorldContexts()[0].World(), UAmbitSpawner::StaticClass(),
-        AllActorsToSerialize);
+    UGameplayStatics::GetAllActorsWithInterface(GEngine->GetWorldContexts()[0].World(), UAmbitSpawner::StaticClass(),
+                                                AllActorsToSerialize);
 
     TArray<AActor*> ValidActors = AllActorsToSerialize.FilterByPredicate([](AActor* Actor)
     {
@@ -626,8 +612,7 @@ void UConfigImportExport::PrepareAllSpawnersObjectConfigs(bool bToS3)
         return;
     }
 
-    UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher =
-            NewObject<UAmbitExporterDelegateWatcher>();
+    UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher = NewObject<UAmbitExporterDelegateWatcher>();
     ConfigurationDelegateWatcher->SpawnerCount = ValidActors.Num();
     ConfigurationDelegateWatcher->bSendToS3 = bToS3;
     ConfigurationDelegateWatcher->Parent = this;
@@ -640,9 +625,8 @@ void UConfigImportExport::PrepareAllSpawnersObjectConfigs(bool bToS3)
     for (AActor* Actor : ValidActors)
     {
         IAmbitSpawner* CastedActor = Cast<IAmbitSpawner>(Actor);
-        CastedActor->GetOnSpawnedObjectConfigCompletedDelegate()
-                   .BindUObject(ConfigurationDelegateWatcher,
-                                &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
+        CastedActor->GetOnSpawnedObjectConfigCompletedDelegate().BindUObject(
+            ConfigurationDelegateWatcher, &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
 
         // Create the asynchronous call to the object so that the delegate handles the return.
         if (Seed == INDEX_NONE)
@@ -656,74 +640,60 @@ void UConfigImportExport::PrepareAllSpawnersObjectConfigs(bool bToS3)
     }
 }
 
-void UConfigImportExport::CreateAmbitSpawnersFromJson(
-    const TSharedPtr<FJsonObject>& JsonObject)
+void UConfigImportExport::CreateAmbitSpawnersFromJson(const TSharedPtr<FJsonObject>& JsonObject)
 {
     UWorld* World = GEngine->GetWorldContexts()[0].World();
 
     // Remove any existing AmbitSpawners.
     TArray<AActor*> ExistingSpawners;
-    UGameplayStatics::GetAllActorsWithInterface(
-        World, UAmbitSpawner::StaticClass(), ExistingSpawners);
+    UGameplayStatics::GetAllActorsWithInterface(World, UAmbitSpawner::StaticClass(), ExistingSpawners);
     for (AActor* Spawner : ExistingSpawners)
     {
         Spawner->Destroy();
     }
 
-    const TSharedPtr<FJsonObject> Spawners = JsonObject->
-            GetObjectField(JsonConstants::KAllSpawnersConfigsKey);
+    const TSharedPtr<FJsonObject> Spawners = JsonObject->GetObjectField(JsonConstants::KAllSpawnersConfigsKey);
 
-    ConfigureSpawnersByType<ASpawnOnSurface, FSpawnerBaseConfig>(
-        Spawners, JsonConstants::KSpawnerSurfaceKey, World);
-    ConfigureSpawnersByType<ASpawnInVolume, FSpawnInVolumeConfig>(
-        Spawners, JsonConstants::KSpawnerVolumeKey, World);
-    ConfigureSpawnersByType<ASpawnOnPath, FSpawnOnPathConfig>(
-        Spawners, JsonConstants::KSpawnerPathKey, World);
+    ConfigureSpawnersByType<ASpawnOnSurface, FSpawnerBaseConfig>(Spawners, JsonConstants::KSpawnerSurfaceKey, World);
+    ConfigureSpawnersByType<ASpawnInVolume, FSpawnInVolumeConfig>(Spawners, JsonConstants::KSpawnerVolumeKey, World);
+    ConfigureSpawnersByType<ASpawnOnPath, FSpawnOnPathConfig>(Spawners, JsonConstants::KSpawnerPathKey, World);
     ConfigureSpawnersByType<ASpawnWithHoudini, FSpawnWithHoudiniConfig>(
         Spawners, JsonConstants::KSpawnerSurfaceHoudiniKey, World);
-    ConfigureSpawnersByType<ASpawnVehiclePath, FSpawnVehiclePathConfig>(
-        Spawners, JsonConstants::KSpawnerVehiclePathKey, World);
+    ConfigureSpawnersByType<ASpawnVehiclePath, FSpawnVehiclePathConfig>(Spawners, JsonConstants::KSpawnerVehiclePathKey,
+                                                                        World);
 }
 
 template <typename ClassType, typename StructType>
-void UConfigImportExport::ConfigureSpawnersByType(
-    const TSharedPtr<FJsonObject>& Spawners,
-    const FString& TypeKey, UWorld*& World)
+void UConfigImportExport::ConfigureSpawnersByType(const TSharedPtr<FJsonObject>& Spawners, const FString& TypeKey,
+                                                  UWorld*& World)
 {
     if (Spawners->HasField(TypeKey))
     {
         for (const TSharedPtr<FJsonValue>& JsonValue : Spawners->GetArrayField(TypeKey))
         {
-            TSharedPtr<StructType> SpawnerConfig =
-                    MakeShareable(new StructType);
+            TSharedPtr<StructType> SpawnerConfig = MakeShareable(new StructType);
             SpawnerConfig->DeserializeFromJson(JsonValue->AsObject());
             const FVector& Location = SpawnerConfig->SpawnerLocation;
             const FRotator& Rotation = SpawnerConfig->SpawnerRotation;
             // Spawn an ClassType Spawner and configure.
-            ClassType* Spawner = World->SpawnActor<ClassType>(
-                Location, Rotation);
+            ClassType* Spawner = World->SpawnActor<ClassType>(Location, Rotation);
             Spawner->Configure(SpawnerConfig);
         }
     }
 }
 
 template <typename ClassType, typename StructType>
-void UConfigImportExport::SerializeSpawnerConfigs(
-    TSharedPtr<FJsonObject>& SpawnersJson, const FString& SpawnerTypeKey)
+void UConfigImportExport::SerializeSpawnerConfigs(TSharedPtr<FJsonObject>& SpawnersJson, const FString& SpawnerTypeKey)
 {
     TArray<TSharedPtr<FJsonValue>> SpawnerTypeSpecificArray;
     TArray<AActor*> AllActors;
-    UGameplayStatics::GetAllActorsOfClass(
-        GEngine->GetWorldContexts()[0].World(), ClassType::StaticClass(),
-        AllActors);
+    UGameplayStatics::GetAllActorsOfClass(GEngine->GetWorldContexts()[0].World(), ClassType::StaticClass(), AllActors);
     // Get each AmbitSpawner's configuration and add to AmbitSpawnerArray
     for (AActor* Actor : AllActors)
     {
-        TSharedPtr<StructType> AmbitSpawnerConfig = static_cast<
-            ClassType*>(Actor)->GetConfiguration();
+        TSharedPtr<StructType> AmbitSpawnerConfig = static_cast<ClassType*>(Actor)->GetConfiguration();
         const TSharedPtr<FJsonObject> curJson = AmbitSpawnerConfig->SerializeToJson();
-        TSharedRef<FJsonValueObject> JsonValue = MakeShareable(
-            new FJsonValueObject(curJson));
+        TSharedRef<FJsonValueObject> JsonValue = MakeShareable(new FJsonValueObject(curJson));
         SpawnerTypeSpecificArray.Add(JsonValue);
     }
     if (SpawnerTypeSpecificArray.Num() > 0)
@@ -772,8 +742,7 @@ bool UConfigImportExport::WriteJsonFile(const TSharedPtr<FJsonObject>& OutputCon
 
     if (OutputString.IsEmpty() || FileName.IsEmpty() || FileExtension.IsEmpty())
     {
-        FMenuHelpers::LogErrorAndPopup(
-            "Error Serializing File.");
+        FMenuHelpers::LogErrorAndPopup("Error Serializing File.");
         return false;
     }
     const FString OutputFileName = FileName + FileExtension;

@@ -52,43 +52,41 @@ public:
     /**
      * Select Preset Time of Day
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (DisplayName = "Preset Time of Day"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta = (DisplayName = "Preset Time of Day"))
     FString PresetTimeOfDay = TimeOfDay::KCustom;
 
     /**
      * Time of day slider ranging from 0.0 to 23.99999
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (ClampMin = "0.0", ClampMax = "23.99999", UIMin = "0.0", UIMax = "23.99999", DisplayName = "Time of Day"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings",
+        meta = (ClampMin = "0.0", ClampMax = "23.99999", UIMin = "0.0", UIMax = "23.99999", DisplayName = "Time of Day"
+        ))
     float TimeOfDay = 9.0f;
 
     /**
      * Select Preset Weather Types
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (DisplayName = "Weather Type"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta = (DisplayName = "Weather Type"))
     FString PresetWeather;
 
     /**
      * Weather Parameters struct
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (DisplayName = "Weather Parameters"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta = (DisplayName = "Weather Parameters"))
     FAmbitWeatherParameters WeatherParameters;
 
     /**
      * Pedestrian Density [0.0 - 1.0]
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings",
+        meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
     float PedestrianDensity;
 
     /**
      * Vehicle Density [0.0 - 1.0]
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings",
+        meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
     float VehicleDensity;
 
     /**
@@ -142,16 +140,14 @@ public:
     /**
      * Specifies glTF file type
      */
-    UPROPERTY(EditAnywhere, Category = "Map Export Settings", meta =
-        (DisplayName = "glTF File Type"))
+    UPROPERTY(EditAnywhere, Category = "Map Export Settings", meta = (DisplayName = "glTF File Type"))
     ;
     FString GltfType = GltfFileType::KGltf;
 
     /**
     * Choose the geographical AWS Region where the Amazon S3 bucket below is located.
     */
-    UPROPERTY(EditAnywhere, Category = "AWS Settings", meta =
-        (DisplayName = "AWS Region"))
+    UPROPERTY(EditAnywhere, Category = "AWS Settings", meta = (DisplayName = "AWS Region"))
     FString AwsRegion = Aws::Region::US_EAST_1;
 
     /**
@@ -160,8 +156,7 @@ public:
      * Amazon S3 can store an infinite amount of data in a S3 bucket.
      * For more information, please access Amazon S3 User Guide https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
      */
-    UPROPERTY(EditAnywhere, Category = "AWS Settings", meta =
-        (DisplayName = "S3 Bucket Name"))
+    UPROPERTY(EditAnywhere, Category = "AWS Settings", meta = (DisplayName = "S3 Bucket Name"))
     FString S3BucketName;
 
     void SetParent(FAmbitMode* NewParent)
