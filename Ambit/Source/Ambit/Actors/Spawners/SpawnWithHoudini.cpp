@@ -1,11 +1,11 @@
 ﻿//   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,19 +16,19 @@
 
 #include "SpawnWithHoudini.h"
 
-#include <stdexcept>
-
 #include "HoudiniPublicAPI.h"
 #include "HoudiniPublicAPIBlueprintLib.h"
 #include "Components/BillboardComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
-#include <AmbitUtils/MenuHelpers.h>
+#include <stdexcept>
 
 #include "Ambit/AmbitModule.h"
 #include "Ambit/Actors/SpawnedObjectConfigs/SpawnedObjectConfig.h"
 #include "Ambit/Mode/Constant.h"
 #include "Ambit/Utils/AmbitWorldHelpers.h"
+
+#include <AmbitUtils/MenuHelpers.h>
 
 ASpawnWithHoudini::ASpawnWithHoudini()
 {
@@ -54,9 +54,8 @@ ASpawnWithHoudini::~ASpawnWithHoudini()
     // If we generated from the editor, we don't destroy when leaving play.
     // If we generated from the runtime, we let the EndPlay function handle
     // this clearing as to not disrupt other lifecycles.
-    if (CurrentGeneration == EGenerationType::NotGenerated
-        || (CurrentGeneration == EGenerationType::FromEditor
-        && ((World != nullptr) && (World->IsPlayInEditor() || World->IsPlayInPreview()))))
+    if (CurrentGeneration == NotGenerated || CurrentGeneration == FromEditor && (World != nullptr && (World->
+        IsPlayInEditor() || World->IsPlayInPreview())))
     {
         ResetObstacleSpawner();
     }
@@ -64,8 +63,8 @@ ASpawnWithHoudini::~ASpawnWithHoudini()
 
 bool ASpawnWithHoudini::HasActorsToSpawn() const
 {
-    const TArray<FHoudiniLoadableAsset> FilteredActorsToSpawn =
-        HoudiniAssetDetails.FilterByPredicate([](const FHoudiniLoadableAsset AssetDetails)
+    const TArray<FHoudiniLoadableAsset> FilteredActorsToSpawn = HoudiniAssetDetails.FilterByPredicate(
+        [](const FHoudiniLoadableAsset& AssetDetails)
         {
             return AssetDetails.HDAToLoad != nullptr;
         });
@@ -77,29 +76,29 @@ void ASpawnWithHoudini::GenerateObstacles()
     Random.Initialize(RandomSeed);
     const bool bDidClear = ClearObstacles();
     if (!bDidClear)
+    {
         return;
+    }
 
     const TArray<AActor*> SurfaceActors = AmbitWorldHelpers::GetActorsByMatchBy(
         MatchBy, SurfaceNamePattern, SurfaceTags);
 
-    UE_LOG(LogAmbit, Display, TEXT("Matching surface actors: %i"),
-        SurfaceActors.Num());
+    UE_LOG(LogAmbit, Display, TEXT("Matching surface actors: %i"), SurfaceActors.Num());
 
-    TArray<FTransform> LocationsToSpawn =
-        AmbitWorldHelpers::GenerateRandomLocationsFromActors(
-            SurfaceActors, RandomSeed, DensityMin, DensityMax);
+    TArray<FTransform> LocationsToSpawn = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
+        SurfaceActors, RandomSeed, DensityMin, DensityMax);
 
     UWorld* World = GetWorld();
 
-    if (CurrentGeneration == EGenerationType::NotGenerated)
+    if (CurrentGeneration == NotGenerated)
     {
         if (World != nullptr && (World->IsPlayInEditor() || World->IsPlayInPreview()))
         {
-            CurrentGeneration = EGenerationType::FromRuntime;
+            CurrentGeneration = FromRuntime;
         }
         else
         {
-            CurrentGeneration = EGenerationType::FromEditor;
+            CurrentGeneration = FromEditor;
         }
     }
 
@@ -109,16 +108,19 @@ void ASpawnWithHoudini::GenerateObstacles()
         const int32 Index = Random.RandRange(0, HoudiniAssetDetails.Num() - 1);
         UHoudiniAsset* IndividualHDA = HoudiniAssetDetails[Index].HDAToLoad;
         // Check whether the HDA Asset has been selected
-        if (IndividualHDA)
+        if (IndividualHDA != nullptr)
         {
             FString BakePath = GetBakePathRelative();
-            UHoudiniPublicAPIAssetWrapper* SpawnedActor = HoudiniApi->InstantiateAsset(IndividualHDA, Transform, World, nullptr
-                , false, false, BakePath);
+            UHoudiniPublicAPIAssetWrapper* SpawnedActor = HoudiniApi->InstantiateAsset(
+                IndividualHDA, Transform, World, nullptr, false, false, BakePath);
             if (SpawnedActor != nullptr)
             {
-                SpawnedActor->GetOnPreInstantiationDelegate().AddUniqueDynamic(this, &ASpawnWithHoudini::AssetPreInstantiation_DelegateHandler);
-                SpawnedActor->GetOnPostProcessingDelegate().AddUniqueDynamic(this, &ASpawnWithHoudini::PostProcessing_DelegateHandler);
-                SpawnedActor->GetOnPostBakeDelegate().AddUniqueDynamic(this, &ASpawnWithHoudini::PostBake_DelegateHandler);
+                SpawnedActor->GetOnPreInstantiationDelegate().AddUniqueDynamic(
+                    this, &ASpawnWithHoudini::AssetPreInstantiation_DelegateHandler);
+                SpawnedActor->GetOnPostProcessingDelegate().AddUniqueDynamic(
+                    this, &ASpawnWithHoudini::PostProcessing_DelegateHandler);
+                SpawnedActor->GetOnPostBakeDelegate().AddUniqueDynamic(
+                    this, &ASpawnWithHoudini::PostBake_DelegateHandler);
 
                 HoudiniAssetDetails[Index].SpawnedActors.Add(SpawnedActor);
             }
@@ -132,7 +134,7 @@ bool ASpawnWithHoudini::ClearObstacles()
 
     const bool bIsRuntime = World != nullptr && (World->IsPlayInEditor() || World->IsPlayInPreview());
 
-    if (CurrentGeneration == EGenerationType::FromEditor && bIsRuntime)
+    if (CurrentGeneration == FromEditor && bIsRuntime)
     {
         FMenuHelpers::DisplayMessagePopup("Content generated in the editor cannot be modified in runtime.", "Error");
         return false;
@@ -142,7 +144,7 @@ bool ASpawnWithHoudini::ClearObstacles()
     {
         TArray<UHoudiniPublicAPIAssetWrapper*> SpawnedActors = LoadedSet.SpawnedActors;
 
-        for (auto Actor : SpawnedActors)
+        for (auto* Actor : SpawnedActors)
         {
             if (Actor->IsValidLowLevel() && !Actor->IsPendingKill())
             {
@@ -153,7 +155,7 @@ bool ASpawnWithHoudini::ClearObstacles()
         LoadedSet.SpawnedActors.Empty();
     }
 
-    CurrentGeneration = EGenerationType::NotGenerated;
+    CurrentGeneration = NotGenerated;
     ActorBakeCount = 0;
     CachedActorCount = 0;
     return true;
@@ -163,10 +165,11 @@ void ASpawnWithHoudini::PopulateParameters(UHoudiniPublicAPIAssetWrapper* Spawne
 {
     if (SpawnedActor->IsValidLowLevel())
     {
-        const int32 FoundAsset = HoudiniAssetDetails.IndexOfByPredicate([SpawnedActor](FHoudiniLoadableAsset asset)
-        {
-            return asset.SpawnedActors.Contains(SpawnedActor);
-        });
+        const int32 FoundAsset = HoudiniAssetDetails.IndexOfByPredicate(
+            [SpawnedActor](const FHoudiniLoadableAsset& asset)
+            {
+                return asset.SpawnedActors.Contains(SpawnedActor);
+            });
 
         if (FoundAsset != INDEX_NONE && HoudiniAssetDetails[FoundAsset].ParamsToRandom.Num() == 0)
         {
@@ -175,11 +178,13 @@ void ASpawnWithHoudini::PopulateParameters(UHoudiniPublicAPIAssetWrapper* Spawne
             const bool bActiveParameters = SpawnedActor->GetParameterTuples(ActorExistingParameterMap);
             if (bActiveParameters)
             {
-                for (const auto ParameterMap : ActorExistingParameterMap)
+                for (const auto& ParameterMap : ActorExistingParameterMap)
                 {
                     FName ParameterName = ParameterMap.Key;
                     if (ParameterName.GetPlainNameString().Contains("seed"))
+                    {
                         HoudiniAssetDetails[FoundAsset].ParamsToRandom.Add(ParameterName);
+                    }
                 }
             }
         }
@@ -191,11 +196,12 @@ void ASpawnWithHoudini::RandomizeActor(UHoudiniPublicAPIAssetWrapper* SpawnedAct
     if (SpawnedActor->IsValidLowLevel())
     {
         int32 AssetIndexInList = INDEX_NONE;
-        const int32 ListNumber = HoudiniAssetDetails.IndexOfByPredicate([SpawnedActor, &AssetIndexInList](FHoudiniLoadableAsset asset)
-        {
-            AssetIndexInList = asset.SpawnedActors.IndexOfByKey(SpawnedActor);
-            return AssetIndexInList != INDEX_NONE;
-        });
+        const int32 ListNumber = HoudiniAssetDetails.IndexOfByPredicate(
+            [SpawnedActor, &AssetIndexInList](const FHoudiniLoadableAsset& asset)
+            {
+                AssetIndexInList = asset.SpawnedActors.IndexOfByKey(SpawnedActor);
+                return AssetIndexInList != INDEX_NONE;
+            });
 
         TMap<FName, FHoudiniParameterTuple> ActorExistingParameterMap;
         TMap<FName, FHoudiniParameterTuple> ActorNewParameterMap;
@@ -204,14 +210,14 @@ void ASpawnWithHoudini::RandomizeActor(UHoudiniPublicAPIAssetWrapper* SpawnedAct
         // but different enough from all other actors.
         if (ListNumber != INDEX_NONE)
         {
-            int32 AssetSeed = (100 * RandomSeed) + (10 * ListNumber) + (AssetIndexInList);
+            int32 AssetSeed = 100 * RandomSeed + 10 * ListNumber + AssetIndexInList;
             Random.Initialize(AssetSeed);
         }
 
         const bool bActiveParameters = SpawnedActor->GetParameterTuples(ActorExistingParameterMap);
         if (bActiveParameters)
         {
-            for (const auto ParameterTuple : ActorExistingParameterMap)
+            for (const auto& ParameterTuple : ActorExistingParameterMap)
             {
                 FHoudiniParameterTuple NewParameterValue;
 
@@ -251,25 +257,29 @@ void ASpawnWithHoudini::RandomizeActor(UHoudiniPublicAPIAssetWrapper* SpawnedAct
                         // For the sake of simplicity, this keeps the numbers sane.
                         const float InPosition = CurrentTuples.FloatRampPoints[i].Position;
                         const float InValue = Random.FRandRange(0, FloatMax);
-                        const EHoudiniPublicAPIRampInterpolationType InterpolationType = static_cast<EHoudiniPublicAPIRampInterpolationType>(Random.RandRange(1, 7));
+                        const EHoudiniPublicAPIRampInterpolationType InterpolationType = static_cast<
+                            EHoudiniPublicAPIRampInterpolationType>(Random.RandRange(1, 7));
 
-                        FHoudiniPublicAPIFloatRampPoint RandomFloatRamp = FHoudiniPublicAPIFloatRampPoint(InPosition, InValue, InterpolationType);
+                        FHoudiniPublicAPIFloatRampPoint RandomFloatRamp = FHoudiniPublicAPIFloatRampPoint(
+                            InPosition, InValue, InterpolationType);
                         NewParameterValue.FloatRampPoints.Add(RandomFloatRamp);
                     }
 
                     for (int i = 0; i < CurrentTuples.ColorRampPoints.Num(); i++)
                     {
                         // Seeded variant of FLinearColor::MakeRandomColor
-                        const uint8 Hue = uint8(Random.RandRange(0, 255));
-                        const uint8 Saturation = uint8(Random.RandRange(0, 255));
-                        const uint8 Brightness = uint8(Random.RandRange(0, 255));
+                        const uint8 Hue = static_cast<uint8>(Random.RandRange(0, 255));
+                        const uint8 Saturation = static_cast<uint8>(Random.RandRange(0, 255));
+                        const uint8 Brightness = static_cast<uint8>(Random.RandRange(0, 255));
                         const FLinearColor Color = FLinearColor::MakeFromHSV8(Hue, Saturation, Brightness);
 
                         // For the sake of simplicity, this keeps the numbers sane.
                         const float InPosition = CurrentTuples.ColorRampPoints[i].Position;
-                        const EHoudiniPublicAPIRampInterpolationType InterpolationType = static_cast<EHoudiniPublicAPIRampInterpolationType>(Random.RandRange(1, 7));
+                        const EHoudiniPublicAPIRampInterpolationType InterpolationType = static_cast<
+                            EHoudiniPublicAPIRampInterpolationType>(Random.RandRange(1, 7));
 
-                        FHoudiniPublicAPIColorRampPoint RandomColorRamp = FHoudiniPublicAPIColorRampPoint(InPosition, Color, InterpolationType);
+                        FHoudiniPublicAPIColorRampPoint RandomColorRamp = FHoudiniPublicAPIColorRampPoint(
+                            InPosition, Color, InterpolationType);
                         NewParameterValue.ColorRampPoints.Add(RandomColorRamp);
                     }
 
@@ -289,21 +299,23 @@ void ASpawnWithHoudini::RandomizeActor(UHoudiniPublicAPIAssetWrapper* SpawnedAct
             }
             else
             {
-                UE_LOG(LogAmbit, Warning, TEXT("Houdini Asset could not be fully cooked for spawner %s and object %s. Invalid option set."),
-                    *this->GetActorLabel(), *SpawnedActor->GetName());
+                UE_LOG(LogAmbit, Warning,
+                       TEXT("Houdini Asset could not be fully cooked for spawner %s and object %s. Invalid option set."
+                       ), *this->GetActorLabel(), *SpawnedActor->GetName());
             }
         }
     }
     else
     {
-        UE_LOG(LogAmbit, Warning, TEXT("Houdini Asset is no longer available in %s. Skipping."), *this->GetActorLabel());
+        UE_LOG(LogAmbit, Warning, TEXT("Houdini Asset is no longer available in %s. Skipping."),
+               *this->GetActorLabel());
     }
 }
 
 TArray<UHoudiniPublicAPIAssetWrapper*> ASpawnWithHoudini::GetSpawnedActors() const
 {
     TArray<UHoudiniPublicAPIAssetWrapper*> SpawnedActors;
-    for (auto LoadedSet : HoudiniAssetDetails)
+    for (const auto& LoadedSet : HoudiniAssetDetails)
     {
         TArray<UHoudiniPublicAPIAssetWrapper*> AssetActors = LoadedSet.SpawnedActors;
 
@@ -344,8 +356,7 @@ void ASpawnWithHoudini::GenerateSpawnedObjectConfiguration(int32 Seed)
 
 TSharedPtr<FSpawnWithHoudiniConfig> ASpawnWithHoudini::GetConfiguration() const
 {
-    TSharedPtr<FSpawnWithHoudiniConfig> Config =
-        MakeShareable(new FSpawnWithHoudiniConfig);
+    TSharedPtr<FSpawnWithHoudiniConfig> Config = MakeShareable(new FSpawnWithHoudiniConfig);
     Config->SpawnerLocation = this->GetActorLocation();
     Config->SpawnerRotation = this->GetActorRotation();
     Config->MatchBy = MatchBy;
@@ -358,7 +369,7 @@ TSharedPtr<FSpawnWithHoudiniConfig> ASpawnWithHoudini::GetConfiguration() const
     return Config;
 }
 
-void ASpawnWithHoudini::Configure(const TSharedPtr<FSpawnWithHoudiniConfig> Config)
+void ASpawnWithHoudini::Configure(const TSharedPtr<FSpawnWithHoudiniConfig>& Config)
 {
     MatchBy = Config->MatchBy;
     SurfaceNamePattern = Config->SurfaceNamePattern;
@@ -374,7 +385,7 @@ int ASpawnWithHoudini::GetActorCount()
     {
         CachedActorCount = GetSpawnedActors().Num();
     }
-    
+
     return CachedActorCount;
 }
 
@@ -383,16 +394,20 @@ void ASpawnWithHoudini::BeginPlay()
     Super::BeginPlay();
 
     // Only spawn if there are no spawned objects from the editor.
-    if (CurrentGeneration != EGenerationType::FromEditor)
+    if (CurrentGeneration != FromEditor)
+    {
         GenerateObstacles();
+    }
 }
 
 void ASpawnWithHoudini::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
     Super::EndPlay(EndPlayReason);
 
-    if (CurrentGeneration != EGenerationType::FromEditor)
+    if (CurrentGeneration != FromEditor)
+    {
         ClearObstacles();
+    }
 }
 
 void ASpawnWithHoudini::AssetPreInstantiation_DelegateHandler(UHoudiniPublicAPIAssetWrapper* SpawnedActor)
@@ -400,8 +415,9 @@ void ASpawnWithHoudini::AssetPreInstantiation_DelegateHandler(UHoudiniPublicAPIA
     PopulateParameters(SpawnedActor);
     RandomizeActor(SpawnedActor);
     PreInstantiationDone.ExecuteIfBound();
-    
-    SpawnedActor->GetOnPreInstantiationDelegate().RemoveDynamic(this, &ASpawnWithHoudini::AssetPreInstantiation_DelegateHandler);
+
+    SpawnedActor->GetOnPreInstantiationDelegate().RemoveDynamic(
+        this, &ASpawnWithHoudini::AssetPreInstantiation_DelegateHandler);
 }
 
 void ASpawnWithHoudini::PostProcessing_DelegateHandler(UHoudiniPublicAPIAssetWrapper* SpawnedActor)
@@ -427,7 +443,7 @@ void ASpawnWithHoudini::PostBake_DelegateHandler(UHoudiniPublicAPIAssetWrapper* 
             CreateSpawnedObjectConfiguration();
         }
     }
-    else 
+    else
     {
         USpawnedObjectConfig* EmptyConfig = NewObject<USpawnedObjectConfig>();
 
@@ -466,7 +482,7 @@ void ASpawnWithHoudini::CreateSpawnedObjectConfiguration()
             const TArray<AActor*> SurfaceActors = AmbitWorldHelpers::GetActorsByMatchBy(
                 MatchName, AssetNameOnly, TagsT, true);
             TArray<FTransform> Transforms;
-            for (auto Transform : SurfaceActors)
+            for (auto* Transform : SurfaceActors)
             {
                 Transforms.Add(Transform->GetActorTransform());
 
@@ -483,10 +499,9 @@ void ASpawnWithHoudini::CreateSpawnedObjectConfiguration()
 
         bSucceeded = true;
     }
-    catch (const std::runtime_error& Re) 
+    catch (const std::runtime_error& Re)
     {
-        UE_LOG(LogAmbit, Error, TEXT("Failed to bake properly. Error: %i"),
-            Re.what());
+        UE_LOG(LogAmbit, Error, TEXT("Failed to bake properly. Error: %i"), Re.what());
     }
 
     auto FinalConfig = TScriptInterface<IConfigJsonSerializer>(Config);

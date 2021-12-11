@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,9 +15,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include <aws/core/Region.h>
-
-#include "AmbitWeatherParameters.h"
 #include "Constant.h"
 #include "ExportPlatforms.h"
 #include "PedestrianTraffic.h"
@@ -25,6 +22,10 @@
 #include "VehicleTraffic.h"
 #include "WeatherTypes.h"
 #include "UObject/Object.h"
+
+#include <aws/core/Region.h>
+
+#include "AmbitWeatherParameters.h"
 
 // must always be last
 #include "AmbitObject.generated.h"
@@ -51,43 +52,41 @@ public:
     /**
      * Select Preset Time of Day
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (DisplayName = "Preset Time of Day"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta = (DisplayName = "Preset Time of Day"))
     FString PresetTimeOfDay = TimeOfDay::KCustom;
 
     /**
      * Time of day slider ranging from 0.0 to 23.99999
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (ClampMin = "0.0", ClampMax = "23.99999", UIMin = "0.0", UIMax = "23.99999", DisplayName = "Time of Day"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings",
+        meta = (ClampMin = "0.0", ClampMax = "23.99999", UIMin = "0.0", UIMax = "23.99999", DisplayName = "Time of Day"
+        ))
     float TimeOfDay = 9.0f;
 
     /**
      * Select Preset Weather Types
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (DisplayName = "Weather Type"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta = (DisplayName = "Weather Type"))
     FString PresetWeather;
 
     /**
      * Weather Parameters struct
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (DisplayName = "Weather Parameters"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta = (DisplayName = "Weather Parameters"))
     FAmbitWeatherParameters WeatherParameters;
 
     /**
      * Pedestrian Density [0.0 - 1.0]
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings",
+        meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
     float PedestrianDensity;
 
     /**
      * Vehicle Density [0.0 - 1.0]
      */
-    UPROPERTY(EditAnywhere, Category = "Scenario Settings", meta =
-        (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+    UPROPERTY(EditAnywhere, Category = "Scenario Settings",
+        meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
     float VehicleDensity;
 
     /**
@@ -141,15 +140,14 @@ public:
     /**
      * Specifies glTF file type
      */
-    UPROPERTY(EditAnywhere, Category = "Map Export Settings", meta =
-        (DisplayName = "glTF File Type"));
+    UPROPERTY(EditAnywhere, Category = "Map Export Settings", meta = (DisplayName = "glTF File Type"))
+    ;
     FString GltfType = GltfFileType::KGltf;
 
     /**
     * Choose the geographical AWS Region where the Amazon S3 bucket below is located.
     */
-    UPROPERTY(EditAnywhere, Category = "AWS Settings", meta =
-        (DisplayName = "AWS Region"))
+    UPROPERTY(EditAnywhere, Category = "AWS Settings", meta = (DisplayName = "AWS Region"))
     FString AwsRegion = Aws::Region::US_EAST_1;
 
     /**
@@ -158,8 +156,7 @@ public:
      * Amazon S3 can store an infinite amount of data in a S3 bucket.
      * For more information, please access Amazon S3 User Guide https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
      */
-    UPROPERTY(EditAnywhere, Category = "AWS Settings", meta =
-        (DisplayName = "S3 Bucket Name"))
+    UPROPERTY(EditAnywhere, Category = "AWS Settings", meta = (DisplayName = "S3 Bucket Name"))
     FString S3BucketName;
 
     void SetParent(FAmbitMode* NewParent)

@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,12 +15,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Dom/JsonObject.h"
 #include "Subsystems/EngineSubsystem.h"
 
 #include <AWSUE4Module/Public/FirehoseUE4Client.h>
-
-#include "Dom/JsonObject.h"
-
 
 #include "UserMetricsSubsystem.generated.h"
 
@@ -34,6 +32,7 @@ class AMBIT_API UUserMetricsSubsystem : public UEngineSubsystem
 
 public:
     void Initialize(FSubsystemCollectionBase& Collection) override;
+
     void Deinitialize() override;
 
     /**
@@ -43,7 +42,8 @@ public:
      *@param NameSpace namespace which this event belongs to (like AmbitSpawner/AmbitMode etc).
      *@param CustomData any custom data we'd like to store along with the event. This is stored in json format.
      */
-    void Track(FString EventName, FString NameSpace, TSharedPtr<FJsonObject> CustomData = MakeShareable(new FJsonObject));
+    void Track(const FString& EventName, const FString& NameSpace,
+               TSharedPtr<FJsonObject> CustomData = MakeShareable(new FJsonObject));
 
 private:
     bool SendEvents(float deltatime);

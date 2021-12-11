@@ -1,26 +1,28 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "Misc/AutomationTest.h"
 #include "BulkScenarioConfiguration.h"
+
 #include "ScenarioDefinition.h"
 #include "Dom/JsonObject.h"
+#include "Misc/AutomationTest.h"
 
 #include <AmbitUtils/JsonHelpers.h>
 
 BEGIN_DEFINE_SPEC(BulkScenarioConfigurationSpec, "Ambit.BulkScenarioConfiguration",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+
     FBulkScenarioConfiguration BulkConfig;
     TSharedPtr<FJsonObject> Json;
 
@@ -210,7 +212,7 @@ void BulkScenarioConfigurationSpec::Define()
             }
 
             // Test that the correct scenario was generated.
-            FScenarioDefinition Scenario = GeneratedScenarios[0];
+            const FScenarioDefinition Scenario = GeneratedScenarios[0];
             TestEqual("Precipitation", Scenario.AmbitWeatherParameters.Precipitation, 80.0f);
             TestEqual("Pedestrian Density", Scenario.PedestrianDensity, 0.2f);
             TestEqual("Vehicle Density", Scenario.VehicleDensity, 0.5f);
@@ -236,7 +238,7 @@ void BulkScenarioConfigurationSpec::Define()
             }
 
             // Test that the correct scenario was generated.
-            FScenarioDefinition Scenario = GeneratedScenarios[0];
+            const FScenarioDefinition Scenario = GeneratedScenarios[0];
             TestEqual("Pedestrian Density", Scenario.PedestrianDensity, 0.0f);
             TestEqual("Vehicle Density", Scenario.VehicleDensity, 0.0f);
         });
@@ -246,7 +248,6 @@ void BulkScenarioConfigurationSpec::Define()
             // Configure for two weather variants.
             BulkConfig.WeatherTypes.SetSunny(true);
             BulkConfig.WeatherTypes.SetRainy(true);
-
 
             // Configure for single pedestrian traffic variant.
             BulkConfig.PedestrianDensity.Min = 0.2;

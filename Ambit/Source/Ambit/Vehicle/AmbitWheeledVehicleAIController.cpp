@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,29 +13,27 @@
 //   limitations under the License.
 
 #include "AmbitWheeledVehicleAIController.h"
-#include "AmbitVehicleHelpers.h"
 
 #include "Constant.h"
-
 #include "EngineUtils.h"
-#include "GameFramework/Pawn.h"
 #include "WheeledVehicleMovementComponent.h"
 #include "WheeledVehicleMovementComponent4W.h"
+#include "GameFramework/Pawn.h"
 
-AAmbitWheeledVehicleAIController::AAmbitWheeledVehicleAIController(const FObjectInitializer& ObjectInitializer)
-    : Super(ObjectInitializer)
+#include "AmbitVehicleHelpers.h"
+
+AAmbitWheeledVehicleAIController::AAmbitWheeledVehicleAIController(const FObjectInitializer& ObjectInitializer) : Super(
+    ObjectInitializer)
 {
     PrimaryActorTick.bCanEverTick = true;
     PrimaryActorTick.TickGroup = TG_PrePhysics;
 
-    ThrottleController = FAmbitVehicleLongitudinalController(
-        PIDController::LongitudinalProportionalTerm,
-        PIDController::LongitudinalDifferentialTerm,
-        PIDController::LongitudinalIntegralTerm);
-    SteeringController = FAmbitVehicleLateralController(
-        PIDController::LateralProportionalTerm,
-        PIDController::LateralDifferentialTerm,
-        PIDController::LateralIntegralTerm);
+    ThrottleController = FAmbitVehicleLongitudinalController(PIDController::LongitudinalProportionalTerm,
+                                                             PIDController::LongitudinalDifferentialTerm,
+                                                             PIDController::LongitudinalIntegralTerm);
+    SteeringController = FAmbitVehicleLateralController(PIDController::LateralProportionalTerm,
+                                                        PIDController::LateralDifferentialTerm,
+                                                        PIDController::LateralIntegralTerm);
 }
 
 void AAmbitWheeledVehicleAIController::OnPossess(APawn* APawn)
@@ -80,7 +78,6 @@ void AAmbitWheeledVehicleAIController::Tick(const float DeltaTime)
         {
             WaypointsBuffer.Emplace(Waypoint);
         }
-
     }
 
     const FVector CurrentLocation = Vehicle->GetActorLocation();
@@ -93,18 +90,19 @@ void AAmbitWheeledVehicleAIController::Tick(const float DeltaTime)
         float Radius = AmbitVehicleHelpers::GetThreePointCircleRadius(PastWaypoint, WaypointsBuffer[0],
                                                                       WaypointsBuffer[1]);
 
-        TargetSpeed = (TargetSpeed > Radius * VehicleControl::TurningRadiusSpeedFactor)
+        TargetSpeed = TargetSpeed > Radius * VehicleControl::TurningRadiusSpeedFactor
                           ? Radius * VehicleControl::TurningRadiusSpeedFactor
                           : TargetSpeed;
 
         for (int i = 0; i < WaypointsBuffer.Num() - 2; i++)
         {
             if (FVector::Dist(FVector(CurrentLocation.X, CurrentLocation.Y, 0),
-                              FVector(WaypointsBuffer[i].X, WaypointsBuffer[i].Y, 0)) < CurrentSpeed * VehicleControl::LookingAheadDistanceFactor)
+                              FVector(WaypointsBuffer[i].X, WaypointsBuffer[i].Y, 0)) < CurrentSpeed *
+                VehicleControl::LookingAheadDistanceFactor)
             {
                 Radius = AmbitVehicleHelpers::GetThreePointCircleRadius(WaypointsBuffer[i], WaypointsBuffer[i + 1],
                                                                         WaypointsBuffer[i + 2]);
-                TargetSpeed = (TargetSpeed > Radius * VehicleControl::TurningRadiusSpeedFactor)
+                TargetSpeed = TargetSpeed > Radius * VehicleControl::TurningRadiusSpeedFactor
                                   ? Radius * VehicleControl::TurningRadiusSpeedFactor
                                   : TargetSpeed;
             }
@@ -149,8 +147,8 @@ void AAmbitWheeledVehicleAIController::Tick(const float DeltaTime)
 
     for (int i = 0; i < WaypointsBuffer.Num(); i++)
     {
-        if (FVector::Dist(FVector(CurrentLocation.X, CurrentLocation.Y, 0), FVector(WaypointsBuffer[i].X, WaypointsBuffer[i].Y, 0))
-            < WaypointDistanceThreshold)
+        if (FVector::Dist(FVector(CurrentLocation.X, CurrentLocation.Y, 0),
+                          FVector(WaypointsBuffer[i].X, WaypointsBuffer[i].Y, 0)) < WaypointDistanceThreshold)
         {
             MaxIndex = i;
         }
@@ -169,8 +167,7 @@ void AAmbitWheeledVehicleAIController::Tick(const float DeltaTime)
     }
 }
 
-void AAmbitWheeledVehicleAIController::SetVehicleRoute(
-    const TArray<FTransform>& Locations)
+void AAmbitWheeledVehicleAIController::SetVehicleRoute(const TArray<FTransform>& Locations)
 {
     for (const FTransform& Transform : Locations)
     {
@@ -189,4 +186,3 @@ void AAmbitWheeledVehicleAIController::SetLoopedPath(bool Looped)
 {
     IsLooped = Looped;
 }
-

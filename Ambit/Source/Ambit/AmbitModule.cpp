@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,27 +14,22 @@
 
 #include "AmbitModule.h"
 
-#include "Mode/AmbitMode.h"
-#include "Mode/AmbitWidget.h"
-
-#include "Actors/Spawners/SpawnOnSurface.h"
-#include "Actors/Spawners/SpawnOnPath.h"
-#include "Actors/Spawners/SpawnInVolume.h"
-#include "Actors/Spawners/SpawnVehiclePath.h"
-#include "Actors/Spawners/SpawnWithHoudini.h"
-#include "Actors/EditorDetails/SpawnerDetails.h"
-
 #include "EditorTutorial.h"
 #include "IIntroTutorials.h"
-#include "LevelEditor.h"
-
-#include "Styling/SlateStyleRegistry.h"
 #include "SlateOptMacros.h"
+#include "Interfaces/IPluginManager.h"
 #include "PlacementMode/Public/IPlacementModeModule.h"
+#include "Styling/SlateStyleRegistry.h"
+
+#include "Ambit/Actors/EditorDetails/SpawnerDetails.h"
+#include "Ambit/Actors/Spawners/SpawnInVolume.h"
+#include "Ambit/Actors/Spawners/SpawnOnPath.h"
+#include "Ambit/Actors/Spawners/SpawnOnSurface.h"
+#include "Ambit/Actors/Spawners/SpawnVehiclePath.h"
+#include "Ambit/Actors/Spawners/SpawnWithHoudini.h"
+#include "Ambit/Mode/AmbitMode.h"
 
 #include <AmbitUtils/MenuHelpers.h>
-
-#include "Interfaces/IPluginManager.h"
 
 DEFINE_LOG_CATEGORY(LogAmbit)
 
@@ -55,7 +50,7 @@ namespace
             return ProjectPluginDir;
         }
 
-        TSharedPtr<IPlugin> AmbitPlugin = IPluginManager::Get().FindPlugin(TEXT("Ambit"));
+        const TSharedPtr<IPlugin> AmbitPlugin = IPluginManager::Get().FindPlugin(TEXT("Ambit"));
         if (AmbitPlugin.IsValid() && FPaths::DirectoryExists(AmbitPlugin->GetBaseDir()))
         {
             return AmbitPlugin->GetBaseDir();
@@ -69,7 +64,12 @@ namespace
 #define LOCTEXT_NAMESPACE "FAmbitModule"
 
 TSharedPtr<FSlateStyleSet> FAmbitModule::StyleSet = nullptr;
-TSharedPtr<class ISlateStyle> FAmbitModule::GetStyleSet() { return StyleSet; }
+
+TSharedPtr<class ISlateStyle> FAmbitModule::GetStyleSet()
+{
+    return StyleSet;
+}
+
 FAmbitModule* FAmbitModule::FAmbitModuleInstance = nullptr;
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -99,7 +99,8 @@ void FAmbitModule::Initialize()
     StyleSet->Set("LevelEditor.Ambit", new FSlateImageBrush(IconsDir + "Ambit_Icon_1024.png", Icon40x40));
     StyleSet->Set("LevelEditor.Ambit.Small", new FSlateImageBrush(IconsDir + "Ambit_Icon_1024.png", Icon20x20));
     StyleSet->Set("LevelEditor.Ambit.Selected", new FSlateImageBrush(IconsDir + "Ambit_Icon_1024.png", Icon40x40));
-    StyleSet->Set("LevelEditor.Ambit.Selected.Small", new FSlateImageBrush(IconsDir + "Ambit_Icon_1024.png", Icon20x20));
+    StyleSet->Set("LevelEditor.Ambit.Selected.Small",
+                  new FSlateImageBrush(IconsDir + "Ambit_Icon_1024.png", Icon20x20));
 
     // Actor Icon Settings
     StyleSet->Set("ClassIcon.SpawnOnSurface", new FSlateImageBrush(IconsDir + "Ambit_Icon_1024.png", Icon16x16));
@@ -123,7 +124,8 @@ void FAmbitModule::Initialize()
     FTutorialCategory AWSAmbitCategory = FTutorialCategory();
     AWSAmbitCategory.Identifier = "AWSAmbit";
     AWSAmbitCategory.Title = NSLOCTEXT("TutorialCategories", "AWSAmbitTitle", "AWS Ambit");
-    AWSAmbitCategory.Description = NSLOCTEXT("TutorialCategories", "AWSAmbitDescription", "This tutorial will cover how AWS Ambit works.");
+    AWSAmbitCategory.Description = NSLOCTEXT("TutorialCategories", "AWSAmbitDescription",
+                                             "This tutorial will cover how AWS Ambit works.");
     AWSAmbitCategory.Icon = "LevelEditor.Ambit";
     AWSAmbitCategory.Texture = FSoftObjectPath("/Ambit/Icons/AmbitIcon");
     AWSAmbitCategory.SortOrder = 100;
@@ -146,11 +148,11 @@ FAmbitModule& FAmbitModule::Get()
     return *FAmbitModuleInstance;
 }
 
-void FAmbitModule::CreateAmbitNotification(FText MessageText, float FadeInDuration,
-                                           float FadeOutDuration, float ExpireDuration, bool bFireAndForget)
+void FAmbitModule::CreateAmbitNotification(const FText& MessageText, float FadeInDuration, float FadeOutDuration,
+                                           float ExpireDuration, bool bFireAndForget)
 {
-    FMenuHelpers::CreateNotification(MessageText, Get().GetAmbitNotificationBrush(),
-                                     FadeInDuration, FadeOutDuration, ExpireDuration, bFireAndForget);
+    FMenuHelpers::CreateNotification(MessageText, Get().GetAmbitNotificationBrush(), FadeInDuration, FadeOutDuration,
+                                     ExpireDuration, bFireAndForget);
 }
 
 void FAmbitModule::StartupModule()
@@ -162,20 +164,16 @@ void FAmbitModule::StartupModule()
     AmbitNotificationBrush = FSlateIcon(GetStyleSetName(), "Notification.Ambit").GetIcon();
 
     //register mode
-    FEditorModeRegistry::Get().RegisterMode<FAmbitMode>(
-        FAmbitMode::EM_AmbitModeId,
-        LOCTEXT("AmbitMode", "AWS Ambit Scenario Mode"),
-        FSlateIcon(GetStyleSetName(), "LevelEditor.Ambit", "LevelEditor.Ambit.Small"),
-        true
-    );
+    FEditorModeRegistry::Get().RegisterMode<FAmbitMode>(FAmbitMode::EM_AmbitModeId,
+                                                        LOCTEXT("AmbitMode", "AWS Ambit Scenario Mode"),
+                                                        FSlateIcon(GetStyleSetName(), "LevelEditor.Ambit",
+                                                                   "LevelEditor.Ambit.Small"), true);
 
     //register place actors category
     IPlacementModeModule& PlacementModeModule = IPlacementModeModule::Get();
     //Register Ambit Spawner Types
-    int32 Priority = 43; // Position of category tab in Place Actors panel
-    FPlacementCategoryInfo AwsAmbit(LOCTEXT("AwsAmbit",
-                                                     "AWS Ambit"), "AwsAmbit",
-                                             TEXT("AwsAmbit"), Priority);
+    const int32 Priority = 43; // Position of category tab in Place Actors panel
+    const FPlacementCategoryInfo AwsAmbit(LOCTEXT("AwsAmbit", "AWS Ambit"), "AwsAmbit", TEXT("AwsAmbit"), Priority);
     PlacementModeModule.RegisterPlacementCategory(AwsAmbit);
 
     //register actors to category
@@ -187,7 +185,9 @@ void FAmbitModule::StartupModule()
 
     FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
     // Register details presenter for our component type and runtime settings.
-    PropertyModule.RegisterCustomClassLayout(ASpawnWithHoudini::StaticClass()->GetFName(), FOnGetDetailCustomizationInstance::CreateStatic(&FSpawnerDetails::MakeInstance));
+    PropertyModule.RegisterCustomClassLayout(ASpawnWithHoudini::StaticClass()->GetFName(),
+                                             FOnGetDetailCustomizationInstance::CreateStatic(
+                                                 &FSpawnerDetails::MakeInstance));
 
     PropertyModule.NotifyCustomizationModuleChanged();
 }

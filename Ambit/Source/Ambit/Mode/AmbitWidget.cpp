@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,19 +13,17 @@
 //   limitations under the License.
 
 #include "AmbitWidget.h"
-#include "AmbitMode.h"
-#include "AmbitObject.h"
-#include "AmbitDetailCustomization.h"
 
 #include "EditorModeManager.h"
 #include "EditorTutorial.h"
 #include "IDetailsView.h"
 #include "IIntroTutorials.h"
-
 #include "PropertyEditorModule.h"
 #include "SlateOptMacros.h"
 
-#include "Widgets/Input/SButton.h"
+#include "AmbitDetailCustomization.h"
+#include "AmbitMode.h"
+#include "AmbitObject.h"
 
 #define LOCTEXT_NAMESPACE "FAmbitModule"
 
@@ -71,18 +69,19 @@ void SAmbitWidget::Construct(const FArguments& InArgs, TSharedRef<FAmbitModeTool
                                                        &FAmbitDetailCustomization::MakeInstance));
     PropertyEditorModule.NotifyCustomizationModuleChanged();
 
-    FDetailsViewArgs DetailsViewArgs(false, false, false, FDetailsViewArgs::HideNameArea);
+    const FDetailsViewArgs DetailsViewArgs(false, false, false, FDetailsViewArgs::HideNameArea);
 
     DetailsPanel = PropertyEditorModule.CreateDetailView(DetailsViewArgs);
     DetailsPanel->SetIsPropertyVisibleDelegate(FIsPropertyVisible::CreateSP(this, &SAmbitWidget::GetIsPropertyVisible));
 
     FAmbitMode* AmbitMode = GetEditorMode();
 
-    IIntroTutorials& IntroTutorials = FModuleManager::LoadModuleChecked<IIntroTutorials>(TEXT("IntroTutorials"));
+    const IIntroTutorials& IntroTutorials = FModuleManager::LoadModuleChecked<IIntroTutorials>(TEXT("IntroTutorials"));
 
-    FMargin StandardLeftPadding(6.f, 3.f, 3.f, 3.f);
-    FMargin StandardRightPadding(3.f, 3.f, 6.f, 3.f);
+    const FMargin StandardLeftPadding(6.f, 3.f, 3.f, 3.f);
+    const FMargin StandardRightPadding(3.f, 3.f, 6.f, 3.f);
 
+    // @formatter:off
     ChildSlot
     [
         SNew(SVerticalBox)
@@ -118,6 +117,8 @@ void SAmbitWidget::Construct(const FArguments& InArgs, TSharedRef<FAmbitModeTool
         ]
     ];
 
+    // @formatter:on
+
     RefreshDetailPanel();
 }
 
@@ -138,11 +139,7 @@ FText SAmbitWidget::GetErrorText() const
 bool SAmbitWidget::GetAmbitIsEnabled() const
 {
     FAmbitMode* AmbitMode = GetEditorMode();
-    if (AmbitMode)
-    {
-        return true;
-    }
-    return false;
+    return AmbitMode != nullptr;
 }
 
 bool SAmbitWidget::GetIsPropertyVisible(const FPropertyAndParent& PropertyAndParent) const
@@ -150,10 +147,10 @@ bool SAmbitWidget::GetIsPropertyVisible(const FPropertyAndParent& PropertyAndPar
     return true;
 }
 
-void SAmbitWidget::RefreshDetailPanel()
+void SAmbitWidget::RefreshDetailPanel() const
 {
     FAmbitMode* AmbitMode = GetEditorMode();
-    if (AmbitMode)
+    if (AmbitMode != nullptr)
     {
         // Refresh details panel
         DetailsPanel->SetObject(AmbitMode->UISettings, true);

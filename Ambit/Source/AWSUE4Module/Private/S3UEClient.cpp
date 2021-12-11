@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,6 @@
 #include <fstream>
 #include <memory>
 #include <stdexcept>
-
 #include <aws/s3/S3Client.h>
 #include <aws/s3/model/Bucket.h>
 #include <aws/s3/model/CreateBucketRequest.h>
@@ -39,15 +38,14 @@ TSet<FString> S3UEClient::ListBuckets()
     if (!Outcome.IsSuccess())
     {
         auto Err = Outcome.GetError();
-        UE_LOG(LogAWSUE4Module, Error, TEXT("ListBuckets: %s : %s"),
-               *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
+        UE_LOG(LogAWSUE4Module, Error, TEXT("ListBuckets: %s : %s"), *FString(Err.GetExceptionName().c_str()),
+               *FString(Err.GetMessage().c_str()));
         throw std::runtime_error(Err.GetMessage().c_str());
     }
 
     UE_LOG(LogAWSUE4Module, Display, TEXT("Bucket names: "));
 
-    Aws::Vector<Aws::S3::Model::Bucket> Buckets =
-        Outcome.GetResult().GetBuckets();
+    Aws::Vector<Aws::S3::Model::Bucket> Buckets = Outcome.GetResult().GetBuckets();
 
     for (const Aws::S3::Model::Bucket& Bucket : Buckets)
     {
@@ -61,8 +59,8 @@ TSet<FString> S3UEClient::ListBuckets()
 
 bool S3UEClient::CreateBucket(const FString& Region, const FString& BucketName)
 {
-    Aws::String S3Region = AWSUEStringUtils::FStringToAwsString(Region);
-    Aws::String S3BucketName = AWSUEStringUtils::FStringToAwsString(BucketName);
+    const Aws::String S3Region = AWSUEStringUtils::FStringToAwsString(Region);
+    const Aws::String S3BucketName = AWSUEStringUtils::FStringToAwsString(BucketName);
 
     if (S3BucketName.empty() || S3Region.empty())
     {
@@ -74,13 +72,13 @@ bool S3UEClient::CreateBucket(const FString& Region, const FString& BucketName)
     Aws::Client::ClientConfiguration Config;
     Config.region = S3Region;
 
-    Aws::S3::S3Client S3Client(Config);
+    const Aws::S3::S3Client S3Client(Config);
     Aws::S3::Model::CreateBucketRequest Request;
     Request.SetBucket(S3BucketName);
 
     // transfer bucket region to a specific type which AWS S3 CreateBucket function will use
-    Aws::S3::Model::BucketLocationConstraint RegionConstraint =
-        Aws::S3::Model::BucketLocationConstraintMapper::GetBucketLocationConstraintForName(S3Region);
+    const Aws::S3::Model::BucketLocationConstraint RegionConstraint =
+            Aws::S3::Model::BucketLocationConstraintMapper::GetBucketLocationConstraintForName(S3Region);
 
     // By default, buckets are created in the us-east-1(N. Virginia) region.
     // If you use a Region other than the US East (N. Virginia) endpoint to create a bucket,
@@ -94,13 +92,13 @@ bool S3UEClient::CreateBucket(const FString& Region, const FString& BucketName)
         Request.SetCreateBucketConfiguration(BucketConfig);
     }
 
-    auto Outcome = S3Client.CreateBucket(Request);
+    const auto Outcome = S3Client.CreateBucket(Request);
 
     if (!Outcome.IsSuccess())
     {
-        auto Err = Outcome.GetError();
-        UE_LOG(LogAWSUE4Module, Error, TEXT("Create Bucket: %s : %s"),
-               *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
+        const auto Err = Outcome.GetError();
+        UE_LOG(LogAWSUE4Module, Error, TEXT("Create Bucket: %s : %s"), *FString(Err.GetExceptionName().c_str()),
+               *FString(Err.GetMessage().c_str()));
         throw std::runtime_error(Err.GetMessage().c_str());
     }
 
@@ -140,16 +138,15 @@ bool S3UEClient::PutBucketEncryption(const FString& BucketName)
     if (!BucketEncryptionOutcome.IsSuccess())
     {
         auto Err = BucketEncryptionOutcome.GetError();
-        UE_LOG(LogAWSUE4Module, Error, TEXT("Put Bucket Encryption: %s : %s"),
-               *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
+        UE_LOG(LogAWSUE4Module, Error, TEXT("Put Bucket Encryption: %s : %s"), *FString(Err.GetExceptionName().c_str()),
+               *FString(Err.GetMessage().c_str()));
         throw std::runtime_error(Err.GetMessage().c_str());
     }
     UE_LOG(LogAWSUE4Module, Display, TEXT("Successfully put encryption to bucket: %s."), *BucketName);
     return true;
 }
 
-TSet<FString> S3UEClient::ListObjects(const FString& Region,
-                                      const FString& BucketName)
+TSet<FString> S3UEClient::ListObjects(const FString& Region, const FString& BucketName)
 {
     Aws::String S3Region = AWSUEStringUtils::FStringToAwsString(Region);
     Aws::String S3BucketName = AWSUEStringUtils::FStringToAwsString(BucketName);
@@ -175,15 +172,14 @@ TSet<FString> S3UEClient::ListObjects(const FString& Region,
     if (!Outcome.IsSuccess())
     {
         auto Err = Outcome.GetError();
-        UE_LOG(LogAWSUE4Module, Error, TEXT("ListObjects: %s : %s"),
-               *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
+        UE_LOG(LogAWSUE4Module, Error, TEXT("ListObjects: %s : %s"), *FString(Err.GetExceptionName().c_str()),
+               *FString(Err.GetMessage().c_str()));
         throw std::runtime_error(Err.GetMessage().c_str());
     }
 
     UE_LOG(LogAWSUE4Module, Display, TEXT("Objects in bucket: "));
 
-    Aws::Vector<Aws::S3::Model::Object> Objects =
-        Outcome.GetResult().GetContents();
+    Aws::Vector<Aws::S3::Model::Object> Objects = Outcome.GetResult().GetContents();
 
     for (const Aws::S3::Model::Object& Object : Objects)
     {
@@ -216,19 +212,17 @@ FString S3UEClient::GetObjectAsString(const FString& Region, const FString& Buck
     ObjectRequest.SetBucket(S3BucketName);
     ObjectRequest.SetKey(S3ObjectName);
 
-    Aws::S3::Model::GetObjectOutcome GetObjectOutcome =
-        S3Client.GetObject(ObjectRequest);
+    Aws::S3::Model::GetObjectOutcome GetObjectOutcome = S3Client.GetObject(ObjectRequest);
 
     if (!GetObjectOutcome.IsSuccess())
     {
         auto Err = GetObjectOutcome.GetError();
-        UE_LOG(LogAWSUE4Module, Error, TEXT("GetObjectAsString: %s : %s"),
-               *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
+        UE_LOG(LogAWSUE4Module, Error, TEXT("GetObjectAsString: %s : %s"), *FString(Err.GetExceptionName().c_str()),
+               *FString(Err.GetMessage().c_str()));
         throw std::runtime_error(Err.GetMessage().c_str());
     }
 
-    auto& RetrievedFile = GetObjectOutcome.GetResultWithOwnership().
-                                           GetBody();
+    auto& RetrievedFile = GetObjectOutcome.GetResultWithOwnership().GetBody();
 
     std::ostringstream StringStream;
     StringStream << RetrievedFile.rdbuf();
@@ -237,8 +231,8 @@ FString S3UEClient::GetObjectAsString(const FString& Region, const FString& Buck
     return FString(FileContents.c_str());
 }
 
-bool S3UEClient::PutObject(const FString& Region, const FString& BucketName,
-                           const FString& ObjectName, const FString& ObjectContent)
+bool S3UEClient::PutObject(const FString& Region, const FString& BucketName, const FString& ObjectName,
+                           const FString& ObjectContent)
 {
     Aws::String S3Region = AWSUEStringUtils::FStringToAwsString(Region);
     Aws::String S3BucketName = AWSUEStringUtils::FStringToAwsString(BucketName);
@@ -262,8 +256,7 @@ bool S3UEClient::PutObject(const FString& Region, const FString& BucketName,
 
     std::string ObjectContentString = std::string(TCHAR_TO_UTF8(*ObjectContent));
 
-    const std::shared_ptr<Aws::IOStream> InputData =
-        Aws::MakeShared<Aws::StringStream>("");
+    const std::shared_ptr<Aws::IOStream> InputData = Aws::MakeShared<Aws::StringStream>("");
     *InputData << ObjectContentString.c_str();
 
     Request.SetBody(InputData);
@@ -273,8 +266,8 @@ bool S3UEClient::PutObject(const FString& Region, const FString& BucketName,
     if (!Outcome.IsSuccess())
     {
         auto Err = Outcome.GetError();
-        UE_LOG(LogAWSUE4Module, Error, TEXT("PutObject: %s : %s"),
-               *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
+        UE_LOG(LogAWSUE4Module, Error, TEXT("PutObject: %s : %s"), *FString(Err.GetExceptionName().c_str()),
+               *FString(Err.GetMessage().c_str()));
         throw std::runtime_error(Err.GetMessage().c_str());
     }
 
@@ -282,8 +275,8 @@ bool S3UEClient::PutObject(const FString& Region, const FString& BucketName,
     return true;
 }
 
-bool S3UEClient::PutLocalObject(const FString& Region, const FString& BucketName,
-                                const FString& ObjectName, const FString& LocalFilePath)
+bool S3UEClient::PutLocalObject(const FString& Region, const FString& BucketName, const FString& ObjectName,
+                                const FString& LocalFilePath)
 {
     Aws::String S3Region = AWSUEStringUtils::FStringToAwsString(Region);
     Aws::String S3BucketName = AWSUEStringUtils::FStringToAwsString(BucketName);
@@ -323,8 +316,8 @@ bool S3UEClient::PutLocalObject(const FString& Region, const FString& BucketName
     if (!Outcome.IsSuccess())
     {
         auto Err = Outcome.GetError();
-        UE_LOG(LogAWSUE4Module, Error, TEXT("PutLocalObject: %s : %s"),
-               *FString(Err.GetExceptionName().c_str()), *FString(Err.GetMessage().c_str()));
+        UE_LOG(LogAWSUE4Module, Error, TEXT("PutLocalObject: %s : %s"), *FString(Err.GetExceptionName().c_str()),
+               *FString(Err.GetMessage().c_str()));
         throw std::runtime_error(Err.GetMessage().c_str());
     }
     UE_LOG(LogAWSUE4Module, Display, TEXT("Added object to bucket."));

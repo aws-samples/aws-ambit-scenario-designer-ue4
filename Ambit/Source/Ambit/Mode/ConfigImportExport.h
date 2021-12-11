@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,6 @@ class UConfigImportExport : public UObject
 {
     GENERATED_BODY()
 public:
-
     // SDF import and export
     /**
      * Starts the process to import an SDF file specified on screen.
@@ -71,8 +70,7 @@ public:
      *
      * @return Boolean to indicate if the write was successful or not.
      */
-    bool ProcessSdfForExport(const TMap<FString, TSharedPtr<FJsonObject>>& AmbitSpawnerArray,
-                             bool bToS3);
+    bool ProcessSdfForExport(const TMap<FString, TSharedPtr<FJsonObject>>& AmbitSpawnerArray, bool bToS3);
 
     // Generate Permutations
     /**
@@ -114,8 +112,8 @@ protected:
      * Calls AWSWrapper::PutObject
      * Allows for injection of the function to be changed. Should only be changed in testing.
      */
-    TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName,
-                   const FString& Content)> LambdaPutS3Object = AWSWrapper::PutObject;
+    TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& Content)>
+    LambdaPutS3Object = AWSWrapper::PutObject;
 
     /**
      * Calls AmbitFileHelpers::WriteFile
@@ -128,8 +126,8 @@ protected:
      * Calls AmbitFileHelpers::GetPathForFileFromPopup
      * Allows for injection of the function to be changed. Should only be changed in testing.
      */
-    TFunction<FString(const FString& FileExtension, const FString& DefaultPath,
-                      const FString& Filename)> LambdaGetPathFromPopup = AmbitFileHelpers::GetPathForFileFromPopup;
+    TFunction<FString(const FString& FileExtension, const FString& DefaultPath, const FString& Filename)>
+    LambdaGetPathFromPopup = AmbitFileHelpers::GetPathForFileFromPopup;
 
     /**
     * For internal testing only. Returns when ProcessSdfForExport() has been completed and there are no more items in queue. 
@@ -137,7 +135,6 @@ protected:
     FDoneDelegate SdfProcessDone;
 
 private:
-
     // Spawner and Spawned Object Configuration Functions
     /**
      * Retrieves all spawners under the IAmbitSpawner and starts
@@ -162,16 +159,14 @@ private:
      * recreates and configures any spawner of ClassType using the StructType configuration.
      */
     template <typename ClassType, typename StructType>
-    void ConfigureSpawnersByType(const TSharedPtr<FJsonObject>& Spawners,
-                                 const FString& TypeKey, UWorld*& World);
+    void ConfigureSpawnersByType(const TSharedPtr<FJsonObject>& Spawners, const FString& TypeKey, UWorld*& World);
 
     /**
      * Given a JSON object, adds an array field to the object containing JSON objects
      * serialized from StructType configuration that describe each Ambit Spawner of ClassType
      */
     template <typename ClassType, typename StructType>
-    void SerializeSpawnerConfigs(
-        TSharedPtr<FJsonObject>& SpawnersJson, const FString& SpawnerTypeKey);
+    void SerializeSpawnerConfigs(TSharedPtr<FJsonObject>& SpawnersJson, const FString& SpawnerTypeKey);
 
     /**
      * Retrieves the next item in QueuedSdfConfigToExport if one exist, else
@@ -183,7 +178,7 @@ private:
      * the queue. If the queue doesn't exist, it will take the values from the screen
      * to create a defaulted one.
      */
-    TSharedPtr<FScenarioDefinition> DequeueOrDefaultNextSdfConfigToProcess();
+    TSharedPtr<FScenarioDefinition> DequeueOrDefaultNextSdfConfigToProcess() const;
 
     // JSON Helpers
     /**
@@ -290,6 +285,7 @@ public:
     UFUNCTION(Category = "Ambit Detail Customization Delegate Handler")
     void SpawnedObjectConfigCompleted_Handler(UPARAM(ref) TScriptInterface<IConfigJsonSerializer>& Config,
                                               bool bSuccess);
+
 private:
     /**
      * The current number of spawners that have completed their response.

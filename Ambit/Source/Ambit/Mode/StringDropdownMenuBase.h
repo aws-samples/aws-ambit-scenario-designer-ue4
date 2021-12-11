@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,6 @@ template <typename M>
 class TFStringDropdownMenuBase : public TFDropdownMenuBase<FString, M>
 {
 public:
-
     /**
      * Changes and FString into FText and returns
      */
@@ -40,7 +39,7 @@ public:
     static FText GetCurrentValueAsText(TSharedRef<IPropertyHandle> PropertyHandle)
     {
         FString CurrentValue = "";
-        FPropertyAccess::Result Result = PropertyHandle->GetValue(CurrentValue);
+        const FPropertyAccess::Result Result = PropertyHandle->GetValue(CurrentValue);
         check(Result == FPropertyAccess::Success);
 
         return FText::FromString(CurrentValue);

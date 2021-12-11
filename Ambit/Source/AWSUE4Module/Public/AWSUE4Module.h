@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Modules/ModuleManager.h"
 
 #include <aws/core/utils/memory/MemorySystemInterface.h>
 
@@ -28,13 +27,10 @@ DECLARE_LOG_CATEGORY_EXTERN(LogAWSUE4Module, Log, All);
 class MemoryManagerWrapper : public Aws::Utils::Memory::MemorySystemInterface
 {
 public:
-
     /**
      * Allocate the memory with the block size by using Unreal Engine override new
      */
-    void* AllocateMemory(
-        std::size_t blockSize, std::size_t alignment,
-        const char* allocationTag = nullptr) override;
+    void* AllocateMemory(std::size_t blockSize, std::size_t alignment, const char* allocationTag = nullptr) override;
 
     /**
      * Free the memory pointed to by pointer by using Unreal Engine override delete
@@ -83,7 +79,7 @@ public:
      *
      * @see IModuleInterface for details
      */
-    virtual void StartupModule() override;
+    void StartupModule() override;
 
     /**
      * Called before the module is unloaded, right before the module object is destroyed.
@@ -93,7 +89,7 @@ public:
      *
      * @see IModuleInterface for details
      */
-    virtual void ShutdownModule() override;
+    void ShutdownModule() override;
 
 private:
     /**

@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,14 +13,16 @@
 //   limitations under the License.
 
 #include "AmbitSpawnerCollisionHelpers.h"
-#include "Components/StaticMeshComponent.h"
+
 #include "EngineUtils.h"
-#include "Ambit/AmbitModule.h"
-#include "Ambit/Mode/Constant.h"
+#include "Components/StaticMeshComponent.h"
 #include "Engine/SCS_Node.h"
 #include "Engine/SimpleConstructionScript.h"
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
+
+#include "Ambit/AmbitModule.h"
+#include "Ambit/Mode/Constant.h"
 
 // TODO: Figure out a way to change DefaultEngine.ini in code
 // to indicate that GameTraceChannel1 is for "Spawned Obstacles"
@@ -29,50 +31,38 @@
 #define AMBIT_SPAWNED_OBSTACLE ECC_GameTraceChannel1
 #define AMBIT_SPAWNED_OVERLAP ECC_GameTraceChannel2
 
-bool AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(
-    UPrimitiveComponent* OverlappingComponent,
-    AActor* SpawnedActor)
+bool AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(UPrimitiveComponent* OverlappingComponent, AActor* SpawnedActor)
 {
     // Filter out overlaps if they are overlapping AMBIT_SPAWNER_OVERLAP objects
-    if (OverlappingComponent->GetCollisionObjectType()
-        == AMBIT_SPAWNED_OVERLAP)
+    if (OverlappingComponent->GetCollisionObjectType() == AMBIT_SPAWNED_OVERLAP)
     {
         return false;
     }
     // Delete if spawned obstacle is overlapping another spawned obstacle
-    if (OverlappingComponent->GetCollisionObjectType()
-        == AMBIT_SPAWNED_OBSTACLE)
+    if (OverlappingComponent->GetCollisionObjectType() == AMBIT_SPAWNED_OBSTACLE)
     {
         return true;
     }
-    const FVector& SpawnedActorLocation =
-        SpawnedActor->GetActorLocation();
-    const FVector& LocationOfOverlappingComp =
-        OverlappingComponent->GetComponentLocation();
+    const FVector& SpawnedActorLocation = SpawnedActor->GetActorLocation();
+    const FVector& LocationOfOverlappingComp = OverlappingComponent->GetComponentLocation();
 
-    const float DistanceBetweenActorAndComp =
-        FVector::Distance(SpawnedActorLocation,
-            LocationOfOverlappingComp) / 100.f;
+    const float DistanceBetweenActorAndComp = FVector::Distance(SpawnedActorLocation, LocationOfOverlappingComp) /
+            100.f;
 
     // Gets point on collision that is closest
     // to the location of the spawned actor
     // assumes that the anchor point of the spawned actor
     // is at the bottom of its mesh
     FVector CollisionPointClosestToActor;
-    OverlappingComponent->GetClosestPointOnCollision(
-        SpawnedActorLocation,
-        CollisionPointClosestToActor);
+    OverlappingComponent->GetClosestPointOnCollision(SpawnedActorLocation, CollisionPointClosestToActor);
     // Calculates distance from location of overlapping component
     // to the collision point on said component closest to spawned actor
-    const float DistanceFromOverlappedMesh =
-        FVector::Distance(CollisionPointClosestToActor,
-            LocationOfOverlappingComp) / 100.f;
+    const float DistanceFromOverlappedMesh = FVector::Distance(CollisionPointClosestToActor, LocationOfOverlappingComp)
+            / 100.f;
 
     // If the distances are nearly equal, this means that spawned actor
     // is not penetrating the overlapping actor
-    if (FMath::IsNearlyEqual(
-        DistanceBetweenActorAndComp,
-        DistanceFromOverlappedMesh))
+    if (FMath::IsNearlyEqual(DistanceBetweenActorAndComp, DistanceFromOverlappedMesh))
     {
         // Checks for edge case when collision points are equidistant
         // from the actor location
@@ -81,22 +71,19 @@ bool AmbitSpawnerCollisionHelpers::IsPenetratingOverlap(
             return OverlappingComponent->Bounds.BoxExtent.Z > 0;
         }
         return false;
-
     }
     return true;
 }
 
 void AmbitSpawnerCollisionHelpers::FindDefaultStaticMeshComponents(UClass* Actor,
-    TArray<UStaticMeshComponent*>& OutArray)
+                                                                   TArray<UStaticMeshComponent*>& OutArray)
 {
     OutArray.Empty();
     // Gets all C++ added default sub-object components of Actor class
     TArray<UObject*> AllComponents;
     TArray<UObject*> StaticMeshUObjects;
     Actor->GetDefaultObjectSubobjects(AllComponents);
-    ContainsObjectOfClass(AllComponents,
-        UStaticMeshComponent::StaticClass(), false,
-        &StaticMeshUObjects);
+    ContainsObjectOfClass(AllComponents, UStaticMeshComponent::StaticClass(), false, &StaticMeshUObjects);
 
     for (UObject* StaticMeshUObject : StaticMeshUObjects)
     {
@@ -108,26 +95,20 @@ void AmbitSpawnerCollisionHelpers::FindDefaultStaticMeshComponents(UClass* Actor
         // If actor is in blueprint, gets all (if any) static mesh components
         // and adds them to the actor class via blueprint
         UClass* StaticMeshComponent = UStaticMeshComponent::StaticClass();
-        const UBlueprintGeneratedClass* ActorBlueprintGeneratedClass =
-            Cast<UBlueprintGeneratedClass>(Actor);
-        const TArray<USCS_Node*>& Nodes =
-            ActorBlueprintGeneratedClass->SimpleConstructionScript->GetAllNodes();
-        for (USCS_Node* Node : Nodes)
+        const UBlueprintGeneratedClass* ActorBlueprintGeneratedClass = Cast<UBlueprintGeneratedClass>(Actor);
+        const TArray<USCS_Node*>& Nodes = ActorBlueprintGeneratedClass->SimpleConstructionScript->GetAllNodes();
+        for (const USCS_Node* Node : Nodes)
         {
-            if (UClass::FindCommonBase(Node->ComponentClass,
-                StaticMeshComponent) == StaticMeshComponent)
+            if (UClass::FindCommonBase(Node->ComponentClass, StaticMeshComponent) == StaticMeshComponent)
             {
-                OutArray.Add(
-                    Cast<UStaticMeshComponent>(
-                        Node->ComponentTemplate));
+                OutArray.Add(Cast<UStaticMeshComponent>(Node->ComponentTemplate));
             }
         }
     }
 }
 
 void AmbitSpawnerCollisionHelpers::SetCollisionForAllStaticMeshComponents(
-    const TArray<UStaticMeshComponent*>& StaticMeshComponents,
-    bool bRemoveOverlaps)
+    const TArray<UStaticMeshComponent*>& StaticMeshComponents, bool bRemoveOverlaps)
 {
     for (UStaticMeshComponent* StaticMeshComponent : StaticMeshComponents)
     {
@@ -146,16 +127,14 @@ void AmbitSpawnerCollisionHelpers::SetCollisionForAllStaticMeshComponents(
         StaticMeshComponent->SetCollisionProfileName(AmbitSpawner::KAmbitCollisionProfileName);
         StaticMeshComponent->GetStaticMesh()->bCustomizedCollision = true;
         StaticMeshComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
-        StaticMeshComponent->SetCollisionResponseToChannel(
-            AMBIT_SPAWNED_OBSTACLE, ECR_Block);
+        StaticMeshComponent->SetCollisionResponseToChannel(AMBIT_SPAWNED_OBSTACLE, ECR_Block);
         // Set Overlappable component response to Overlap
-        StaticMeshComponent->SetCollisionResponseToChannel(
-            AMBIT_SPAWNED_OVERLAP, ECR_Overlap);
+        StaticMeshComponent->SetCollisionResponseToChannel(AMBIT_SPAWNED_OVERLAP, ECR_Overlap);
     }
 }
 
-void AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
-     const AActor* Actor, TArray<bool>& Original, const bool bReset)
+void AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(const AActor* Actor, TArray<bool>& Original,
+                                                                    const bool bReset)
 {
     TArray<UStaticMeshComponent*> StaticMeshComponents;
     Actor->GetComponents<UStaticMeshComponent>(StaticMeshComponents);
@@ -169,9 +148,10 @@ void AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
     {
         if (StaticMeshComponents.Num() != Original.Num())
         {
-            UE_LOG(LogAmbit, Warning, 
-                TEXT("The amount of StaticMeshComponents found for Actor %s does not match the number of Original GenerateOverlapEvents settings stored."), 
-                *Actor->GetName());
+            UE_LOG(LogAmbit, Warning,
+                   TEXT(
+                       "The amount of StaticMeshComponents found for Actor %s does not match the number of Original GenerateOverlapEvents settings stored."
+                   ), *Actor->GetName());
             return;
         }
     }
@@ -192,14 +172,13 @@ void AmbitSpawnerCollisionHelpers::SetGenerateOverlapEventsForActor(
     }
 }
 
-void AmbitSpawnerCollisionHelpers::StoreCollisionProfiles(
-    const FString& PathName,
-    const TArray<UStaticMeshComponent*>& StaticMeshComponents,
-    TMap<FString, TArray<FCollisionResponseTemplate>>& OutMap)
+void AmbitSpawnerCollisionHelpers::StoreCollisionProfiles(const FString& PathName,
+                                                          const TArray<UStaticMeshComponent*>& StaticMeshComponents,
+                                                          TMap<FString, TArray<FCollisionResponseTemplate>>& OutMap)
 {
     // Store the original collision profiles of the CDO static mesh components
     TArray<FCollisionResponseTemplate> OriginalResponses;
-    for (UStaticMeshComponent* Mesh : StaticMeshComponents)
+    for (const UStaticMeshComponent* Mesh : StaticMeshComponents)
     {
         FCollisionResponseTemplate CollisionResponse;
         CollisionResponse.ResponseToChannels = Mesh->GetCollisionResponseToChannels();
@@ -217,11 +196,9 @@ void AmbitSpawnerCollisionHelpers::ResetCollisionProfiles(
 {
     for (const TSubclassOf<AActor>& Actor : ActorsToSpawnClean)
     {
-        TArray<FCollisionResponseTemplate> Originals =
-            OriginalCollisionProfiles.FindChecked(Actor->GetPathName());
+        TArray<FCollisionResponseTemplate> Originals = OriginalCollisionProfiles.FindChecked(Actor->GetPathName());
         TArray<UStaticMeshComponent*> StaticMeshComponents;
-        FindDefaultStaticMeshComponents(
-            Actor.Get(), StaticMeshComponents);
+        FindDefaultStaticMeshComponents(Actor.Get(), StaticMeshComponents);
 
         // Iterates through all collision profiles associated with
         // static mesh components of the Actor

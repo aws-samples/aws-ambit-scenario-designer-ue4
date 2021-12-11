@@ -1,38 +1,37 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "Misc/AutomationTest.h"
-
 #include "AmbitWorldHelpers.h"
+
+#include "Components/BoxComponent.h"
+#include "Components/SplineComponent.h"
 #include "Engine/StaticMeshActor.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
+#include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"
-
-#include "Components/SplineComponent.h"
-#include "Components/BoxComponent.h"
 #include "UObject/UObjectGlobals.h"
 
 BEGIN_DEFINE_SPEC(AmbitWorldHelpersSpec, "Ambit.AmbitWorldHelpers",
-                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-                  ApplicationContextMask)
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+
     UWorld* World;
     AStaticMeshActor* TestSurfaceActor;
     AActor* TestComponentActor;
     UBoxComponent* RealBox;
-    USplineComponent* RealSpline; 
+    USplineComponent* RealSpline;
     FString ExpectedActorName;
     FString ExpectedTag_1;
     FString ExpectedTag_2;
@@ -62,8 +61,7 @@ void AmbitWorldHelpersSpec::Define()
         FRotator Rotation(0, 0, 0);
         FTransform Transform(Rotation, Location);
 
-        TestSurfaceActor = World->SpawnActor<AStaticMeshActor>(
-            AStaticMeshActor::StaticClass(), Transform, Params);
+        TestSurfaceActor = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), Transform, Params);
         if (TestSurfaceActor == nullptr)
         {
             UE_LOG(LogAmbit, Error, TEXT("TestSurfaceActor is null pointer."));
@@ -80,13 +78,10 @@ void AmbitWorldHelpersSpec::Define()
         FVector NewLocation(0, 0, 100);
         FRotator NewRotation(0, 0, 0);
         FTransform NewTransform(NewRotation, NewLocation);
-        TestComponentActor = World->SpawnActor<AActor>(
-            AActor::StaticClass(), NewTransform, NewParams);
+        TestComponentActor = World->SpawnActor<AActor>(AActor::StaticClass(), NewTransform, NewParams);
 
-        RealBox = NewObject<UBoxComponent>(TestComponentActor,
-                                           UBoxComponent::StaticClass(), "RealBox");
-        RealSpline = NewObject<USplineComponent>(TestComponentActor,
-                                                 USplineComponent::StaticClass(), "RealSpline");
+        RealBox = NewObject<UBoxComponent>(TestComponentActor, UBoxComponent::StaticClass(), "RealBox");
+        RealSpline = NewObject<USplineComponent>(TestComponentActor, USplineComponent::StaticClass(), "RealSpline");
     });
 
     Describe("GetActorsByMatchBy()", [this]()
@@ -99,7 +94,7 @@ void AmbitWorldHelpersSpec::Define()
                 {
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
@@ -108,7 +103,7 @@ void AmbitWorldHelpersSpec::Define()
                 {
                     TArray<FName> TagList;
                     TagList.Add(FName("WrongTag"));
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
@@ -118,7 +113,7 @@ void AmbitWorldHelpersSpec::Define()
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
                     const FString WrongName = "Cube";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, WrongName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
@@ -128,7 +123,7 @@ void AmbitWorldHelpersSpec::Define()
                     TArray<FName> TagList;
                     TagList.Add(FName("WrongTag"));
                     const FString WrongName = "Cube";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, WrongName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
@@ -138,7 +133,7 @@ void AmbitWorldHelpersSpec::Define()
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
                     const FString EmptyName = "";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, EmptyName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
@@ -148,33 +143,33 @@ void AmbitWorldHelpersSpec::Define()
                     TArray<FName> TagList;
                     TagList.Add(FName("WrongTag"));
                     const FString EmptyName = "";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, EmptyName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
 
                 It("with correct name and empty tag list", [this]()
                 {
-                    TArray<FName> TagList;
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<FName> TagList;
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
 
                 It("with wrong name and empty tag list", [this]()
                 {
-                    TArray<FName> TagList;
+                    const TArray<FName> TagList;
                     const FString WrongName = "Cube";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, WrongName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
 
                 It("with empty name and empty tag list", [this]()
                 {
-                    TArray<FName> TagList;
+                    const TArray<FName> TagList;
                     const FString EmptyName = "";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, EmptyName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
@@ -193,7 +188,7 @@ void AmbitWorldHelpersSpec::Define()
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
                     TagList.Add(FName(ExpectedTag_2));
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
@@ -204,7 +199,7 @@ void AmbitWorldHelpersSpec::Define()
                        TArray<FName> TagList;
                        TagList.Add(FName(ExpectedTag_2));
                        TagList.Add(FName(ExpectedTag_1));
-                       TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                       const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                            EMatchBy::NameOrTags, ExpectedActorName, TagList);
                        TestEqual("The number of matched actor", ResultActors.Num(), 1);
                    });
@@ -213,7 +208,7 @@ void AmbitWorldHelpersSpec::Define()
                 {
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
@@ -223,7 +218,7 @@ void AmbitWorldHelpersSpec::Define()
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
                     TagList.Add(FName("WrongTag"));
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
@@ -233,7 +228,7 @@ void AmbitWorldHelpersSpec::Define()
                     TagList.Add(FName(ExpectedTag_1));
                     TagList.Add(FName("WrongTag"));
                     const FString WrongName = "Cube";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameOrTags, WrongName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
@@ -248,7 +243,7 @@ void AmbitWorldHelpersSpec::Define()
                 {
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
@@ -257,7 +252,7 @@ void AmbitWorldHelpersSpec::Define()
                 {
                     TArray<FName> TagList;
                     TagList.Add(FName("WrongTag"));
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
@@ -266,8 +261,8 @@ void AmbitWorldHelpersSpec::Define()
                 {
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
-                    FString WrongName = "Cube";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const FString WrongName = "Cube";
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, WrongName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
@@ -276,8 +271,8 @@ void AmbitWorldHelpersSpec::Define()
                 {
                     TArray<FName> TagList;
                     TagList.Add(FName("WrongTag"));
-                    FString WrongName = "Cube";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const FString WrongName = "Cube";
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, WrongName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
@@ -286,8 +281,8 @@ void AmbitWorldHelpersSpec::Define()
                 {
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
-                    FString EmptyName = "";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const FString EmptyName = "";
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, EmptyName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
@@ -296,34 +291,34 @@ void AmbitWorldHelpersSpec::Define()
                 {
                     TArray<FName> TagList;
                     TagList.Add(FName("WrongTag"));
-                    FString EmptyName = "";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const FString EmptyName = "";
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, EmptyName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
 
                 It("with correct name and empty tag", [this]()
                 {
-                    TArray<FName> TagList;
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<FName> TagList;
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
 
                 It("with wrong name and empty tag", [this]()
                 {
-                    TArray<FName> TagList;
-                    FString WrongName = "Cube";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<FName> TagList;
+                    const FString WrongName = "Cube";
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, WrongName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
 
                 It("with empty name and empty tag", [this]()
                 {
-                    TArray<FName> TagList;
-                    FString EmptyName = "";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<FName> TagList;
+                    const FString EmptyName = "";
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, EmptyName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
@@ -342,7 +337,7 @@ void AmbitWorldHelpersSpec::Define()
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
                     TagList.Add(FName(ExpectedTag_2));
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
@@ -353,7 +348,7 @@ void AmbitWorldHelpersSpec::Define()
                        TArray<FName> TagList;
                        TagList.Add(FName(ExpectedTag_2));
                        TagList.Add(FName(ExpectedTag_1));
-                       TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                       const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                            EMatchBy::NameAndTags, ExpectedActorName, TagList);
                        TestEqual("The number of matched actor", ResultActors.Num(), 1);
                    });
@@ -362,7 +357,7 @@ void AmbitWorldHelpersSpec::Define()
                 {
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 1);
                 });
@@ -372,7 +367,7 @@ void AmbitWorldHelpersSpec::Define()
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
                     TagList.Add(FName("WrongTag"));
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, ExpectedActorName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
@@ -382,8 +377,8 @@ void AmbitWorldHelpersSpec::Define()
                     TArray<FName> TagList;
                     TagList.Add(FName(ExpectedTag_1));
                     TagList.Add(FName(ExpectedTag_2));
-                    FString WrongName = "Cube";
-                    TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                    const FString WrongName = "Cube";
+                    const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                         EMatchBy::NameAndTags, WrongName, TagList);
                     TestEqual("The number of matched actor", ResultActors.Num(), 0);
                 });
@@ -398,13 +393,13 @@ void AmbitWorldHelpersSpec::Define()
                 TestSurfaceActor->SetActorLabel(ExpectedActorName);
             });
 
-            It("when the name only contains *_+-<>?, the name can be checked and we expect to get a matched actor", [
-                   this]()
+            It("when the name only contains *_+-<>?, the name can be checked and we expect to get a matched actor",
+               [this]()
                {
                    TArray<FName> TagList;
                    TagList.Add(FName(ExpectedTag_1));
-                   FString NamePatternWithSpecialCharacter = "*_+-<>?";
-                   TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                   const FString NamePatternWithSpecialCharacter = "*_+-<>?";
+                   const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                        EMatchBy::NameAndTags, NamePatternWithSpecialCharacter, TagList);
                    TestEqual("The number of matched actor", ResultActors.Num(), 1);
                });
@@ -412,8 +407,8 @@ void AmbitWorldHelpersSpec::Define()
             {
                 TArray<FName> TagList;
                 TagList.Add(FName(ExpectedTag_1));
-                FString NamePatternWithSpecialCharacter = "~!@#$%^&()";
-                TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                const FString NamePatternWithSpecialCharacter = "~!@#$%^&()";
+                const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                     EMatchBy::NameAndTags, NamePatternWithSpecialCharacter, TagList);
                 TestEqual("The number of matched actor", ResultActors.Num(), 0);
             });
@@ -431,7 +426,7 @@ void AmbitWorldHelpersSpec::Define()
             {
                 TArray<FName> TagList;
                 TagList.Add(FName(ExpectedTagWithSpecialCharacters));
-                TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
+                const TArray<AActor*> ResultActors = AmbitWorldHelpers::GetActorsByMatchBy(
                     EMatchBy::NameAndTags, ExpectedActorName, TagList);
                 TestEqual("The number of matched actor", ResultActors.Num(), 1);
             });
@@ -442,14 +437,14 @@ void AmbitWorldHelpersSpec::Define()
     {
         It("when the LineStart is above the actor, the line trace will hit the actor", [this]()
         {
-            FVector LineStart(0, 0, 10);
+            const FVector LineStart(0, 0, 10);
             const FHitResult& Hit = AmbitWorldHelpers::LineTraceBelowWorldPoint(LineStart);
             TestTrue("The line trace hit the actor", Hit.IsValidBlockingHit());
         });
 
         It("when the LineStart is below the actor, the line trace will not hit the actor", [this]()
         {
-            FVector LineStart(0, 0, -10);
+            const FVector LineStart(0, 0, -10);
             const FHitResult& Hit = AmbitWorldHelpers::LineTraceBelowWorldPoint(LineStart);
             TestFalse("The line trace doesn't hit the actor", Hit.IsValidBlockingHit());
         });
@@ -459,13 +454,11 @@ void AmbitWorldHelpersSpec::Define()
     {
         It("will return an empty array if Box is invalid", [this]()
         {
-            AddExpectedError(
-                TEXT("Invalid box component."),
-                EAutomationExpectedErrorFlags::Exact, 1);
+            AddExpectedError(TEXT("Invalid box component."), EAutomationExpectedErrorFlags::Exact, 1);
             UBoxComponent* EmptyBox = nullptr;
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed = 0;
+            const int32 RandomSeed = 0;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 EmptyBox, ActorsToSearch, RandomSeed, true);
@@ -477,8 +470,8 @@ void AmbitWorldHelpersSpec::Define()
         {
             RealBox->SetBoxExtent(FVector(300, 300, 0));
 
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, false);
@@ -490,8 +483,8 @@ void AmbitWorldHelpersSpec::Define()
         {
             RealBox->SetBoxExtent(FVector(0, 0, 0));
 
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, false);
@@ -502,13 +495,13 @@ void AmbitWorldHelpersSpec::Define()
         It("Can snap to surface below if provided in ActorsToSearch array", [this]()
         {
             RealBox->SetBoxExtent(FVector(200, 200, 0));
-            FVector Scale3D(100, 100, 100);
+            const FVector Scale3D(100, 100, 100);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed = 0;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const int32 RandomSeed = 0;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, false, DensityMin, DensityMax);
@@ -523,11 +516,11 @@ void AmbitWorldHelpersSpec::Define()
         It("Can snap to unspecified surface below if bSnapToSurfaceBelow is true when ActorsToSearch is empty", [this]()
         {
             RealBox->SetBoxExtent(FVector(200, 200, 0));
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = true;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = true;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax);
@@ -541,36 +534,34 @@ void AmbitWorldHelpersSpec::Define()
 
         It("Will generate random rotations only within the provided range", [this]()
         {
-            float RotationMin = 30.0f;
-            float RotationMax = 90.0f;
+            const float RotationMin = 30.0f;
+            const float RotationMax = 90.0f;
             RealBox->SetBoxExtent(FVector(300, 300, 0));
 
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            float DensityMin = 0.05f;
-            float DensityMax = 0.2f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const float DensityMin = 0.05f;
+            const float DensityMax = 0.2f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
-                RealBox, ActorsToSearch, RandomSeed, false, DensityMin,
-                DensityMax, RotationMin, RotationMax);
+                RealBox, ActorsToSearch, RandomSeed, false, DensityMin, DensityMax, RotationMin, RotationMax);
 
             for (const FTransform& OneTransform : Transforms)
             {
                 UE_LOG(LogAmbit, Display, TEXT("Yaw: %f"), OneTransform.Rotator().Yaw);
                 TestTrue("We expect all of the generated rotations to be within the provided range",
-                         RotationMin < OneTransform.Rotator().Yaw &&
-                         RotationMax > OneTransform.Rotator().Yaw);
+                         RotationMin < OneTransform.Rotator().Yaw && RotationMax > OneTransform.Rotator().Yaw);
             }
         });
 
         It("Use same random seed will have the exact same FTransform set", [this]()
         {
             RealBox->SetBoxExtent(FVector(200, 200, 0));
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
             TArray<FTransform> ExpectedArray = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax);
@@ -579,8 +570,8 @@ void AmbitWorldHelpersSpec::Define()
 
             UE_LOG(LogAmbit, Display, TEXT("The number of ExpectedArray is: %d"), ExpectedArray.Num());
             UE_LOG(LogAmbit, Display, TEXT("The number of ActualArray is: %d"), ActualArray.Num());
-            TestEqual("With the same random seed, we expect they will have the same size.",
-                      ActualArray.Num(), ExpectedArray.Num());
+            TestEqual("With the same random seed, we expect they will have the same size.", ActualArray.Num(),
+                      ExpectedArray.Num());
             for (int i = 0; i < ActualArray.Num(); ++i)
             {
                 TestTrue("With the same random seed, we expect each corresponding elements are same.",
@@ -591,12 +582,12 @@ void AmbitWorldHelpersSpec::Define()
         It("Use different random seed will have different set", [this]()
         {
             RealBox->SetBoxExtent(FVector(200, 200, 0));
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed_1 = 0;
-            int32 RandomSeed_2 = 1;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed_1 = 0;
+            const int32 RandomSeed_2 = 1;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
             TArray<FTransform> ExpectedArray = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed_1, bSnapToSurfaceBelow, DensityMin, DensityMax);
@@ -631,45 +622,43 @@ void AmbitWorldHelpersSpec::Define()
         {
             RealBox->SetBoxExtent(FVector(500, 500, 0));
             RealBox->SetRelativeRotation(FRotator(0, 45, 0).Quaternion());
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
-            TArray<FTransform> RotatedArray = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
+            const TArray<FTransform> RotatedArray = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax);
 
             RealBox->SetRelativeRotation(FRotator(0, 0, 0).Quaternion());
-            TArray<FTransform> NormalArray = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
+            const TArray<FTransform> NormalArray = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax);
 
             UE_LOG(LogAmbit, Display, TEXT("The number of RotatedArray is: %d"), RotatedArray.Num());
             UE_LOG(LogAmbit, Display, TEXT("The number of NormalArray is: %d"), NormalArray.Num());
 
             TestEqual("The rotated box and the normal box should generate the same number of FTransforms.",
-                      NormalArray.Num(),
-                      RotatedArray.Num());
+                      NormalArray.Num(), RotatedArray.Num());
         });
 
         It("Can handle when DensityMin is greater than DensityMax", [this]()
         {
             AddExpectedError(
-                TEXT("DensityMin is greater than DensityMax. No actors spawned."),
-                EAutomationExpectedErrorFlags::Exact, 1);
+                TEXT("DensityMin is greater than DensityMax. No actors spawned."), EAutomationExpectedErrorFlags::Exact,
+                1);
             RealBox->SetBoxExtent(FVector(500, 500, 0));
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
-            TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
+            const TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMax, DensityMin);
             UE_LOG(LogAmbit, Display, TEXT("The number of ActualArray is: %d"), ActualArray.Num());
 
-            TestEqual("The array should be empty.",
-                      ActualArray.Num(), 0);
+            TestEqual("The array should be empty.", ActualArray.Num(), 0);
         });
 
         It("Can handle when RotationMin is greater than RotationMax", [this]()
@@ -678,28 +667,27 @@ void AmbitWorldHelpersSpec::Define()
                 TEXT("RotationMin is greater than RotationMax. No actors spawned."),
                 EAutomationExpectedErrorFlags::Exact, 1);
             RealBox->SetBoxExtent(FVector(500, 500, 0));
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
-            TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
+            const TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax, 90.f, 45.f);
             UE_LOG(LogAmbit, Display, TEXT("The number of ActualArray is: %d"), ActualArray.Num());
 
-            TestEqual("The array should be empty.",
-                      ActualArray.Num(), 0);
+            TestEqual("The array should be empty.", ActualArray.Num(), 0);
         });
 
         It("will generate zero locations if bSnapToSurfaceBelow is true but there are no surfaces below", [this]()
         {
             TestComponentActor->SetActorLocation(FVector(0, 0, -100));
             RealBox->SetBoxExtent(FVector(500, 500, 0));
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = true;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = true;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax);
@@ -711,14 +699,14 @@ void AmbitWorldHelpersSpec::Define()
         {
             TestComponentActor->SetActorLocation(FVector(0, 0, -100));
             RealBox->SetBoxExtent(FVector(500, 500, 0));
-            FVector Scale3D(100, 100, 0);
+            const FVector Scale3D(100, 100, 0);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Push(TestSurfaceActor);
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
                 RealBox, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax);
@@ -731,13 +719,11 @@ void AmbitWorldHelpersSpec::Define()
     {
         It("will return an empty array if Spline is invalid", [this]()
         {
-            AddExpectedError(
-                TEXT("Invalid spline component."),
-                EAutomationExpectedErrorFlags::Exact, 1);
+            AddExpectedError(TEXT("Invalid spline component."), EAutomationExpectedErrorFlags::Exact, 1);
             USplineComponent* EmptySpline = nullptr;
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed = 0;
+            const int32 RandomSeed = 0;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 EmptySpline, ActorsToSearch, RandomSeed, true);
@@ -749,8 +735,8 @@ void AmbitWorldHelpersSpec::Define()
         {
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
             RealSpline->SetClosedLoop(true);
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, false);
@@ -763,8 +749,8 @@ void AmbitWorldHelpersSpec::Define()
         {
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
 
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, false);
@@ -776,8 +762,8 @@ void AmbitWorldHelpersSpec::Define()
         {
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 1, 100), ESplineCoordinateSpace::World);
 
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, false);
@@ -788,13 +774,13 @@ void AmbitWorldHelpersSpec::Define()
         It("Can snap to surface below if provided in ActorsToSearch array", [this]()
         {
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
-            FVector Scale3D(100, 100, 100);
+            const FVector Scale3D(100, 100, 100);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed = 0;
-            float DensityMin = 0.02f;
-            float DensityMax = 0.5f;
+            const int32 RandomSeed = 0;
+            const float DensityMin = 0.02f;
+            const float DensityMax = 0.5f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, false, DensityMin, DensityMax);
@@ -802,8 +788,8 @@ void AmbitWorldHelpersSpec::Define()
 
             for (const FTransform& OneTransform : Transforms)
             {
-                UE_LOG(LogAmbit, Display, TEXT("Test Surface: %f, Object: %f"),
-                       TestSurfaceActor->GetActorLocation().Z, OneTransform.GetLocation().Z);
+                UE_LOG(LogAmbit, Display, TEXT("Test Surface: %f, Object: %f"), TestSurfaceActor->GetActorLocation().Z,
+                       OneTransform.GetLocation().Z);
                 TestEqual("The generated location has snapped to the surface provided.",
                           TestSurfaceActor->GetActorLocation().Z, OneTransform.GetLocation().Z, 0.05f);
             }
@@ -812,13 +798,13 @@ void AmbitWorldHelpersSpec::Define()
         It("Can snap to unspecified surface below if bSnapToSurfaceBelow is true when ActorsToSearch is empty", [this]()
         {
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
-            FVector Scale3D(100, 100, 100);
+            const FVector Scale3D(100, 100, 100);
             TestSurfaceActor->SetActorScale3D(Scale3D);
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = true;
-            float DensityMin = 0.02f;
-            float DensityMax = 0.5f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = true;
+            const float DensityMin = 0.02f;
+            const float DensityMax = 0.5f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax);
@@ -826,8 +812,8 @@ void AmbitWorldHelpersSpec::Define()
 
             for (const FTransform& OneTransform : Transforms)
             {
-                UE_LOG(LogAmbit, Display, TEXT("Test Surface: %f, Object: %f"),
-                       TestSurfaceActor->GetActorLocation().Z, OneTransform.GetLocation().Z);
+                UE_LOG(LogAmbit, Display, TEXT("Test Surface: %f, Object: %f"), TestSurfaceActor->GetActorLocation().Z,
+                       OneTransform.GetLocation().Z);
                 TestEqual("The generated location has snapped to the surface below.",
                           TestSurfaceActor->GetActorLocation().Z, OneTransform.GetLocation().Z, 0.05f);
             }
@@ -835,37 +821,35 @@ void AmbitWorldHelpersSpec::Define()
 
         It("Will generate random rotations only within the provided range", [this]()
         {
-            float RotationMin = 30.0f;
-            float RotationMax = 90.0f;
+            const float RotationMin = 30.0f;
+            const float RotationMax = 90.0f;
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
 
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            float DensityMin = 0.02f;
-            float DensityMax = 0.5f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const float DensityMin = 0.02f;
+            const float DensityMax = 0.5f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
-                RealSpline, ActorsToSearch, RandomSeed, false, DensityMin,
-                DensityMax, RotationMin, RotationMax);
+                RealSpline, ActorsToSearch, RandomSeed, false, DensityMin, DensityMax, RotationMin, RotationMax);
             UE_LOG(LogAmbit, Display, TEXT("The number of Transforms is: %d"), Transforms.Num());
 
             for (const FTransform& OneTransform : Transforms)
             {
                 UE_LOG(LogAmbit, Display, TEXT("Yaw: %f"), OneTransform.Rotator().Yaw);
                 TestTrue("We expect all of the generated rotations to be within the provided range",
-                         RotationMin < OneTransform.Rotator().Yaw &&
-                         RotationMax > OneTransform.Rotator().Yaw);
+                         RotationMin < OneTransform.Rotator().Yaw && RotationMax > OneTransform.Rotator().Yaw);
             }
         });
 
         It("Use same random seed will have the exact same FTransform set", [this]()
         {
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.02f;
-            float DensityMax = 0.5f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.02f;
+            const float DensityMax = 0.5f;
 
             TArray<FTransform> ExpectedArray = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax);
@@ -874,8 +858,8 @@ void AmbitWorldHelpersSpec::Define()
 
             UE_LOG(LogAmbit, Display, TEXT("The number of ExpectedArray is: %d"), ExpectedArray.Num());
             UE_LOG(LogAmbit, Display, TEXT("The number of ActualArray is: %d"), ActualArray.Num());
-            TestEqual("With the same random seed, we expect they will have the same size.",
-                      ActualArray.Num(), ExpectedArray.Num());
+            TestEqual("With the same random seed, we expect they will have the same size.", ActualArray.Num(),
+                      ExpectedArray.Num());
             for (int i = 0; i < ActualArray.Num(); ++i)
             {
                 TestTrue("With the same random seed, we expect each corresponding elements are same.",
@@ -886,13 +870,13 @@ void AmbitWorldHelpersSpec::Define()
         It("Use different random seed will have different set", [this]()
         {
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed_1 = 0;
-            int32 RandomSeed_2 = 1;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.02f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed_1 = 0;
+            const int32 RandomSeed_2 = 1;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.02f;
 
-            float DensityMax = 0.5f;
+            const float DensityMax = 0.5f;
 
             TArray<FTransform> DifferentArray = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed_1, bSnapToSurfaceBelow, DensityMin, DensityMax);
@@ -925,22 +909,21 @@ void AmbitWorldHelpersSpec::Define()
         It("Can handle when DensityMin is greater than DensityMax", [this]()
         {
             AddExpectedError(
-                TEXT("DensityMin is greater than DensityMax. No actors spawned."),
-                EAutomationExpectedErrorFlags::Exact, 1);
+                TEXT("DensityMin is greater than DensityMax. No actors spawned."), EAutomationExpectedErrorFlags::Exact,
+                1);
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
-            TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
+            const TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMax, DensityMin);
 
             UE_LOG(LogAmbit, Display, TEXT("The number of ActualArray is: %d"), ActualArray.Num());
 
-            TestEqual("The array should be empty.",
-                      ActualArray.Num(), 0);
+            TestEqual("The array should be empty.", ActualArray.Num(), 0);
         });
 
         It("Can handle when RotationMin is greater than RotationMax", [this]()
@@ -949,29 +932,28 @@ void AmbitWorldHelpersSpec::Define()
                 TEXT("RotationMin is greater than RotationMax. No actors spawned."),
                 EAutomationExpectedErrorFlags::Exact, 1);
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
-            TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
+            const TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax, 90.f, 45.f);
 
             UE_LOG(LogAmbit, Display, TEXT("The number of ActualArray is: %d"), ActualArray.Num());
-            TestEqual("The array should be empty.",
-                      ActualArray.Num(), 0);
+            TestEqual("The array should be empty.", ActualArray.Num(), 0);
         });
 
         It("will generate zero locations if bSnapToSurfaceBelow is true but there are no surfaces below", [this]()
         {
             TestComponentActor->SetActorLocation(FVector(0, 0, -100));
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
-            TArray<AActor*> ActorsToSearch;
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = true;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const TArray<AActor*> ActorsToSearch;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = true;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax);
@@ -983,14 +965,14 @@ void AmbitWorldHelpersSpec::Define()
         {
             TestComponentActor->SetActorLocation(FVector(0, 0, -100));
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
-            FVector Scale3D(100, 100, 0);
+            const FVector Scale3D(100, 100, 0);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Push(TestSurfaceActor);
-            int32 RandomSeed = 0;
-            bool bSnapToSurfaceBelow = false;
-            float DensityMin = 0.5f;
-            float DensityMax = 1.0f;
+            const int32 RandomSeed = 0;
+            const bool bSnapToSurfaceBelow = false;
+            const float DensityMin = 0.5f;
+            const float DensityMax = 1.0f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
                 RealSpline, ActorsToSearch, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax);
@@ -1012,8 +994,8 @@ void AmbitWorldHelpersSpec::Define()
             const float DensityMax = 1.0f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromSpline(
-                RealSpline, ActorsToSearch, RandomSeed, false, DensityMin,
-                DensityMax, RotationMin, RotationMax, bFollowSplineRotation);
+                RealSpline, ActorsToSearch, RandomSeed, false, DensityMin, DensityMax, RotationMin, RotationMax,
+                bFollowSplineRotation);
 
             const float ExpectedRotation = 210.0f;
 
@@ -1032,87 +1014,81 @@ void AmbitWorldHelpersSpec::Define()
     {
         It("Can generate random locations when SurfaceActor is large enough", [this]()
         {
-            FVector Scale3D(100, 100, 100);
+            const FVector Scale3D(100, 100, 100);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed = 0;
-            float DensityMin = 0.05f;
-            float DensityMax = 0.2f;
+            const int32 RandomSeed = 0;
+            const float DensityMin = 0.05f;
+            const float DensityMax = 0.2f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
-                ActorsToSearch, RandomSeed, DensityMin,
-                DensityMax);
+                ActorsToSearch, RandomSeed, DensityMin, DensityMax);
             UE_LOG(LogAmbit, Display, TEXT("The number of Transforms is: %d"), Transforms.Num());
             TestTrue("The number of Transforms is greater than 1.", Transforms.Num() > 0);
         });
 
         It("Cannot generate random locations when SurfaceActor is not large enough", [this]()
         {
-            FVector Scale3D(1, 1, 1);
+            const FVector Scale3D(1, 1, 1);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed = 0;
-            float DensityMin = 0.05f;
-            float DensityMax = 0.2f;
+            const int32 RandomSeed = 0;
+            const float DensityMin = 0.05f;
+            const float DensityMax = 0.2f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
-                ActorsToSearch, RandomSeed, DensityMin,
-                DensityMax);
+                ActorsToSearch, RandomSeed, DensityMin, DensityMax);
             UE_LOG(LogAmbit, Display, TEXT("The number of Transforms is: %d"), Transforms.Num());
             TestEqual("The number of Transforms is equal to 0.", Transforms.Num(), 0);
         });
 
         It("Will generate random rotations only within the provided range", [this]()
         {
-            float RotationMin = 30.0f;
-            float RotationMax = 90.0f;
+            const float RotationMin = 30.0f;
+            const float RotationMax = 90.0f;
 
-            FVector Scale3D(100, 100, 100);
+            const FVector Scale3D(100, 100, 100);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed = 0;
-            float DensityMin = 0.05f;
-            float DensityMax = 0.2f;
+            const int32 RandomSeed = 0;
+            const float DensityMin = 0.05f;
+            const float DensityMax = 0.2f;
 
             const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
-                ActorsToSearch, RandomSeed, DensityMin,
-                DensityMax, RotationMin, RotationMax);
+                ActorsToSearch, RandomSeed, DensityMin, DensityMax, RotationMin, RotationMax);
 
             for (const FTransform& OneTransform : Transforms)
             {
                 UE_LOG(LogAmbit, Display, TEXT("Yaw: %f"), OneTransform.Rotator().Yaw);
                 TestTrue("We expect all of the generated rotations to be within the provided range",
-                         RotationMin < OneTransform.Rotator().Yaw &&
-                         RotationMax > OneTransform.Rotator().Yaw);
+                         RotationMin < OneTransform.Rotator().Yaw && RotationMax > OneTransform.Rotator().Yaw);
             }
         });
 
         It("Use same random seed will have the exact same FTransform set", [this]()
         {
-            FVector Scale3D(100, 100, 100);
+            const FVector Scale3D(100, 100, 100);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed = 0;
-            float DensityMin = 0.05f;
-            float DensityMax = 0.2f;
+            const int32 RandomSeed = 0;
+            const float DensityMin = 0.05f;
+            const float DensityMax = 0.2f;
 
             TArray<FTransform> ExpectedArray = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
-                ActorsToSearch, RandomSeed, DensityMin,
-                DensityMax);
+                ActorsToSearch, RandomSeed, DensityMin, DensityMax);
             //TSet<FTransform> ExpectedSet = TSet<FTransform>(ExpectedArray);
             TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
-                ActorsToSearch, RandomSeed, DensityMin,
-                DensityMax);
+                ActorsToSearch, RandomSeed, DensityMin, DensityMax);
             //TSet<FTransform> ActualSet = TSet<FTransform>(ActualArray);
 
             UE_LOG(LogAmbit, Display, TEXT("The number of ExpectedArray is: %d"), ExpectedArray.Num());
             UE_LOG(LogAmbit, Display, TEXT("The number of ActualArray is: %d"), ActualArray.Num());
-            TestEqual("With the same random seed, we expect they will have the same size.",
-                      ActualArray.Num(), ExpectedArray.Num());
+            TestEqual("With the same random seed, we expect they will have the same size.", ActualArray.Num(),
+                      ExpectedArray.Num());
             for (int i = 0; i < ActualArray.Num(); ++i)
             {
                 TestTrue("With the same random seed, we expect each corresponding elements are same.",
@@ -1122,21 +1098,19 @@ void AmbitWorldHelpersSpec::Define()
 
         It("Use different random seed will have different set", [this]()
         {
-            FVector Scale3D(100, 100, 100);
+            const FVector Scale3D(100, 100, 100);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed_1 = 0;
-            int32 RandomSeed_2 = 1;
-            float DensityMin = 0.05f;
-            float DensityMax = 0.2f;
+            const int32 RandomSeed_1 = 0;
+            const int32 RandomSeed_2 = 1;
+            const float DensityMin = 0.05f;
+            const float DensityMax = 0.2f;
 
             TArray<FTransform> DifferentArray = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
-                ActorsToSearch, RandomSeed_1, DensityMin,
-                DensityMax);
+                ActorsToSearch, RandomSeed_1, DensityMin, DensityMax);
             TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
-                ActorsToSearch, RandomSeed_2, DensityMin,
-                DensityMax);
+                ActorsToSearch, RandomSeed_2, DensityMin, DensityMax);
 
             UE_LOG(LogAmbit, Display, TEXT("The number of DifferentArray is: %d"), DifferentArray.Num());
             UE_LOG(LogAmbit, Display, TEXT("The number of ActualArray is: %d"), ActualArray.Num());
@@ -1164,20 +1138,19 @@ void AmbitWorldHelpersSpec::Define()
         It("Can handle when DensityMin is greater than DensityMax", [this]()
         {
             AddExpectedError(
-                TEXT("DensityMin is greater than DensityMax. No actors spawned."),
-                EAutomationExpectedErrorFlags::Exact, 1);
-            FVector Scale3D(100, 100, 100);
+                TEXT("DensityMin is greater than DensityMax. No actors spawned."), EAutomationExpectedErrorFlags::Exact,
+                1);
+            const FVector Scale3D(100, 100, 100);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed = 0;
-            float DensityMin = 0.05f;
-            float DensityMax = 0.2f;
-            TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
+            const int32 RandomSeed = 0;
+            const float DensityMin = 0.05f;
+            const float DensityMax = 0.2f;
+            const TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
                 ActorsToSearch, RandomSeed, DensityMax, DensityMin);
             UE_LOG(LogAmbit, Display, TEXT("The number of ActualArray is: %d"), ActualArray.Num());
-            TestEqual("The array should be empty.",
-                      ActualArray.Num(), 0);
+            TestEqual("The array should be empty.", ActualArray.Num(), 0);
         });
 
         It("Can handle when RotationMin is greater than RotationMax", [this]()
@@ -1185,20 +1158,19 @@ void AmbitWorldHelpersSpec::Define()
             AddExpectedError(
                 TEXT("RotationMin is greater than RotationMax. No actors spawned."),
                 EAutomationExpectedErrorFlags::Exact, 1);
-            FVector Scale3D(100, 100, 100);
+            const FVector Scale3D(100, 100, 100);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToSearch;
             ActorsToSearch.Add(TestSurfaceActor);
-            int32 RandomSeed = 0;
-            float DensityMin = 0.05f;
-            float DensityMax = 0.2f;
+            const int32 RandomSeed = 0;
+            const float DensityMin = 0.05f;
+            const float DensityMax = 0.2f;
 
-            TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
+            const TArray<FTransform> ActualArray = AmbitWorldHelpers::GenerateRandomLocationsFromActors(
                 ActorsToSearch, RandomSeed, DensityMin, DensityMax, 90.f, 45.f);
             UE_LOG(LogAmbit, Display, TEXT("The number of ActualArray is: %d"), ActualArray.Num());
 
-            TestEqual("The array should be empty.",
-                      ActualArray.Num(), 0);
+            TestEqual("The array should be empty.", ActualArray.Num(), 0);
         });
     });
 
@@ -1206,16 +1178,15 @@ void AmbitWorldHelpersSpec::Define()
     {
         It("Will return an unchanged FTransform if ActorsToHit is empty and bSnapToSurfaceBelow is false", [this]()
         {
-            TArray<AActor*> ActorsToHit;
-            bool bSnapToSurfaceBelow = false;
+            const TArray<AActor*> ActorsToHit;
+            const bool bSnapToSurfaceBelow = false;
 
-            FVector Location(0, 0, 100);
-            FRotator Rotation(0, 0, 0);
+            const FVector Location(0, 0, 100);
+            const FRotator Rotation(0, 0, 0);
             FTransform Transform(Rotation, Location);
-            FTransform OriginalTransform(Rotation, Location);
+            const FTransform OriginalTransform(Rotation, Location);
 
-            AmbitWorldHelpers::CheckAndSnapToSurface(
-                Transform, ActorsToHit, bSnapToSurfaceBelow);
+            AmbitWorldHelpers::CheckAndSnapToSurface(Transform, ActorsToHit, bSnapToSurfaceBelow);
 
             TestTrue("We expect the element of the adjusted FTransform to be the same as the original FTransform.",
                      OriginalTransform.Equals(Transform));
@@ -1223,19 +1194,18 @@ void AmbitWorldHelpersSpec::Define()
 
         It("Will return an changed FTransform if ActorsToHit is NOT empty and bSnapToSurfaceBelow is false", [this]()
         {
-            FVector Scale3D(100, 100, 100);
+            const FVector Scale3D(100, 100, 100);
             TestSurfaceActor->SetActorScale3D(Scale3D);
             TArray<AActor*> ActorsToHit;
             ActorsToHit.Add(TestSurfaceActor);
-            bool bSnapToSurfaceBelow = false;
+            const bool bSnapToSurfaceBelow = false;
 
-            FVector Location(0, 0, 100);
-            FRotator Rotation(0, 0, 0);
+            const FVector Location(0, 0, 100);
+            const FRotator Rotation(0, 0, 0);
             FTransform Transform(Rotation, Location);
-            FTransform OriginalTransform(Rotation, Location);
+            const FTransform OriginalTransform(Rotation, Location);
 
-            AmbitWorldHelpers::CheckAndSnapToSurface(
-                Transform, ActorsToHit, bSnapToSurfaceBelow);
+            AmbitWorldHelpers::CheckAndSnapToSurface(Transform, ActorsToHit, bSnapToSurfaceBelow);
 
             TestFalse("We expect the element of the adjusted FTransform to be different from the original FTransform.",
                       OriginalTransform.Equals(Transform));
@@ -1243,16 +1213,15 @@ void AmbitWorldHelpersSpec::Define()
 
         It("Will return an changed FTransform if ActorsToHit is empty and bSnapToSurfaceBelow is true", [this]()
         {
-            TArray<AActor*> ActorsToHit;
-            bool bSnapToSurfaceBelow = true;
+            const TArray<AActor*> ActorsToHit;
+            const bool bSnapToSurfaceBelow = true;
 
-            FVector Location(0, 0, 100);
-            FRotator Rotation(0, 0, 0);
+            const FVector Location(0, 0, 100);
+            const FRotator Rotation(0, 0, 0);
             FTransform Transform(Rotation, Location);
-            FTransform OriginalTransform(Rotation, Location);
+            const FTransform OriginalTransform(Rotation, Location);
 
-            AmbitWorldHelpers::CheckAndSnapToSurface(
-                Transform, ActorsToHit, bSnapToSurfaceBelow);
+            AmbitWorldHelpers::CheckAndSnapToSurface(Transform, ActorsToHit, bSnapToSurfaceBelow);
 
             TestFalse("We expect the element of the adjusted FTransform to be different from the original FTransform.",
                       OriginalTransform.Equals(Transform));
@@ -1263,13 +1232,11 @@ void AmbitWorldHelpersSpec::Define()
     {
         It("will return an empty array if Spline is invalid", [this]()
         {
-            AddExpectedError(
-                TEXT("Invalid spline component."),
-                EAutomationExpectedErrorFlags::Exact, 1);
+            AddExpectedError(TEXT("Invalid spline component."), EAutomationExpectedErrorFlags::Exact, 1);
             USplineComponent* EmptySpline = nullptr;
 
-            float Distance = 100;
-            TArray<FTransform> Transform = AmbitWorldHelpers::GenerateFixedLocationsFromSpline(
+            const float Distance = 100;
+            const TArray<FTransform> Transform = AmbitWorldHelpers::GenerateFixedLocationsFromSpline(
                 EmptySpline, Distance);
             UE_LOG(LogAmbit, Display, TEXT("The number of Transform is: %d"), Transform.Num());
             TestEqual("The number of Transform is equal to 0.", Transform.Num(), 0);
@@ -1280,8 +1247,8 @@ void AmbitWorldHelpersSpec::Define()
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
             RealSpline->SetClosedLoop(true);
 
-            float Distance = 100;
-            TArray<FTransform> Transform = AmbitWorldHelpers::GenerateFixedLocationsFromSpline(
+            const float Distance = 100;
+            const TArray<FTransform> Transform = AmbitWorldHelpers::GenerateFixedLocationsFromSpline(
                 RealSpline, Distance);
             RealSpline->SetClosedLoop(false);
             UE_LOG(LogAmbit, Display, TEXT("The number of Transform is: %d"), Transform.Num());
@@ -1292,8 +1259,8 @@ void AmbitWorldHelpersSpec::Define()
         {
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 5000, 0), ESplineCoordinateSpace::Local);
 
-            float Distance = 100;
-            TArray<FTransform> Transform = AmbitWorldHelpers::GenerateFixedLocationsFromSpline(
+            const float Distance = 100;
+            const TArray<FTransform> Transform = AmbitWorldHelpers::GenerateFixedLocationsFromSpline(
                 RealSpline, Distance);
             UE_LOG(LogAmbit, Display, TEXT("The number of Transform is: %d"), Transform.Num());
             TestTrue("The number of Transform is greater than 0.", Transform.Num() > 0);
@@ -1302,17 +1269,16 @@ void AmbitWorldHelpersSpec::Define()
         It("Cannot generate fixed locations when Spline's length is smaller than the distance", [this]()
         {
             AddExpectedError(
-                TEXT("Distance must be smaller than the total length of Spline."),
-                EAutomationExpectedErrorFlags::Exact, 1);
+                TEXT("Distance must be smaller than the total length of Spline."), EAutomationExpectedErrorFlags::Exact,
+                1);
             RealSpline->SetLocationAtSplinePoint(1, FVector(0, 1, 0), ESplineCoordinateSpace::Local);
-            float Distance = 100;
-            TArray<FTransform> Transform = AmbitWorldHelpers::GenerateFixedLocationsFromSpline(
+            const float Distance = 100;
+            const TArray<FTransform> Transform = AmbitWorldHelpers::GenerateFixedLocationsFromSpline(
                 RealSpline, Distance);
 
             UE_LOG(LogAmbit, Display, TEXT("The number of Transform is: %d"), Transform.Num());
 
-            TestEqual("The Transform array should be empty.",
-                Transform.Num(), 0);
+            TestEqual("The Transform array should be empty.", Transform.Num(), 0);
         });
     });
 

@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,12 +22,10 @@
 class AMBIT_API FAmbitVehiclePIDController
 {
 public:
-    FAmbitVehiclePIDController()
-    {
-    }
+    FAmbitVehiclePIDController() = default;
 
-    FAmbitVehiclePIDController(const float P, const float D, const float I)
-        : Proportional(P), Differential(D), Integral(I)
+    FAmbitVehiclePIDController(const float P, const float D, const float I) : Proportional(P), Differential(D),
+                                                                              Integral(I)
     {
     }
 
@@ -59,13 +57,10 @@ private:
 class AMBIT_API FAmbitVehicleLongitudinalController : public FAmbitVehiclePIDController
 {
 public:
+    FAmbitVehicleLongitudinalController() = default;
 
-    FAmbitVehicleLongitudinalController()
-    {
-    }
-
-    FAmbitVehicleLongitudinalController(const float P, const float D, const float I)
-        : FAmbitVehiclePIDController(P, D, I)
+    FAmbitVehicleLongitudinalController(const float P, const float D, const float I) : FAmbitVehiclePIDController(
+        P, D, I)
     {
     }
 
@@ -90,13 +85,9 @@ public:
 class AMBIT_API FAmbitVehicleLateralController : public FAmbitVehiclePIDController
 {
 public:
+    FAmbitVehicleLateralController() = default;
 
-    FAmbitVehicleLateralController()
-    {
-    }
-
-    FAmbitVehicleLateralController(const float P, const float D, const float I)
-        : FAmbitVehiclePIDController(P, D, I)
+    FAmbitVehicleLateralController(const float P, const float D, const float I) : FAmbitVehiclePIDController(P, D, I)
     {
     }
 

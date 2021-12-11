@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,7 +51,8 @@ void FSpawnerDetails::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
-void FSpawnerDetails::AddSpawnerButtonForObject(TWeakObjectPtr<ASpawnWithHoudini> Spawner, IDetailLayoutBuilder& DetailBuilder)
+void FSpawnerDetails::AddSpawnerButtonForObject(TWeakObjectPtr<ASpawnWithHoudini> Spawner,
+                                                IDetailLayoutBuilder& DetailBuilder) const
 {
     const FName KCategoryName = "Ambit Spawner";
     const FString KSpawnerGroup = "SpawnerActions";
@@ -83,32 +84,35 @@ void FSpawnerDetails::AddSpawnerButtonForObject(TWeakObjectPtr<ASpawnWithHoudini
     IDetailCategoryBuilder& SpawnerSettingsCategory = DetailBuilder.
         EditCategory(KCategoryName);
 
+    // @formatter:off
     SpawnerSettingsCategory.AddCustomRow(
         FText::FromString(KSpawnerGroup))
         [
             SNew(SHorizontalBox)
             + SHorizontalBox::Slot()
-        .HAlign(HAlign_Center)
-        .AutoWidth()
-        .Padding(KPaddingLeft, KPaddingRemainingSides, KPaddingRemainingSides, KPaddingRemainingSides)
-        [
-            SNew(SButton)
-            .ContentPadding(FMargin(KMarginHorizontal, KMarginVertical))
-        .Text(FText::FromString(KGenerate))
-        .OnClicked_Lambda(OnGenerateClicked)
-        .ToolTipText(FText::FromString(KHintTextGenerateObstacles))
-        ]
-    + SHorizontalBox::Slot()
-        .HAlign(HAlign_Center)
-        .AutoWidth()
-        .Padding(KPaddingLeft, KPaddingRemainingSides, KPaddingRemainingSides, KPaddingRemainingSides)
-        [
-            SNew(SButton)
-            .ContentPadding(FMargin(KMarginHorizontal, KMarginVertical))
-        .Text(FText::FromString(KClear))
-        .OnClicked_Lambda(OnClearClicked)
-        .ToolTipText(FText::FromString(KHintTextClearObstacles))
-        ]
+            .HAlign(HAlign_Center)
+            .AutoWidth()
+            .Padding(KPaddingLeft, KPaddingRemainingSides, KPaddingRemainingSides, KPaddingRemainingSides)
+            [
+                SNew(SButton)
+                .ContentPadding(FMargin(KMarginHorizontal, KMarginVertical))
+                .Text(FText::FromString(KGenerate))
+                .OnClicked_Lambda(OnGenerateClicked)
+                .ToolTipText(FText::FromString(KHintTextGenerateObstacles))
+            ]
+            + SHorizontalBox::Slot()
+            .HAlign(HAlign_Center)
+            .AutoWidth()
+            .Padding(KPaddingLeft, KPaddingRemainingSides, KPaddingRemainingSides, KPaddingRemainingSides)
+            [
+                SNew(SButton)
+                .ContentPadding(FMargin(KMarginHorizontal, KMarginVertical))
+                .Text(FText::FromString(KClear))
+                .OnClicked_Lambda(OnClearClicked)
+                .ToolTipText(FText::FromString(KHintTextClearObstacles))
+            ]
         ];
+    // @formatter:on
 }
+
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION

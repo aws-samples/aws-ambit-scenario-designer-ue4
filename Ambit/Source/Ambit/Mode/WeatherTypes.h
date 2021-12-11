@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,8 +13,10 @@
 //   limitations under the License.
 
 #pragma once
+
 #include "Constant.h"
 #include "IScenarioParameter.h"
+
 #include <AmbitUtils/ConfigJsonSerializer.h>
 
 #include "WeatherTypes.generated.h"
@@ -25,15 +27,12 @@
 USTRUCT()
 struct AMBIT_API FWeatherTypes
 #if CPP
-    : public IScenarioParameter, public FConfigJsonSerializer
+        : public IScenarioParameter, public FConfigJsonSerializer
 #endif
 {
     GENERATED_BODY()
 
-    FWeatherTypes()
-        : bSunny(false)
-          , bRainy(false)
-          , bFoggy(false)
+    FWeatherTypes() : bSunny(false), bRainy(false), bFoggy(false)
     {
     }
 
@@ -71,15 +70,15 @@ public:
 
 
     // Getter and Setter of weather types
-    void SetSunny(bool);
+    void SetSunny(bool SelectedSunny);
 
     bool GetSunny() const;
 
-    void SetRainy(bool);
+    void SetRainy(bool SelectedRain);
 
     bool GetRainy() const;
 
-    void SetFoggy(bool);
+    void SetFoggy(bool SelectedFoggy);
 
     bool GetFoggy() const;
 };

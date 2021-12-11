@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,9 +13,11 @@
 //   limitations under the License.
 
 #pragma once
+
 #include "CoreMinimal.h"
-#include "Ambit/Mode/Constant.h"
 #include "UObject/Interface.h"
+
+#include "Ambit/Mode/Constant.h"
 
 #include "ConfigJsonSerializer.generated.h"
 
@@ -34,7 +36,6 @@ class AMBITUTILS_API IConfigJsonSerializer
 {
     GENERATED_BODY()
 public:
-
     /**
      * Serialize the class information into a Json object
      */
@@ -46,7 +47,9 @@ public:
     /**
     * Deserialize the Json object into Unreal Engine editor
     */
-    virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) { };
+    virtual void DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject)
+    {
+    };
 
     /**
      * Retrieves the Configuration Name for the Json to be serialized.
@@ -64,9 +67,7 @@ public:
  */
 struct AMBITUTILS_API FConfigJsonSerializer
 {
-    virtual ~FConfigJsonSerializer()
-    {
-    }
+    virtual ~FConfigJsonSerializer() = default;
 
     /**
      * Serialize the struct information into a Json object
@@ -76,5 +77,5 @@ struct AMBITUTILS_API FConfigJsonSerializer
     /**
     * Deserialize the Json object into Unreal Engine editor
     */
-    virtual void DeserializeFromJson(TSharedPtr<FJsonObject>) = 0;
+    virtual void DeserializeFromJson(TSharedPtr<FJsonObject> JsonObject) = 0;
 };

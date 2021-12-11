@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,9 +13,6 @@
 //   limitations under the License.
 
 #include "AmbitDetailCustomization.h"
-
-#include "AmbitMode.h"
-#include "AmbitObject.h"
 
 #include "AWSRegionDropdownMenu.h"
 #include "GltfFileTypeDropdownMenu.h"
@@ -31,6 +28,9 @@
 #include "Widgets/Input/SEditableTextBox.h"
 #include "Widgets/Input/SNumericEntryBox.h"
 #include "Widgets/Layout/SWrapBox.h"
+
+#include "AmbitMode.h"
+#include "AmbitObject.h"
 
 #define LOCTEXT_NAMESPACE "AmbitDetail_Customization"
 
@@ -53,8 +53,7 @@ void FAmbitDetailCustomization::PendingDelete()
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
-void FAmbitDetailCustomization::CustomizeDetails(
-    IDetailLayoutBuilder& DetailBuilder)
+void FAmbitDetailCustomization::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 {
     TSet<UClass*> Classes;
 
@@ -83,6 +82,8 @@ void FAmbitDetailCustomization::CustomizeDetails(
     const FString KHintTextScenarioName = "Import Scenario Definition File or Type Name for New Scenario";
     TSharedRef<IPropertyHandle> PropertyHandle_ScenarioName = DetailBuilder.
         GetProperty(GET_MEMBER_NAME_CHECKED(UAmbitObject, ScenarioName));
+
+    // @formatter:off
     ScenarioSettingsCategory.AddProperty(PropertyHandle_ScenarioName)
         .CustomWidget()
         .NameContent()
@@ -139,7 +140,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 .ButtonContent()
                 [
                     SNew(STextBlock)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text_Static(&FTimeOfDayDropdownMenu::GetCurrentValueAsText,
                         PropertyHandle_PresetTimeOfDay)
                     .ToolTipText(PropertyHandle_PresetTimeOfDay->GetToolTipText())
@@ -190,7 +191,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 .ButtonContent()
                 [
                     SNew(STextBlock)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text_Static(&FWeatherDropdownMenu::GetCurrentValueAsText,
                         PropertyHandle_PresetWeather)
                     .ToolTipText(PropertyHandle_PresetWeather->GetToolTipText())
@@ -288,7 +289,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 .ButtonContent()
                 [
                     SNew(STextBlock)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text_Static(&FAWSRegionDropdownMenu::GetCurrentValueAsText,
                         PropertyHandle_Region)
                     .ToolTipText(PropertyHandle_Region->GetToolTipText())
@@ -371,7 +372,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
             [
                 SNew(SWrapBox)
                 .UseAllottedWidth(true)
-                .InnerSlotPadding({ 6, 5 })
+                .InnerSlotPadding({6, 5})
                 + SWrapBox::Slot()
                 [
                     SNew(SBox)
@@ -457,7 +458,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
             [
                 SNew(SWrapBox)
                 .UseAllottedWidth(true)
-                .InnerSlotPadding({ 6, 5 })
+                .InnerSlotPadding({6, 5})
                 + SWrapBox::Slot()
                 [
                     SNew(SBox)
@@ -533,9 +534,10 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 .VAlign(VAlign_Center)
                 [
                     SNew(STextBlock)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("DensityMin", "DensityMin"))
-                    .ToolTipText(LOCTEXT("BulkPedestrianMin", "The minimum percentage of pedestrian density in the range of [0.0, 1.0]"))
+                    .ToolTipText(LOCTEXT("BulkPedestrianMin",
+                                         "The minimum percentage of pedestrian density in the range of [0.0, 1.0]"))
                 ]
                 + SHorizontalBox::Slot()
                 .VAlign(VAlign_Center)
@@ -562,9 +564,10 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 .VAlign(VAlign_Center)
                 [
                     SNew(STextBlock)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("DensityMax", "DensityMax"))
-                    .ToolTipText(LOCTEXT("BulkPedestrianMax", "The maximum percentage of pedestrian density in the range of [0.0, 1.0]"))
+                    .ToolTipText(LOCTEXT("BulkPedestrianMax",
+                                         "The maximum percentage of pedestrian density in the range of [0.0, 1.0]"))
                 ]
                 + SHorizontalBox::Slot()
                 .VAlign(VAlign_Center)
@@ -591,7 +594,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 .VAlign(VAlign_Center)
                 [
                     SNew(STextBlock)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("Increment", "Increment"))
                 ]
                 + SHorizontalBox::Slot()
@@ -601,7 +604,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 [
                     SNew(SEditableTextBox)
                     .IsReadOnly(true)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("0.1", "0.1"))
                 ]
             ]
@@ -632,9 +635,10 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 .VAlign(VAlign_Center)
                 [
                     SNew(STextBlock)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("DensityMin", "DensityMin"))
-                    .ToolTipText(LOCTEXT("BulkVehicleMin", "The minimum percentage of vehicle density in the range of [0.0, 1.0]"))
+                    .ToolTipText(LOCTEXT("BulkVehicleMin",
+                                         "The minimum percentage of vehicle density in the range of [0.0, 1.0]"))
                 ]
                 + SHorizontalBox::Slot()
                 .VAlign(VAlign_Center)
@@ -661,9 +665,10 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 .VAlign(VAlign_Center)
                 [
                     SNew(STextBlock)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("DensityMax", "DensityMax"))
-                    .ToolTipText(LOCTEXT("BulkVehicleMax", "The maximum percentage of vehicle density in the range of [0.0, 1.0]"))
+                    .ToolTipText(LOCTEXT("BulkVehicleMax",
+                                         "The maximum percentage of vehicle density in the range of [0.0, 1.0]"))
                 ]
                 + SHorizontalBox::Slot()
                 .VAlign(VAlign_Center)
@@ -690,7 +695,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 .VAlign(VAlign_Center)
                 [
                     SNew(STextBlock)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("Increment", "Increment"))
                 ]
                 + SHorizontalBox::Slot()
@@ -700,7 +705,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 [
                     SNew(SEditableTextBox)
                     .IsReadOnly(true)
-                    .Font(DetailBuilder.GetDetailFont())
+                    .Font(IDetailLayoutBuilder::GetDetailFont())
                     .Text(LOCTEXT("0.1", "0.1"))
                 ]
             ]
@@ -758,7 +763,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
             [
                 SNew(SWrapBox)
                 .UseAllottedWidth(true)
-                .InnerSlotPadding({ 6, 5 })
+                .InnerSlotPadding({6, 5})
                 + SWrapBox::Slot()
                 [
                     SNew(SBox)
@@ -840,7 +845,7 @@ void FAmbitDetailCustomization::CustomizeDetails(
                     .ButtonContent()
                     [
                         SNew(STextBlock)
-                        .Font(DetailBuilder.GetDetailFont())
+                        .Font(IDetailLayoutBuilder::GetDetailFont())
                         .Text_Static(&FGltfFileTypeDropdownMenu::GetCurrentValueAsText,
                             PropertyHandle_GltfExportType)
                         .ToolTipText(PropertyHandle_GltfExportType->GetToolTipText())
@@ -867,16 +872,15 @@ void FAmbitDetailCustomization::CustomizeDetails(
                 .IsEnabled_Static(&GetExportButtonEnabled)
             ]
         ];
+    // @formatter:on
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
-FText FAmbitDetailCustomization::GetPropertyValueText(
-    TSharedRef<IPropertyHandle> PropertyHandle)
+FText FAmbitDetailCustomization::GetPropertyValueText(TSharedRef<IPropertyHandle> PropertyHandle)
 {
     FString Value;
-    if (PropertyHandle->GetValueAsFormattedString(Value) ==
-        FPropertyAccess::Success)
+    if (PropertyHandle->GetValueAsFormattedString(Value) == FPropertyAccess::Success)
     {
         return FText::FromString(Value);
     }
@@ -884,9 +888,8 @@ FText FAmbitDetailCustomization::GetPropertyValueText(
     return FText();
 }
 
-void FAmbitDetailCustomization::SetPropertyValueString(
-    const FText& NewValue, ETextCommit::Type CommitInfo,
-    TSharedRef<IPropertyHandle> PropertyHandle)
+void FAmbitDetailCustomization::SetPropertyValueString(const FText& NewValue, ETextCommit::Type CommitInfo,
+                                                       TSharedRef<IPropertyHandle> PropertyHandle)
 {
     const FString Name = NewValue.ToString();
     ensure(PropertyHandle->SetValue(Name) == FPropertyAccess::Success);
@@ -969,14 +972,14 @@ FText FAmbitDetailCustomization::UpdateNumberOfPermutations()
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
 
-    int32 PedestrianCounts = AmbitMode->UISettings->BulkPedestrianTraffic.GetVariantCount();
-    int32 VehicleCounts = AmbitMode->UISettings->BulkVehicleTraffic.GetVariantCount();
-    int32 LengthOfWeatherTypes = AmbitMode->UISettings->WeatherTypes.GetVariantCount();
-    int32 NumOfWeatherTypes = FMath::Max(LengthOfWeatherTypes, 1);
-    int32 LengthOfTimeOfDayTypes = AmbitMode->UISettings->TimeOfDayTypes.GetVariantCount();
-    int32 NumOfTimeOfDayTypes = FMath::Max(LengthOfTimeOfDayTypes, 1);
+    const int32 PedestrianCounts = AmbitMode->UISettings->BulkPedestrianTraffic.GetVariantCount();
+    const int32 VehicleCounts = AmbitMode->UISettings->BulkVehicleTraffic.GetVariantCount();
+    const int32 LengthOfWeatherTypes = AmbitMode->UISettings->WeatherTypes.GetVariantCount();
+    const int32 NumOfWeatherTypes = FMath::Max(LengthOfWeatherTypes, 1);
+    const int32 LengthOfTimeOfDayTypes = AmbitMode->UISettings->TimeOfDayTypes.GetVariantCount();
+    const int32 NumOfTimeOfDayTypes = FMath::Max(LengthOfTimeOfDayTypes, 1);
 
-    int32 NumberOfPermutation = PedestrianCounts * VehicleCounts * NumOfWeatherTypes * NumOfTimeOfDayTypes;
+    const int32 NumberOfPermutation = PedestrianCounts * VehicleCounts * NumOfWeatherTypes * NumOfTimeOfDayTypes;
     AmbitMode->UISettings->NumberOfPermutations = NumberOfPermutation;
     return FText::AsNumber(NumberOfPermutation);
 }

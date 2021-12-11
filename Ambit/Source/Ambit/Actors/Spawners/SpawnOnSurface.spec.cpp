@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,8 +21,7 @@
 #include "Ambit/Actors/SpawnerConfigs/SpawnerBaseConfig.h"
 
 BEGIN_DEFINE_SPEC(SpawnOnSurfaceSpec, "Ambit.SpawnOnSurface",
-                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::
-                  ApplicationContextMask)
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     ASpawnOnSurface* Spawner;
     TSharedPtr<FSpawnerBaseConfig> Config;
@@ -43,31 +42,28 @@ void SpawnOnSurfaceSpec::Define()
     {
         Describe("the returned configuration object", [this]()
         {
-            It("when SpawnOnSurface.MatchBy is 'NameOrTags', has correct value",
-               [this]()
-               {
-                   Spawner->MatchBy = EMatchBy::NameOrTags;
-                   Config = Spawner->GetConfiguration();
+            It("when SpawnOnSurface.MatchBy is 'NameOrTags', has correct value", [this]()
+            {
+                Spawner->MatchBy = NameOrTags;
+                Config = Spawner->GetConfiguration();
 
-                   TestEqual("MatchBy", Config->MatchBy, EMatchBy::NameOrTags);
-               });
+                TestEqual("MatchBy", Config->MatchBy, EMatchBy::NameOrTags);
+            });
 
-            It("when SpawnOnSurface.MatchBy is 'NameAndTags', has correct value",
-               [this]()
-               {
-                   Spawner->MatchBy = EMatchBy::NameAndTags;
-                   Config = Spawner->GetConfiguration();
+            It("when SpawnOnSurface.MatchBy is 'NameAndTags', has correct value", [this]()
+            {
+                Spawner->MatchBy = NameAndTags;
+                Config = Spawner->GetConfiguration();
 
-                   TestEqual("MatchBy", Config->MatchBy, EMatchBy::NameAndTags);
-               });
+                TestEqual("MatchBy", Config->MatchBy, EMatchBy::NameAndTags);
+            });
 
             It("has correct SurfaceNamePattern", [this]()
             {
                 Spawner->SurfaceNamePattern = "SampleName";
                 Config = Spawner->GetConfiguration();
 
-                TestEqual("SurfaceName", Config->SurfaceNamePattern,
-                          "SampleName");
+                TestEqual("SurfaceName", Config->SurfaceNamePattern, "SampleName");
             });
 
             It("has correct SurfaceTags", [this]()
@@ -76,10 +72,8 @@ void SpawnOnSurfaceSpec::Define()
                 Spawner->SurfaceTags.Add(FName("TagB"));
                 Config = Spawner->GetConfiguration();
 
-                TestTrue("contains TagA",
-                         Config->SurfaceTags.Contains(FName("TagA")));
-                TestTrue("contains TagB",
-                         Config->SurfaceTags.Contains(FName("TagB")));
+                TestTrue("contains TagA", Config->SurfaceTags.Contains(FName("TagA")));
+                TestTrue("contains TagB", Config->SurfaceTags.Contains(FName("TagB")));
             });
 
             It("has correct DensityMin", [this]()
@@ -125,52 +119,42 @@ void SpawnOnSurfaceSpec::Define()
             It("has correct ActorsToSpawn when it has only one value", [this]()
             {
                 // Set a known AActor subclass as the ActorsToSpawn value.
-                const FString ExpectedValue =
-                    "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+                const FString ExpectedValue = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
                 const FSoftClassPath ClassPath(ExpectedValue);
-                
+
                 TArray<TSubclassOf<AActor>> ExpectedActors;
-                const TSubclassOf<AActor> ExpectedActor = 
-                    ClassPath.TryLoadClass<UObject>();
+                const TSubclassOf<AActor> ExpectedActor = ClassPath.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActor);
                 Spawner->ActorsToSpawn = ExpectedActors;
                 Config = Spawner->GetConfiguration();
 
-                TestEqual("ActorsToSpawn", Config->ActorsToSpawn.Num(),
-                    ExpectedActors.Num());
+                TestEqual("ActorsToSpawn", Config->ActorsToSpawn.Num(), ExpectedActors.Num());
                 for (int32 i = 0; i < ExpectedActors.Num(); i++)
                 {
-                    TestEqual("ActorsToSpawn", Config->ActorsToSpawn[i],
-                        ExpectedActors[i]);
+                    TestEqual("ActorsToSpawn", Config->ActorsToSpawn[i], ExpectedActors[i]);
                 }
             });
 
             It("has correct ActorsToSpawn when it has multiple values", [this]()
             {
                 // Set known AActor subclasses as the ActorsToSpawn value.
-                const FString ExpectedValueOne =
-                    "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+                const FString ExpectedValueOne = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
                 const FSoftClassPath ClassPathOne(ExpectedValueOne);
 
                 TArray<TSubclassOf<AActor>> ExpectedActors;
-                const TSubclassOf<AActor> ExpectedActorOne = 
-                    ClassPathOne.TryLoadClass<UObject>();
+                const TSubclassOf<AActor> ExpectedActorOne = ClassPathOne.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActorOne);
-                const FString ExpectedValueTwo =
-                    "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
+                const FString ExpectedValueTwo = "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
                 const FSoftClassPath ClassPathTwo(ExpectedValueTwo);
-                const TSubclassOf<AActor> ExpectedActorTwo = 
-                    ClassPathTwo.TryLoadClass<UObject>();
+                const TSubclassOf<AActor> ExpectedActorTwo = ClassPathTwo.TryLoadClass<UObject>();
                 ExpectedActors.Add(ExpectedActorTwo);
                 Spawner->ActorsToSpawn = ExpectedActors;
                 Config = Spawner->GetConfiguration();
 
-                TestEqual("ActorsToSpawn", Config->ActorsToSpawn.Num(),
-                    ExpectedActors.Num());
+                TestEqual("ActorsToSpawn", Config->ActorsToSpawn.Num(), ExpectedActors.Num());
                 for (int32 i = 0; i < ExpectedActors.Num(); i++)
                 {
-                    TestEqual("ActorsToSpawn", Config->ActorsToSpawn[i],
-                        ExpectedActors[i]);
+                    TestEqual("ActorsToSpawn", Config->ActorsToSpawn[i], ExpectedActors[i]);
                 }
             });
 
@@ -214,8 +198,7 @@ void SpawnOnSurfaceSpec::Define()
 
             Spawner->Configure(Config);
 
-            TestEqual("SurfaceNamePattern", Spawner->SurfaceNamePattern,
-                      "SampleName");
+            TestEqual("SurfaceNamePattern", Spawner->SurfaceNamePattern, "SampleName");
         });
 
         It("sets SurfaceTags", [this]()
@@ -228,8 +211,7 @@ void SpawnOnSurfaceSpec::Define()
             const int32 TagCount = Spawner->SurfaceTags.Num();
             if (TagCount != 2)
             {
-                const FString Message = "Expected tag count of 2 but was " +
-                    FString::FromInt(TagCount);
+                const FString Message = "Expected tag count of 2 but was " + FString::FromInt(TagCount);
                 AddError(Message);
             }
             else
@@ -286,53 +268,43 @@ void SpawnOnSurfaceSpec::Define()
         It("sets ActorsToSpawn when it has one value", [this]()
         {
             // Set a known AActor subclass as the ActorsToSpawn value.
-            const FString ExpectedValue =
-                "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+            const FString ExpectedValue = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
             const FSoftClassPath ClassPath(ExpectedValue);
             TArray<TSubclassOf<AActor>> ExpectedActors;
-            const TSubclassOf<AActor>& ExpectedActor = 
-                ClassPath.TryLoadClass<UObject>();
+            const TSubclassOf<AActor>& ExpectedActor = ClassPath.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActor);
             Config->ActorsToSpawn = ExpectedActors;
 
             Spawner->Configure(Config);
 
-            TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn.Num(),
-                ExpectedActors.Num());
+            TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn.Num(), ExpectedActors.Num());
             for (int32 i = 0; i < ExpectedActors.Num(); i++)
             {
-                TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn[i],
-                    ExpectedActors[i]);
+                TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn[i], ExpectedActors[i]);
             }
         });
 
         It("sets correct ActorsToSpawn when it has multiple values", [this]()
         {
             // Set known AActor subclasses as the ActorsToSpawn value.
-            const FString ExpectedValueOne =
-                "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+            const FString ExpectedValueOne = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
             const FSoftClassPath ClassPathOne(ExpectedValueOne);
 
             TArray<TSubclassOf<AActor>> ExpectedActors;
-            const TSubclassOf<AActor> ExpectedActorOne = 
-                ClassPathOne.TryLoadClass<UObject>();
+            const TSubclassOf<AActor> ExpectedActorOne = ClassPathOne.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActorOne);
-            const FString ExpectedValueTwo =
-                "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
+            const FString ExpectedValueTwo = "/Engine/EngineSky/BP_Sky_Sphere.BP_Sky_Sphere_C";
             const FSoftClassPath ClassPathTwo(ExpectedValueTwo);
-            const TSubclassOf<AActor> ExpectedActorTwo = 
-                ClassPathTwo.TryLoadClass<UObject>();
+            const TSubclassOf<AActor> ExpectedActorTwo = ClassPathTwo.TryLoadClass<UObject>();
             ExpectedActors.Add(ExpectedActorTwo);
 
             Config->ActorsToSpawn = ExpectedActors;
             Spawner->Configure(Config);
 
-            TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn.Num(),
-                ExpectedActors.Num());
+            TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn.Num(), ExpectedActors.Num());
             for (int32 i = 0; i < ExpectedActors.Num(); i++)
             {
-                TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn[i],
-                    ExpectedActors[i]);
+                TestEqual("ActorsToSpawn", Spawner->ActorsToSpawn[i], ExpectedActors[i]);
             }
         });
 

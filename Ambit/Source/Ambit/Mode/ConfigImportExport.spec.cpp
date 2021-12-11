@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,13 +14,13 @@
 
 #include "ConfigImportExport.h"
 
-#include <stdexcept>
-
 #include "EditorModeManager.h"
 #include "Dom/JsonObject.h"
 #include "Engine/StaticMeshActor.h"
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"
+
+#include <stdexcept>
 
 #include "AmbitObject.h"
 #include "Ambit/Actors/Spawners/SpawnInVolume.h"
@@ -30,7 +30,6 @@
 #include "Ambit/Actors/Spawners/TestClasses/MockableSpawner.h"
 #include "Ambit/Mode/AmbitMode.h"
 #include "Ambit/Mode/TestClasses/MockableConfigImportExport.h"
-#include "Ambit/Utils/AmbitWorldHelpers.h"
 #include "AmbitUtils/JsonHelpers.h"
 
 BEGIN_DEFINE_SPEC(ConfigImportExportSpec, "Ambit.ConfigImportExport",
@@ -115,7 +114,7 @@ void ConfigImportExportSpec::Define()
                 // Generate Exporter
                 Exporter = NewObject<UMockableConfigImportExport>();
 
-                FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+                const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
                 AmbitMode->UISettings->TimeOfDay = 0.1;
                 AmbitMode->UISettings->PedestrianDensity = 0.2;
                 AmbitMode->UISettings->VehicleDensity = 0.3;
@@ -137,7 +136,7 @@ void ConfigImportExportSpec::Define()
 
             It("Should Give On Screen Values (Name Default)", [this]()
             {
-                FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+                const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
                 AmbitMode->UISettings->ScenarioName = "";
                 const TMap<FString, TSharedPtr<FJsonObject>> FakeArray;
 
@@ -152,7 +151,7 @@ void ConfigImportExportSpec::Define()
 
             It("Should Give On Screen Values (Name Specified)", [this]()
             {
-                FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+                const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
                 AmbitMode->UISettings->ScenarioName = "FakeName";
                 const TMap<FString, TSharedPtr<FJsonObject>> FakeArray;
 
@@ -455,7 +454,7 @@ void ConfigImportExportSpec::Define()
             {
                 BeforeEach([this]()
                 {
-                    FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+                    const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
 
                     AmbitMode->UISettings->AwsRegion = "";
                     AmbitMode->UISettings->S3BucketName = "";
@@ -466,8 +465,7 @@ void ConfigImportExportSpec::Define()
                 {
                     bool bHitS3 = false;
                     auto MockWriteToS3 = [&bHitS3](const FString& Region, const FString& BucketName,
-                                                   const FString& ObjectName,
-                                                   const FString& Content) -> bool
+                                                   const FString& ObjectName, const FString& Content) -> bool
                     {
                         bHitS3 = true;
                         return true;
@@ -492,12 +490,11 @@ void ConfigImportExportSpec::Define()
                     // Generate Exporter
                     Exporter = NewObject<UMockableConfigImportExport>();
 
-                    FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+                    const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
                     AmbitMode->UISettings->AwsRegion = Aws::Region::US_EAST_1;
                     AmbitMode->UISettings->S3BucketName = "test--config-import-export--process-sdf-for-export";
-                    AmbitMode->UISettings->BatchName = "AmbitTest"
-                            + FDateTime::UtcNow().ToString()
-                            + "ProcessSdfForExport";
+                    AmbitMode->UISettings->BatchName = "AmbitTest" + FDateTime::UtcNow().ToString() +
+                            "ProcessSdfForExport";
                 });
 
                 Describe("When an Error Occurs During Put", [this]()
@@ -505,8 +502,7 @@ void ConfigImportExportSpec::Define()
                     It("Should Catch and Log Error (Invalid Argument)", [this]()
                     {
                         auto MockWriteToS3 = [](const FString& Region, const FString& BucketName,
-                                                const FString& ObjectName,
-                                                const FString& Content) -> bool
+                                                const FString& ObjectName, const FString& Content) -> bool
                         {
                             throw std::invalid_argument("Test Fail");
                         };
@@ -525,8 +521,7 @@ void ConfigImportExportSpec::Define()
                     It("Should Catch and Log Error (Runtime Argument)", [this]()
                     {
                         auto MockWriteToS3 = [](const FString& Region, const FString& BucketName,
-                                                const FString& ObjectName,
-                                                const FString& Content) -> bool
+                                                const FString& ObjectName, const FString& Content) -> bool
                         {
                             throw std::runtime_error("Test Fail");
                         };
@@ -545,8 +540,7 @@ void ConfigImportExportSpec::Define()
                     It("Should Throw Other Error To Caller", [this]()
                     {
                         auto MockWriteToS3 = [](const FString& Region, const FString& BucketName,
-                                                const FString& ObjectName,
-                                                const FString& Content) -> bool
+                                                const FString& ObjectName, const FString& Content) -> bool
                         {
                             throw std::domain_error("Test Fail");
                         };
@@ -569,7 +563,7 @@ void ConfigImportExportSpec::Define()
 
                 It("Should Use Default Configuration Name When No Name is Set", [this]()
                 {
-                    FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+                    const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
                     AmbitMode->UISettings->ConfigurationName = "";
 
                     FString SpecifiedBscConfigName;
@@ -592,7 +586,7 @@ void ConfigImportExportSpec::Define()
 
                 It("Should Use Specified Configuration Name When Name is Set", [this]()
                 {
-                    FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+                    const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
                     AmbitMode->UISettings->ConfigurationName = "ConfigImportExportUnitTest";
 
                     FString SpecifiedBscConfigName;
@@ -615,14 +609,13 @@ void ConfigImportExportSpec::Define()
 
                 It("Should Create A Path for SDF Configuration", [this]()
                 {
-                    FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+                    const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
                     AmbitMode->UISettings->ConfigurationName = "ConfigImportExportUnitTest";
                     AmbitMode->UISettings->ScenarioName = "ConfigTest";
 
                     FString ActualPathName;
                     auto MockWriteToS3 = [&ActualPathName](const FString& Region, const FString& BucketName,
-                                                           const FString& ObjectName,
-                                                           const FString& Content) -> bool
+                                                           const FString& ObjectName, const FString& Content) -> bool
                     {
                         ActualPathName = ObjectName;
                         return true;
@@ -763,8 +756,7 @@ void ConfigImportExportSpec::Define()
                 if (FoundField)
                 {
                     const bool FoundItems = AmbitSpawnerSection->Get()->TryGetArrayField(
-                        JsonConstants::KAmbitSpawnerObjectsKey,
-                        OutputArray);
+                        JsonConstants::KAmbitSpawnerObjectsKey, OutputArray);
                 }
 
                 TestEqual("Spawned Object count should be consistent", OutputArray->Num(), 1);
@@ -810,8 +802,7 @@ void ConfigImportExportSpec::Define()
             {
                 return "Test";
             };
-            auto MockWriteToS3 = [](const FString& Region, const FString& BucketName,
-                                    const FString& ObjectName,
+            auto MockWriteToS3 = [](const FString& Region, const FString& BucketName, const FString& ObjectName,
                                     const FString& Content) -> bool
             {
                 return true;
@@ -843,15 +834,14 @@ void ConfigImportExportSpec::Define()
                 };
                 Spawner->LambdaGenerateSpawnedObjectConfiguration = SpawnedConfig;
 
-                UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher =
-                        NewObject<UAmbitExporterDelegateWatcher>();
+                UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher = NewObject<
+                    UAmbitExporterDelegateWatcher>();
                 ConfigurationDelegateWatcher->SpawnerCount = 1;
                 ConfigurationDelegateWatcher->bSendToS3 = false;
                 ConfigurationDelegateWatcher->Parent = Exporter;
 
-                Spawner->GetOnSpawnedObjectConfigCompletedDelegate()
-                       .BindUObject(ConfigurationDelegateWatcher,
-                                    &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
+                Spawner->GetOnSpawnedObjectConfigCompletedDelegate().BindUObject(
+                    ConfigurationDelegateWatcher, &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
 
                 // Assert
                 AddExpectedError("One of the SDF configurations have failed to generate properly",
@@ -891,15 +881,15 @@ void ConfigImportExportSpec::Define()
                     };
                     Spawner->LambdaGenerateSpawnedObjectConfiguration = SpawnedConfig;
 
-                    UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher =
-                            NewObject<UAmbitExporterDelegateWatcher>();
+                    UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher = NewObject<
+                        UAmbitExporterDelegateWatcher>();
                     ConfigurationDelegateWatcher->SpawnerCount = 1;
                     ConfigurationDelegateWatcher->bSendToS3 = false;
                     ConfigurationDelegateWatcher->Parent = Exporter;
 
-                    Spawner->GetOnSpawnedObjectConfigCompletedDelegate()
-                           .BindUObject(ConfigurationDelegateWatcher,
-                                        &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
+                    Spawner->GetOnSpawnedObjectConfigCompletedDelegate().BindUObject(
+                        ConfigurationDelegateWatcher,
+                        &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
 
                     Spawner->GenerateSpawnedObjectConfiguration();
                 });
@@ -955,19 +945,19 @@ void ConfigImportExportSpec::Define()
                     };
                     Spawner2->LambdaGenerateSpawnedObjectConfiguration = SpawnedConfig2;
 
-                    UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher =
-                            NewObject<UAmbitExporterDelegateWatcher>();
+                    UAmbitExporterDelegateWatcher* ConfigurationDelegateWatcher = NewObject<
+                        UAmbitExporterDelegateWatcher>();
                     ConfigurationDelegateWatcher->SpawnerCount = 2;
                     ConfigurationDelegateWatcher->bSendToS3 = false;
                     ConfigurationDelegateWatcher->Parent = Exporter;
 
-                    Spawner->GetOnSpawnedObjectConfigCompletedDelegate()
-                           .BindUObject(ConfigurationDelegateWatcher,
-                                        &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
+                    Spawner->GetOnSpawnedObjectConfigCompletedDelegate().BindUObject(
+                        ConfigurationDelegateWatcher,
+                        &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
 
-                    Spawner2->GetOnSpawnedObjectConfigCompletedDelegate()
-                            .BindUObject(ConfigurationDelegateWatcher,
-                                         &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
+                    Spawner2->GetOnSpawnedObjectConfigCompletedDelegate().BindUObject(
+                        ConfigurationDelegateWatcher,
+                        &UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler);
 
                     Spawner->GenerateSpawnedObjectConfiguration();
                     Spawner2->GenerateSpawnedObjectConfiguration();
@@ -975,8 +965,10 @@ void ConfigImportExportSpec::Define()
 
                 It("Should Generate Config from ProcessSdfForExport", [this]()
                 {
-                    TestTrue("JSON Contains expected test field (first item)", JsonContent.Contains("\"ActorToSpawn\": \"Test\","));
-                    TestTrue("JSON Contains expected test field (second item)", JsonContent.Contains("\"ActorToSpawn\": \"Test2\","));
+                    TestTrue("JSON Contains expected test field (first item)",
+                             JsonContent.Contains("\"ActorToSpawn\": \"Test\","));
+                    TestTrue("JSON Contains expected test field (second item)",
+                             JsonContent.Contains("\"ActorToSpawn\": \"Test2\","));
                 });
 
                 It("Should Condense Arrays of Spawned Objects", [this]()

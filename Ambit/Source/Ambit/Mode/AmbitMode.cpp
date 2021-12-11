@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,14 +14,14 @@
 
 #include "AmbitMode.h"
 
-#include "AmbitObject.h"
-#include "AmbitWeather.h"
-#include "Toolkits/ToolkitManager.h"
 #include "EditorModeManager.h"
 #include "EditorViewportClient.h"
-#include "Ambit/Utils/UserMetricsSubsystem.h"
+#include "Toolkits/ToolkitManager.h"
 
+#include "AmbitObject.h"
+#include "AmbitWeather.h"
 #include "AmbitWidget.h"
+#include "Ambit/Utils/UserMetricsSubsystem.h"
 
 const FEditorModeID FAmbitMode::EM_AmbitModeId = TEXT("EM_AmbitMode");
 
@@ -36,9 +36,7 @@ FAmbitMode::FAmbitMode()
     UISettings->SetParent(this);
 }
 
-FAmbitMode::~FAmbitMode()
-{
-}
+FAmbitMode::~FAmbitMode() = default;
 
 void FAmbitMode::AddReferencedObjects(FReferenceCollector& Collector)
 {
@@ -59,7 +57,8 @@ void FAmbitMode::Enter()
         Toolkit->Init(Owner->GetToolkitHost());
     }
 
-    GEngine->GetEngineSubsystem<UUserMetricsSubsystem>()->Track(UserMetrics::AmbitMode::KAmbitModeOpenEvent, UserMetrics::AmbitMode::KAmbitModeNameSpace);
+    GEngine->GetEngineSubsystem<UUserMetricsSubsystem>()->Track(UserMetrics::AmbitMode::KAmbitModeOpenEvent,
+                                                                UserMetrics::AmbitMode::KAmbitModeNameSpace);
 }
 
 void FAmbitMode::Exit()
@@ -73,7 +72,8 @@ void FAmbitMode::Exit()
     // Call base Exit method to ensure proper cleanup
     FEdMode::Exit();
 
-    GEngine->GetEngineSubsystem<UUserMetricsSubsystem>()->Track(UserMetrics::AmbitMode::KAmbitModeCloseEvent, UserMetrics::AmbitMode::KAmbitModeNameSpace);
+    GEngine->GetEngineSubsystem<UUserMetricsSubsystem>()->Track(UserMetrics::AmbitMode::KAmbitModeCloseEvent,
+                                                                UserMetrics::AmbitMode::KAmbitModeNameSpace);
 }
 
 void FAmbitMode::Tick(FEditorViewportClient* ViewportClient, float DeltaTime)
@@ -83,13 +83,12 @@ void FAmbitMode::Tick(FEditorViewportClient* ViewportClient, float DeltaTime)
     for (TObjectIterator<AAmbitWeather> It; It; ++It)
     {
         AAmbitWeather* Weather = Cast<AAmbitWeather>(*It);
-        if (Weather)
+        if (Weather != nullptr)
         {
             Weather->ApplyTimeOfDay(UISettings->TimeOfDay);
             Weather->ApplyWeather(UISettings->WeatherParameters);
-            if (UISettings->TimeOfDay != TimeOfDay::KDefaultMorningSolarTime &&
-                UISettings->TimeOfDay != TimeOfDay::KDefaultMidDaySolarTime &&
-                UISettings->TimeOfDay != TimeOfDay::KDefaultEveningSolarTime &&
+            if (UISettings->TimeOfDay != TimeOfDay::KDefaultMorningSolarTime && UISettings->TimeOfDay !=
+                TimeOfDay::KDefaultMidDaySolarTime && UISettings->TimeOfDay != TimeOfDay::KDefaultEveningSolarTime &&
                 UISettings->TimeOfDay != TimeOfDay::KDefaultNightSolarTime)
             {
                 UISettings->PresetTimeOfDay = TimeOfDay::KCustom;

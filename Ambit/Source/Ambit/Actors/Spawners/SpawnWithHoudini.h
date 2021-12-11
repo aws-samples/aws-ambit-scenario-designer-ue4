@@ -1,11 +1,11 @@
 ﻿//   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,22 +45,17 @@ struct AMBIT_API FHoudiniLoadableAsset
     GENERATED_BODY()
 
 public:
-
     /**
      * A specific Houdini Digital Asset that we wish to load to the screen.
      */
-    UPROPERTY(EditAnywhere, meta =
-        (DisplayName = "Houdini Asset"),
-        Category = "Ambit Spawner")
+    UPROPERTY(EditAnywhere, meta = (DisplayName = "Houdini Asset"), Category = "Ambit Spawner")
     UHoudiniAsset* HDAToLoad;
 
     /**
      * A list of the parameters that we will randomize. If it is not in this list,
      * it will not be randomized.
      */
-    UPROPERTY(EditAnywhere, meta =
-        (DisplayName = "Parameters to randomize"),
-        Category = "Ambit Spawner")
+    UPROPERTY(EditAnywhere, meta = (DisplayName = "Parameters to randomize"), Category = "Ambit Spawner")
     TSet<FName> ParamsToRandom;
 
     /**
@@ -81,6 +76,7 @@ class AMBIT_API ASpawnWithHoudini : public AActor, public IAmbitSpawner
     GENERATED_BODY()
 public:
     ASpawnWithHoudini();
+
     ~ASpawnWithHoudini();
 
     class UBillboardComponent* IconComponent;
@@ -88,35 +84,31 @@ public:
     /**
      * Change this value to generate different random arrangements.
      */
-    UPROPERTY(EditAnywhere,
-        Category = "Ambit Spawner")
+    UPROPERTY(EditAnywhere, Category = "Ambit Spawner")
     int32 RandomSeed = 0;
 
     /**
      * Select to Match By AND/OR
      */
-    UPROPERTY(EditAnywhere,
-        Category = "Ambit Spawner")
+    UPROPERTY(EditAnywhere, Category = "Ambit Spawner")
     TEnumAsByte<EMatchBy> MatchBy = EMatchBy::NameAndTags;
 
     /**
      * The search string used to find actors representing surfaces to spawn onto.
      */
-    UPROPERTY(EditAnywhere,
-        Category = "Ambit Spawner")
+    UPROPERTY(EditAnywhere, Category = "Ambit Spawner")
     FString SurfaceNamePattern = "";
 
     /**
      *The tag name used to find actors representing surfaces to spawn onto.
      */
-    UPROPERTY(EditAnywhere,
-        Category = "Ambit Spawner")
+    UPROPERTY(EditAnywhere, Category = "Ambit Spawner")
     TArray<FName> SurfaceTags;
 
     /**
      * The maximum random value floats can be adjusted to.
      */
-     float FloatMax = 100.f;
+    float FloatMax = 100.f;
 
     /**
      * The maximum random value ints can be adjusted to.
@@ -126,24 +118,19 @@ public:
     /**
      * The minimum number of items to spawn per square meter on average.
      */
-    UPROPERTY(EditAnywhere, meta =
-        (DisplayName = "Items Per Meter (Min)"),
-        Category = "Ambit Spawner")
+    UPROPERTY(EditAnywhere, meta = (DisplayName = "Items Per Meter (Min)"), Category = "Ambit Spawner")
     float DensityMin = 0.05f;
 
     /**
      * The maximum number of items to spawn per square meter on average.
      */
-    UPROPERTY(EditAnywhere, meta = (DisplayName =
-        "Items Per Meter (Max)"),
-        Category = "Ambit Spawner")
+    UPROPERTY(EditAnywhere, meta = (DisplayName = "Items Per Meter (Max)"), Category = "Ambit Spawner")
     float DensityMax = 0.2f;
 
     /**
      * The HDA that will be spawned randomly.
      */
-    UPROPERTY(EditAnywhere, meta =
-        (DisplayName = "Houdini Asset", ShowOnlyInnerProperties, AdvancedDisplay),
+    UPROPERTY(EditAnywhere, meta = (DisplayName = "Houdini Asset", ShowOnlyInnerProperties, AdvancedDisplay),
         Category = "Ambit Spawner")
     TArray<FHoudiniLoadableAsset> HoudiniAssetDetails;
 
@@ -223,7 +210,7 @@ public:
     /**
      * @inheritDoc
      */
-    void Configure(const TSharedPtr<FSpawnWithHoudiniConfig> Config);
+    void Configure(const TSharedPtr<FSpawnWithHoudiniConfig>& Config);
 
     /**
      * @inheritDoc
@@ -320,17 +307,26 @@ private:
     /**
      * Determines if we are trying to export to SDF, which requires we bake assets to disk. 
      */
-    bool IsExportSdf() const { return OnSpawnedObjectConfigCompleted.IsBound(); };
+    bool IsExportSdf() const
+    {
+        return OnSpawnedObjectConfigCompleted.IsBound();
+    };
 
     /**
      * A content-specified path (based on the Game's Content folder) to where the baked objects will be placed.
      */
-    FString GetBakePathRelative() const { return "/Game/Ambit/" + this->GetName(); };
+    FString GetBakePathRelative() const
+    {
+        return "/Game/Ambit/" + this->GetName();
+    };
 
     /**
      * An absolute path on disk to the Content directory to where the baked objects will be placed.
      */
-    FString GetBakePathFull() const { return FPaths::ProjectContentDir() + "/Ambit/" + this->GetName(); };
+    FString GetBakePathFull() const
+    {
+        return FPaths::ProjectContentDir() + "/Ambit/" + this->GetName();
+    };
 
     /**
      * Handles the SDF export by finding all of the baked objects, packaging them for the SDF,

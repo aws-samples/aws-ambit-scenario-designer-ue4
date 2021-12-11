@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//   
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//   
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//   
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,11 +22,11 @@
 #include "Math/UnrealMathUtility.h"
 #include "UObject/ConstructorHelpers.h"
 
-#include <AmbitUtils/MenuHelpers.h>
-
 #include "Ambit/AmbitModule.h"
 #include "Ambit/Mode/Constant.h"
 #include "Ambit/Utils/AmbitWorldHelpers.h"
+
+#include <AmbitUtils/MenuHelpers.h>
 
 ASpawnInVolume::ASpawnInVolume()
 {
@@ -43,17 +43,16 @@ ASpawnInVolume::ASpawnInVolume()
     IconComponent->SetupAttachment(RootComponent);
 }
 
-void ASpawnInVolume::PostEditChangeProperty(
-    FPropertyChangedEvent& PropertyChangedEvent)
+void ASpawnInVolume::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);
 
     const FRotator& BoxRotation = Box->GetComponentTransform().Rotator();
-    if (!FMath::IsNearlyEqual(BoxRotation.Roll, 0.f) ||
-        !FMath::IsNearlyEqual(BoxRotation.Pitch, 0.f))
+    if (!FMath::IsNearlyEqual(BoxRotation.Roll, 0.f) || !FMath::IsNearlyEqual(BoxRotation.Pitch, 0.f))
     {
         const FString& Message = FString::Printf(
-            TEXT("The bound specifier of %s is not flat, which is not allowed. Please set roll (x) and pitch (y) values to 0."),
+            TEXT(
+                "The bound specifier of %s is not flat, which is not allowed. Please set roll (x) and pitch (y) values to 0."),
             *this->GetActorLabel());
         FMenuHelpers::DisplayMessagePopup(Message, "Warning");
     }
@@ -64,18 +63,15 @@ void ASpawnInVolume::PostEditChangeProperty(
     }
 }
 
-TSharedPtr<FSpawnInVolumeConfig>
-ASpawnInVolume::GetConfiguration() const
+TSharedPtr<FSpawnInVolumeConfig> ASpawnInVolume::GetConfiguration() const
 {
-    TSharedPtr<FSpawnInVolumeConfig> Config =
-        Super::GetConfiguration<FSpawnInVolumeConfig>();
+    TSharedPtr<FSpawnInVolumeConfig> Config = Super::GetConfiguration<FSpawnInVolumeConfig>();
     Config->BoxExtent = Box->GetScaledBoxExtent();
     Config->bSnapToSurfaceBelow = bSnapToSurfaceBelow;
     return Config;
 }
 
-void ASpawnInVolume::Configure(
-    const TSharedPtr<FSpawnInVolumeConfig>& Config)
+void ASpawnInVolume::Configure(const TSharedPtr<FSpawnInVolumeConfig>& Config)
 {
     Super::Configure<FSpawnInVolumeConfig>(Config);
     Box->SetBoxExtent(Config->BoxExtent);
@@ -93,11 +89,11 @@ TMap<FString, TArray<FTransform>> ASpawnInVolume::GenerateActors()
     }
 
     const FRotator& BoxRotation = Box->GetComponentTransform().Rotator();
-    if (!FMath::IsNearlyEqual(BoxRotation.Roll, 0.f) ||
-        !FMath::IsNearlyEqual(BoxRotation.Pitch, 0.f))
+    if (!FMath::IsNearlyEqual(BoxRotation.Roll, 0.f) || !FMath::IsNearlyEqual(BoxRotation.Pitch, 0.f))
     {
         const FString& Message = FString::Printf(
-            TEXT("The bound specifier of %s is not flat, which is not allowed. Please set roll (x) and pitch (y) values to 0."),
+            TEXT(
+                "The bound specifier of %s is not flat, which is not allowed. Please set roll (x) and pitch (y) values to 0."),
             *this->GetActorLabel());
         FMenuHelpers::DisplayMessagePopup(Message, "Warning");
         return SpawnedObject;
@@ -115,12 +111,11 @@ TMap<FString, TArray<FTransform>> ASpawnInVolume::GenerateActors()
     {
         UE_LOG(LogAmbit, Warning,
                TEXT("%s: The bound specifier is not a plane. SpawnInVolume will use the top of the box."),
-            *this->GetActorLabel());
+               *this->GetActorLabel());
     }
 
     const TArray<FTransform>& Transforms = AmbitWorldHelpers::GenerateRandomLocationsFromBox(
-        Box, SurfacesToHit, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax,
-        RotationMin, RotationMax);
+        Box, SurfacesToHit, RandomSeed, bSnapToSurfaceBelow, DensityMin, DensityMax, RotationMin, RotationMax);
 
     if (Transforms.Num() > 0)
     {
@@ -128,4 +123,3 @@ TMap<FString, TArray<FTransform>> ASpawnInVolume::GenerateActors()
     }
     return SpawnedObject;
 }
-
