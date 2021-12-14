@@ -6,10 +6,10 @@ nav:
         - Setup: setup.md
     - Static Obstacles:
         - Overview: spawner-parent.md
-        - Spawn on Surface: spawn-on-surface.md
         - Spawn in Volume: spawn-in-volume.md
-        - Spawn with Houdini Digital Assets: spawn-with-houdini.md
         - Spawn on Path: spawn-on-path.md
+        - Spawn on Surface: spawn-on-surface.md
+        - Spawn with Houdini Digital Assets: spawn-with-houdini.md
         - Ambit Spawner Examples: spawner-examples.md
     - Dynamic Obstacles: 
         - Overview: spawn-vehicle-path-parent.md
