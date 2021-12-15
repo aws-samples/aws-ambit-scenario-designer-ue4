@@ -23,7 +23,7 @@ nav:
         - Overview: weather.md
     - Simulation Scenarios:
         - Manual Scenario Generation: individual-scenario-generation.md
-        - Automated Scenario Generation: bulk-senario-generation.md
+        - Automated Scenario Generation: bulk-scenario-generation.md
         - Working with AWS in Ambit: aws-setup.md
     - Exporting Assets:
         - Export Map Options: map-export.md
