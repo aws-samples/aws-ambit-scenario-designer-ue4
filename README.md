@@ -14,6 +14,7 @@ Ambit is implemented as a plugin for Unreal Engine and has been tested for compa
 
 ```
 📂 Ambit/                      ~ Source code for the Ambit UE4 plug-in
+📂 config/                     ~ Source for Ambit configuration files for development
 📂 docs/                       ~ Source for Ambit documentation
 📄 CONTRIBUTING.md             ~ Guidelines for contributing to this project
 📄 LICENSE                     ~ This project's licensing terms
