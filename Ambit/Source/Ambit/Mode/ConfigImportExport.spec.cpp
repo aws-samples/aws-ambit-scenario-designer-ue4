@@ -488,8 +488,14 @@ void ConfigImportExportSpec::Define()
                     };
                     Exporter->SetMockPutObjectS3(MockWriteToS3);
 
+                    auto MockCreateBucket = [](const FString& Region, const FString& BucketName) -> void
+                    {
+                        throw std::invalid_argument("The bucket name or region is empty");
+                    };
+                    Exporter->SetMockS3CreateBucket(MockCreateBucket);
+
                     // Must be set before we call the function.
-                    AddExpectedError("The bucket name or region is empty", EAutomationExpectedErrorFlags::Contains, 2);
+                    AddExpectedError("The bucket name or region is empty", EAutomationExpectedErrorFlags::Contains, 1);
 
                     const TMap<FString, TSharedPtr<FJsonObject>> FakeArray;
                     const bool bWroteSuccess = Exporter->ProcessSdfForExport(FakeArray, true);
