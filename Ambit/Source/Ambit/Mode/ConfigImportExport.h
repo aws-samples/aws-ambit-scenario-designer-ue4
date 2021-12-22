@@ -297,3 +297,15 @@ private:
      */
     TMap<FString, TSharedPtr<FJsonObject>> AllSpawnerConfiguration;
 };
+
+/**
+* Calls AWSWrapper::ListBuckets
+* Allows for injection of the function so that it can be changed for functional testing purposes.
+*/
+static TFunction<TSet<FString>()> LambdaS3ListBuckets = AWSWrapper::ListBuckets;
+
+/**
+* Calls AWSWrapper::CreateBucketWithEncryption
+* Allows for injection of the function so that it can be changed for functional testing purposes.
+*/
+static TFunction<void(const FString& Region, const FString& BucketName)> LambdaS3CreateBucket = AWSWrapper::CreateBucketWithEncryption;
