@@ -425,6 +425,22 @@ void ConfigImportExportSpec::Define()
             };
 
             Exporter->SetMockWriteFile(MockWrite);
+
+            auto MockListBuckets = []() -> TSet<FString>
+            {
+                TSet<FString> setBuckets;
+                setBuckets.Add("BucketName");
+                return setBuckets;
+            };
+
+            Exporter->SetMockS3ListBuckets(MockListBuckets);
+
+            auto MockCreateBucket = [](const FString& Region, const FString& BucketName) -> void
+            {
+                return;
+            };
+
+            Exporter->SetMockS3CreateBucket(MockCreateBucket);
         });
 
         Describe("When Writing to Disk", [this]()

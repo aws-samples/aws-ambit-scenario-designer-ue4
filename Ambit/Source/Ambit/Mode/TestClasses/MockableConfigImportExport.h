@@ -55,6 +55,24 @@ public:
     };
 
     /**
+    * Overrides the default behavior of S3ListBuckets, the function called to list all buckets in an account, to be overwritten with
+    * the function passed in.
+    */
+    void SetMockS3ListBuckets(TFunction<TSet<FString>()> MockFunction)
+    {
+        LambdaS3ListBuckets = std::move(MockFunction);
+    }
+
+    /**
+    * Overrides the default behavior of S3CreateBucket, the function called to create a new bucket for ____, to be overwritten with
+    * the function passed in.
+    */
+    void SetMockS3CreateBucket(TFunction<void(const FString& Region, const FString& BucketName)> MockFunction)
+    {
+        LambdaS3CreateBucket = std::move(MockFunction);
+    }
+
+    /**
      * Sets the DoneDelegate to be the value specified. Used in "Latent" Automation Tests.
      */
     void SetSdfProcessDone(FDoneDelegate const& DoneEvent)

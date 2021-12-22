@@ -828,7 +828,7 @@ bool UConfigImportExport::CreateBucket(const FString& AwsRegion, const FString& 
     TSet<FString> BucketsSet;
     try
     {
-        BucketsSet = AWSWrapper::ListBuckets();
+        BucketsSet = LambdaS3ListBuckets();
     }
     catch (const std::runtime_error& Re)
     {
@@ -841,7 +841,7 @@ bool UConfigImportExport::CreateBucket(const FString& AwsRegion, const FString& 
     {
         try
         {
-            AWSWrapper::CreateBucketWithEncryption(AwsRegion, BucketName);
+            LambdaS3CreateBucket(AwsRegion, BucketName);
         }
         catch (const std::invalid_argument& Ia)
         {
