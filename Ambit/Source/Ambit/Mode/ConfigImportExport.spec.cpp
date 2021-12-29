@@ -1017,4 +1017,101 @@ void ConfigImportExportSpec::Define()
             JsonContent = nullptr;
         });
     });
+
+    Describe("OnExportMap()", [this]()
+    {
+        BeforeEach([this]()
+        {
+            // Create Mode Settings
+            GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
+
+            FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+            check(AmbitMode);
+
+            // Set AWS S3 bucket to store test data
+            AmbitMode->UISettings->AwsRegion = "us-west-2";
+            AmbitMode->UISettings->S3BucketName = "ambit-unit-test-data";
+
+            // Set target platform for export
+            AmbitMode->UISettings->ExportPlatforms.SetWindows(true);
+
+            // Generate World
+            World = FAutomationEditorCommonUtils::CreateNewMap();
+
+            // Generate Exporter
+            Exporter = NewObject<UMockableConfigImportExport>();
+        });
+
+        It("Should Return FReply::Handled", [this]()
+        {
+            const FReply Reply = Exporter->OnExportMap();
+
+            TestTrue("Reply should be true on return", Reply.IsEventHandled());
+        });
+
+        AfterEach([this]()
+        {
+            GLevelEditorModeTools().DeactivateMode(FAmbitMode::EM_AmbitModeId);
+            Exporter = nullptr;
+            JsonContent = "";
+        });
+    });
+
+    Describe("OnExportGltf()", [this]()
+    {
+        BeforeEach([this]()
+        {
+            // Generate World
+            World = FAutomationEditorCommonUtils::CreateNewMap();
+
+            // Create Mode Settings
+            GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
+
+            FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+            check(AmbitMode);
+
+            // Set AWS S3 bucket to store test data
+            AmbitMode->UISettings->AwsRegion = "us-west-2";
+            AmbitMode->UISettings->S3BucketName = "ambit-unit-test-data";
+
+            // Generate Exporter
+            Exporter = NewObject<UMockableConfigImportExport>();
+        });
+
+        It("Should fail if no mesh to export", [this]()
+        {
+            AddExpectedError("Cannot find a static mesh to export.", EAutomationExpectedErrorFlags::Exact, 1);
+            Exporter->OnExportGltf();
+        });
+
+        It("Should succeed after test map is loaded", [this]()
+        {
+            FAutomationEditorCommonUtils::LoadMap("/Ambit/Test/Maps/ProceduralPlacementTestMap");
+
+            // Create Mode Settings
+            GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
+
+            FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+            check(AmbitMode);
+
+            // Set AWS S3 bucket to store test data
+            AmbitMode->UISettings->AwsRegion = "us-west-2";
+            AmbitMode->UISettings->S3BucketName = "ambit-unit-test-data";
+
+            // Set target platform and file type for export
+            AmbitMode->UISettings->ExportPlatforms.SetWindows(true);
+            AmbitMode->UISettings->GltfType = "gltf";
+
+            const FReply Reply = Exporter->OnExportGltf();
+
+            TestTrue("Reply should be true on return", Reply.IsEventHandled());
+        });
+
+        AfterEach([this]()
+        {
+            GLevelEditorModeTools().DeactivateMode(FAmbitMode::EM_AmbitModeId);
+            Exporter = nullptr;
+            JsonContent = "";
+        });
+    });
 }
