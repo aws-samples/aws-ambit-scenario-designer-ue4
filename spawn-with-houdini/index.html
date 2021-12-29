@@ -58,9 +58,11 @@
                 <ul class="current">
                     <li class="toctree-l1"><a class="reference internal" href="../spawner-parent/">Overview</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-surface/">Spawn on Surface</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../spawn-in-volume/">Spawn in Volume</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-path/">Spawn on Path</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-surface/">Spawn on Surface</a>
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Spawn with Houdini Digital Assets</a>
     <ul class="current">
@@ -69,8 +71,6 @@
     <li class="toctree-l2"><a class="reference internal" href="#further-usage">Further Usage</a>
     </li>
     </ul>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-path/">Spawn on Path</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../spawner-examples/">Ambit Spawner Examples</a>
                     </li>
@@ -102,7 +102,7 @@
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../individual-scenario-generation/">Manual Scenario Generation</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../bulk-senario-generation/">Automated Scenario Generation</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../bulk-scenario-generation/">Automated Scenario Generation</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../aws-setup/">Working with AWS in Ambit</a>
                     </li>
@@ -163,18 +163,18 @@
 <p>The <strong>Spawn with Houdini</strong> works very similarly to the <a href="/spawn-on-surface/">Spawn on Surface</a>. The main difference being that you can trigger the generate by the <em>Generate Obstacles</em> button while in the editor, and can specify Houdini Digital Assets to be selected as what to spawn.</p>
 <p><em>Houdini Digital Assets (HDAs)</em> have the ability to surface user parameters for a user to update to customize what look the obstacle has. </p>
 <p>While in the editor mode, the <strong>Spawn with Houdini</strong> instance allows users to <number-badge>1</number-badge> <em>generate</em> many instances of an HDA which then randomizes the "seed" parameters of the HDA. By generating the obstacles here, you can pre-cook the HDAs to the screen to save on loading later. Obstacles generated at this phase will not regenerate when pressing play, nor be deleted once the play has finished.
-If you are not happy with the results or want to clean your world of these spawned obstacles - simply click the <number-badge>2</number-badge> <em>clear obstacles</em> button.</p>
+If you are not happy with the results or want to clean your world of these spawned obstacles - simply click the <number-badge>2</number-badge> <em>Clear Obstacles</em> button.</p>
+<p>You can always change the randomization of locations and parameters by updating the <number-badge>3</number-badge> <em>Random Seed</em>.</p>
+<p>To dictate where the obstacles are spawned a <number-badge>4</number-badge> similar form can be filled out as the <a href="/spawn-on-surface/">Spawn on Surface</a> to match by <em>Surface Name Pattern</em> and/or by <em>Surface Tag</em>. The number of generated obstacles can be controlled using the <number-badge>5</number-badge> <em>density</em> range.</p>
+<p>The user can select which HDA they want to spawn in bulk by selecting it as the <number-badge>6</number-badge> <em>Houdini Asset</em> from the dropdown. <strong>Note:</strong> This asset must already be imported into Unreal Engine via the Houdini Plugin.</p>
+<p><img alt="Spawn with Houdini UI" src="../images/spawn-with-houdini/AmbitSpawnerForHoudini_UI_Annotated.png" /></p>
 <p>While in the play mode, the <strong>Spawn with Houdini</strong> will automatically generate with the settings specified. These assets will also automatically be removed once the play has finished. 
 <strong>Note:</strong> The <strong>Spawn with Houdini</strong> will only generate obstacles in play mode if there has not already been spawned actors from the editor mode. </p>
 <p><img alt="Spawn with Houdini UI" src="../images/spawn-with-houdini/AmbitSpawnerForHoudini_Random.png" /></p>
-<p>You can always change the randomization of locations and parameters by updating the <number-badge>3</number-badge> <em>random seed</em>.</p>
-<p>To dictate where the obstacles are spawned a <number-badge>4</number-badge> similar form can be filled out as the <a href="/spawn-on-surface/">Spawn on Surface</a> to match by name and/or by tag.</p>
-<p>The user can select which HDA they want to spawn in bulk by selecting it as the <number-badge>5</number-badge> <em>Houdini Asset</em> from the dropdown. <strong>Note:</strong> This asset must already be imported into Unreal Engine via the Houdini Plugin.</p>
-<p><img alt="Spawn with Houdini UI" src="../images/spawn-with-houdini/AmbitSpawnerForHoudini_UI_Annotated.png" /></p>
 <h2 id="further-usage">Further Usage<a class="headerlink" href="#further-usage" title="Permanent link">&para;</a></h2>
 <p>Multiple <strong>Spawn with Houdini</strong> actors can be placed on the scene, allowing users to create any number of settings to place HDA to the screen. </p>
-<p>If you wish to spawn more assets using the same configuration, press the <number-badge>6</number-badge> + symbol on top this will add a new entry. Expand the selection that appears to put in a different HDA to spawn. One of the HDA from this list will spawn on the locations that are available to spawn.  </p>
-<p>You can customize which parameters are randomized from an HDA by adding their value into the <number-badge>7</number-badge> Parameters to Randomize section. These are the underlying parameter names in the HDA, and can be added so that specific part is randomized when the object is created. If you do not specify anything, <strong>Spawn With Houdini</strong> will automatically look for the "seed" parameter of the HDA and place this in the list automatically.</p>
+<p>If you wish to spawn more assets using the same configuration, press the <number-badge>7</number-badge> + symbol on top this will add a new entry. Expand the selection that appears to put in a different HDA to spawn. One of the HDA from this list will spawn on the locations that are available to spawn.  </p>
+<p>You can customize which parameters are randomized from an HDA by adding their value into the <number-badge>8</number-badge> <em>Parameters to Randomize</em> section. These are the underlying parameter names in the HDA, and can be added so that specific part is randomized when the object is created. If you do not specify anything, <strong>Spawn With Houdini</strong> will automatically look for the "seed" parameter of the HDA and place this in the list automatically.</p>
               
             </div>
           </div>
@@ -182,10 +182,10 @@ If you are not happy with the results or want to clean your world of these spawn
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../spawn-on-path/" class="btn btn-neutral float-right" title="Spawn on Path">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../spawner-examples/" class="btn btn-neutral float-right" title="Ambit Spawner Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../spawn-in-volume/" class="btn btn-neutral" title="Spawn in Volume"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../spawn-on-surface/" class="btn btn-neutral" title="Spawn on Surface"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -211,10 +211,10 @@ If you are not happy with the results or want to clean your world of these spawn
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../spawn-in-volume/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../spawn-on-surface/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../spawn-on-path/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../spawner-examples/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

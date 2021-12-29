@@ -58,13 +58,13 @@
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../spawner-parent/">Overview</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-surface/">Spawn on Surface</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../spawn-in-volume/">Spawn in Volume</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../spawn-with-houdini/">Spawn with Houdini Digital Assets</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../spawn-on-path/">Spawn on Path</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-on-surface/">Spawn on Surface</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../spawn-with-houdini/">Spawn with Houdini Digital Assets</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../spawner-examples/">Ambit Spawner Examples</a>
                     </li>
@@ -102,7 +102,7 @@
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../individual-scenario-generation/">Manual Scenario Generation</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../bulk-senario-generation/">Automated Scenario Generation</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../bulk-scenario-generation/">Automated Scenario Generation</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../aws-setup/">Working with AWS in Ambit</a>
                     </li>
@@ -156,7 +156,7 @@
               
                 <h1 id="spawn-vehicle-path-actor">Spawn Vehicle Path Actor<a class="headerlink" href="#spawn-vehicle-path-actor" title="Permanent link">&para;</a></h1>
 <p>The <strong>Spawn Vehicle Path</strong> actor can be used to generate a path and spawn a single vehicle running along this path by easily doing drag-and-drop, configurating parameters and tweaking the curves.</p>
-<p>The <strong>Spawn Vehicle Path</strong> tool works by using the position of the <strong>Spawn Vehicle Path</strong> actor and the pre-made <em>spline component</em> attached to the actor to determine the path of the vehicle, which will run along the determined path. At runtime, a list of Waypoints will be generated along the path/curve defined by the spline. They will be separated by the fixed distance specified by <number-badge>2</number-badge> (unit in meter). At the same time, a copy of vehicle which can be set at <number-badge>4</number-badge> in class (<a href="https://docs.unrealengine.com/4.27/en-US/API/Plugins/PhysXVehicles/AWheeledVehicle/">AWheeledVehicle</a>) will be instantiated at the beginning of the path. The vehicle will try follow the path by reaching each waypoint from beginning and achieve the speed limit (unit in km/h) set at <number-badge>1</number-badge>. Besides, for debugging purpose, <number-badge>3</number-badge> can be toggled to visualize the waypoints at runtime.</p>
+<p>The <strong>Spawn Vehicle Path</strong> tool works by using the position of the <strong>Spawn Vehicle Path</strong> actor and the pre-made <em>spline component</em> attached to the actor to determine the path of the vehicle, which will run along the determined path. At runtime, a list of Waypoints will be generated along the path/curve defined by the spline. They will be separated by the fixed distance (unit in meter) specified by <number-badge>2</number-badge> <em>Distance Between Waypoints</em>. At the same time, a copy of vehicle which can be set at <number-badge>4</number-badge> <em>Vehicle to Spawn</em> (<a href="https://docs.unrealengine.com/4.27/en-US/API/Plugins/PhysXVehicles/AWheeledVehicle/">AWheeledVehicle</a>), will be instantiated at the beginning of the path. The vehicle will try follow the path by reaching each waypoint from beginning and achieve the <em>Speed Limit</em> (unit in km/h) set at <number-badge>1</number-badge>. <number-badge>3</number-badge> <em>Show Debug Waypoints</em> can be toggled to visualize the waypoints at runtime, for debugging purposes.</p>
 <p><img alt="Spawn Vehicle Path annotated UI" src="../images/spawn-vehicle-path/AmbitVehiclePathGenerator_UI.png" /></p>
 <h2 id="using-spawn-vehicle-path">Using Spawn Vehicle Path<a class="headerlink" href="#using-spawn-vehicle-path" title="Permanent link">&para;</a></h2>
 <p>You can use one or more <strong>Spawn Vehicle Path</strong> instances within a scene. To add an instance, drag-drop the <strong>Spawn Vehicle Path</strong> class from the <strong>Content Browser</strong> or the <strong>AWS Ambit</strong> category tab in the <em>Place Actors</em> panel into your map. You'll find the class under <strong>"Ambit C++ Classes/Ambit/Actors/Spawners"</strong>.</p>
