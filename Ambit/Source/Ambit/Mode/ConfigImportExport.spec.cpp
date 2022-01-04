@@ -1022,24 +1022,37 @@ void ConfigImportExportSpec::Define()
     {
         BeforeEach([this]()
         {
+            // Generate World
+            World = FAutomationEditorCommonUtils::CreateNewMap();
+
             // Create Mode Settings
             GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
 
             FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
             check(AmbitMode);
 
-            // Set AWS S3 bucket to store test data
-            AmbitMode->UISettings->AwsRegion = "us-west-2";
-            AmbitMode->UISettings->S3BucketName = "ambit-unit-test-data";
-
-            // Set target platform for export
-            AmbitMode->UISettings->ExportPlatforms.SetWindows(true);
-
-            // Generate World
-            World = FAutomationEditorCommonUtils::CreateNewMap();
-
             // Generate Exporter
             Exporter = NewObject<UMockableConfigImportExport>();
+
+            auto MockListBuckets = []() -> TSet<FString>
+            {
+                TSet<FString> setBuckets;
+                setBuckets.Add("BucketName");
+                return setBuckets;
+            };
+            Exporter->SetMockS3ListBuckets(MockListBuckets);
+
+            auto MockCreateBucket = [](const FString& Region, const FString& BucketName) -> void
+            {
+                return;
+            };
+            Exporter->SetMockS3CreateBucket(MockCreateBucket);
+
+            auto MockS3FileUpload = [](const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& FilePath) -> bool
+            {
+                return true;
+            };
+            Exporter->SetMockS3FileUpload(MockS3FileUpload);
         });
 
         It("Should Return FReply::Handled", [this]()
@@ -1070,12 +1083,28 @@ void ConfigImportExportSpec::Define()
             FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
             check(AmbitMode);
 
-            // Set AWS S3 bucket to store test data
-            AmbitMode->UISettings->AwsRegion = "us-west-2";
-            AmbitMode->UISettings->S3BucketName = "ambit-unit-test-data";
-
             // Generate Exporter
             Exporter = NewObject<UMockableConfigImportExport>();
+
+            auto MockListBuckets = []() -> TSet<FString>
+            {
+                TSet<FString> setBuckets;
+                setBuckets.Add("BucketName");
+                return setBuckets;
+            };
+            Exporter->SetMockS3ListBuckets(MockListBuckets);
+
+            auto MockCreateBucket = [](const FString& Region, const FString& BucketName) -> void
+            {
+                return;
+            };
+            Exporter->SetMockS3CreateBucket(MockCreateBucket);
+
+            auto MockS3FileUpload = [](const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& FilePath) -> bool
+            {
+                return true;
+            };
+            Exporter->SetMockS3FileUpload(MockS3FileUpload);
         });
 
         It("Should fail if no mesh to export", [this]()
@@ -1086,6 +1115,9 @@ void ConfigImportExportSpec::Define()
 
         It("Should succeed after test map is loaded", [this]()
         {
+            // Load the test map.
+            // Loading this map resets some aspects of AmbitMode and the Exporter objects. These need to be reset again
+            // in order for the test to succeed.
             FAutomationEditorCommonUtils::LoadMap("/Ambit/Test/Maps/ProceduralPlacementTestMap");
 
             // Create Mode Settings
@@ -1094,13 +1126,13 @@ void ConfigImportExportSpec::Define()
             FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
             check(AmbitMode);
 
-            // Set AWS S3 bucket to store test data
-            AmbitMode->UISettings->AwsRegion = "us-west-2";
-            AmbitMode->UISettings->S3BucketName = "ambit-unit-test-data";
-
-            // Set target platform and file type for export
-            AmbitMode->UISettings->ExportPlatforms.SetWindows(true);
-            AmbitMode->UISettings->GltfType = "gltf";
+            // This function has been set in BeforeEach() but loading a new map causes it to be unset. Most likely has
+            // to do with state management in UE. Resetting this function should stop any exceptions from being thrown.
+            auto MockS3FileUpload = [](const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& FilePath) -> bool
+            {
+                return true;
+            };
+            Exporter->SetMockS3FileUpload(MockS3FileUpload);
 
             const FReply Reply = Exporter->OnExportGltf();
 

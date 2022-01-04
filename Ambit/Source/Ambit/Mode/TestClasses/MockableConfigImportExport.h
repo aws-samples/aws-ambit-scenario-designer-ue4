@@ -55,6 +55,16 @@ public:
     };
 
     /**
+     * Overrides the default behavior of LambdaS3FileUpload, the function called when uploading a file to an Amazon S3 bucket in ConfigImportExport,
+     * to be the function passed in.
+     */
+    void SetMockS3FileUpload(TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName,
+                                            const FString& FilePath)> MockFunction)
+    {
+        LambdaS3FileUpload = std::move(MockFunction);
+    }
+
+    /**
     * Overrides the default behavior of S3ListBuckets, the function called to list all buckets in an account, to be overwritten with
     * the function passed in.
     */

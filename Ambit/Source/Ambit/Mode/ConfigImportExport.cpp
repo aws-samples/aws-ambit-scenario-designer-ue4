@@ -466,7 +466,7 @@ FReply UConfigImportExport::OnExportMap()
                                                                            MapName + "_" + TargetPlatform,
                                                                            TargetPlatform);
 
-            AWSWrapper::UploadFile(AwsRegion, BucketName, CompressedFile,
+            LambdaS3FileUpload(AwsRegion, BucketName, CompressedFile,
                                    FPaths::Combine(*FPaths::ProjectIntermediateDir(), *CompressedFile));
         }
         catch (const std::invalid_argument& Ia)
@@ -582,7 +582,7 @@ FReply UConfigImportExport::OnExportGltf()
         const FString& CompressedFile = AmbitFileHelpers::CompressFile(OutputDir, FPaths::ProjectIntermediateDir(),
                                                                        FolderName, TargetPlatform);
 
-        AWSWrapper::UploadFile(AwsRegion, BucketName, CompressedFile,
+        LambdaS3FileUpload(AwsRegion, BucketName, CompressedFile,
                                FPaths::Combine(*FPaths::ProjectIntermediateDir(), *CompressedFile));
     }
 
