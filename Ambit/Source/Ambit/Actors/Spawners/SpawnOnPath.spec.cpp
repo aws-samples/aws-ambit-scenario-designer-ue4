@@ -22,7 +22,7 @@
 
 #include "Ambit/Actors/SpawnerConfigs/SpawnOnPathConfig.h"
 
-BEGIN_DEFINE_SPEC(SpawnOnPathConfig, "Ambit.SpawnOnPathConfig",
+BEGIN_DEFINE_SPEC(SpawnOnPathConfig, "Ambit.Unit.SpawnOnPathConfig",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     ASpawnOnPath* Spawner;

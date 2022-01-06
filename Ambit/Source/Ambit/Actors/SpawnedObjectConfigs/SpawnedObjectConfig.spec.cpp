@@ -20,7 +20,7 @@
 #include <AmbitUtils/JsonHelpers.h>
 
 
-BEGIN_DEFINE_SPEC(SpawnedObjectConfigSpec, "Ambit.SpawnedObjectConfig",
+BEGIN_DEFINE_SPEC(SpawnedObjectConfigSpec, "Ambit.Unit.SpawnedObjectConfig",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     USpawnedObjectConfig* Config;

@@ -18,7 +18,7 @@
 
 #include <AmbitUtils/JsonHelpers.h>
 
-BEGIN_DEFINE_SPEC(SpawnInVolumeConfigSpec, "Ambit.SpawnInVolumeConfig",
+BEGIN_DEFINE_SPEC(SpawnInVolumeConfigSpec, "Ambit.Unit.SpawnInVolumeConfig",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     FSpawnInVolumeConfig Config;

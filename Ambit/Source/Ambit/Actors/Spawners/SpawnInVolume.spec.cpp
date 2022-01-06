@@ -21,7 +21,7 @@
 
 #include "Ambit/Actors/SpawnerConfigs/SpawnInVolumeConfig.h"
 
-BEGIN_DEFINE_SPEC(SpawnInVolumeSpec, "Ambit.SpawnInVolume",
+BEGIN_DEFINE_SPEC(SpawnInVolumeSpec, "Ambit.Unit.SpawnInVolume",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     ASpawnInVolume* Spawner;

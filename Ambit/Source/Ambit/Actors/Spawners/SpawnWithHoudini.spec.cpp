@@ -23,7 +23,7 @@
 #include "Ambit/Utils/AmbitWorldHelpers.h"
 
 
-BEGIN_DEFINE_SPEC(SpawnWithHoudiniSpec, "Ambit.SpawnWithHoudini",
+BEGIN_DEFINE_SPEC(SpawnWithHoudiniSpec, "Ambit.Integration.SpawnWithHoudini",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     UWorld* World;

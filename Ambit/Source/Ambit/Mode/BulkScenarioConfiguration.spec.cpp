@@ -20,7 +20,7 @@
 
 #include <AmbitUtils/JsonHelpers.h>
 
-BEGIN_DEFINE_SPEC(BulkScenarioConfigurationSpec, "Ambit.BulkScenarioConfiguration",
+BEGIN_DEFINE_SPEC(BulkScenarioConfigurationSpec, "Ambit.Unit.BulkScenarioConfiguration",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     FBulkScenarioConfiguration BulkConfig;

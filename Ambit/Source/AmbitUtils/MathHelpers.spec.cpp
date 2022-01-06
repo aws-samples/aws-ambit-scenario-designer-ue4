@@ -16,7 +16,7 @@
 
 #include "Misc/AutomationTest.h"
 
-DEFINE_SPEC(MathHelpersSpec, "AmbitUtils.MathHelpers",
+DEFINE_SPEC(MathHelpersSpec, "Ambit.Unit.Utils.MathHelpers",
             EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
 void MathHelpersSpec::Define()

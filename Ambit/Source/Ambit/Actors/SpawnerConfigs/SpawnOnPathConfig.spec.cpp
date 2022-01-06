@@ -19,7 +19,7 @@
 
 #include <AmbitUtils/JsonHelpers.h>
 
-BEGIN_DEFINE_SPEC(SpawnOnPathSpec, "Ambit.SpawnOnPath",
+BEGIN_DEFINE_SPEC(SpawnOnPathSpec, "Ambit.Unit.SpawnOnPath",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     FSpawnOnPathConfig Config;
