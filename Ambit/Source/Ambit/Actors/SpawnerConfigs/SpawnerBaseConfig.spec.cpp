@@ -22,7 +22,7 @@
 
 #include <AmbitUtils/JsonHelpers.h>
 
-BEGIN_DEFINE_SPEC(SpawnerBaseConfigSpec, "Ambit.AmbitSpawnerBaseConfig",
+BEGIN_DEFINE_SPEC(SpawnerBaseConfigSpec, "Ambit.Unit.AmbitSpawnerBaseConfig",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     FSpawnerBaseConfig Config;

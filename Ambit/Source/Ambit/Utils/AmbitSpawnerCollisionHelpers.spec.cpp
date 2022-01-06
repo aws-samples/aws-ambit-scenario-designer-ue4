@@ -25,7 +25,7 @@
 
 #include "AmbitWorldHelpers.h"
 
-BEGIN_DEFINE_SPEC(AmbitSpawnerCollisionHelpersSpec, "Ambit.AmbitSpawnerCollisionHelpers",
+BEGIN_DEFINE_SPEC(AmbitSpawnerCollisionHelpersSpec, "Ambit.Unit.AmbitSpawnerCollisionHelpers",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     UWorld* World;

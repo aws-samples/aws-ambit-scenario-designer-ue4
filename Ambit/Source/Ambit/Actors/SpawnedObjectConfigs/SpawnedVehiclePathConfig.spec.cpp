@@ -19,7 +19,7 @@
 
 #include <AmbitUtils/JsonHelpers.h>
 
-BEGIN_DEFINE_SPEC(SpawnedVehiclePathConfigSpec, "Ambit.SpawnedVehiclePathConfig",
+BEGIN_DEFINE_SPEC(SpawnedVehiclePathConfigSpec, "Ambit.Unit.SpawnedVehiclePathConfig",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     USpawnedVehiclePathConfig* Config;

@@ -24,7 +24,7 @@
 #include "Tests/AutomationEditorCommon.h"
 #include "UObject/UObjectGlobals.h"
 
-BEGIN_DEFINE_SPEC(AmbitWorldHelpersSpec, "Ambit.AmbitWorldHelpers",
+BEGIN_DEFINE_SPEC(AmbitWorldHelpersSpec, "Ambit.Unit.AmbitWorldHelpers",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     UWorld* World;

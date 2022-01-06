@@ -20,7 +20,7 @@
 
 #include "Ambit/Actors/SpawnerConfigs/SpawnerBaseConfig.h"
 
-BEGIN_DEFINE_SPEC(SpawnOnSurfaceSpec, "Ambit.SpawnOnSurface",
+BEGIN_DEFINE_SPEC(SpawnOnSurfaceSpec, "Ambit.Unit.SpawnOnSurface",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     ASpawnOnSurface* Spawner;

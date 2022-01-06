@@ -32,7 +32,7 @@
 #include "Ambit/Mode/TestClasses/MockableConfigImportExport.h"
 #include "AmbitUtils/JsonHelpers.h"
 
-BEGIN_DEFINE_SPEC(ConfigImportExportSpec, "Ambit.ConfigImportExport",
+BEGIN_DEFINE_SPEC(ConfigImportExportSpec, "Ambit.Unit.ConfigImportExport",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     TSharedPtr<FJsonObject> Json;
