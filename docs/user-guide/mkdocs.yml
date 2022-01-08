@@ -3,6 +3,7 @@ site_name: AWS Ambit Scenario Designer for Unreal Engine 4 User Guide
 nav:
     - Getting Started: 
         - Welcome: index.md
+        - Feature Overview: concepts-and-features.md
         - Setup: setup.md
     - Static Obstacles:
         - Overview: spawner-parent.md
