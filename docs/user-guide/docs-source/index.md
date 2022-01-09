@@ -6,6 +6,8 @@ AWS Ambit Scenario Designer for Unreal Engine 4 (Ambit) is a suite of tools to s
 
 Ambit is implemented as a plugin for the Windows version of Unreal Engine 4 (UE4). However, the content you create with Ambit can be exported and used with other versions of UE4 (Mac, Linux) or even non-UE4 simulators and 3D tools.
 
+To learn what Ambit has to offer, check out the [Feature Overview](./concepts-and-features).
+
 Ambit has been tested for compatibility with [Unreal Engine 4.27](https://docs.unrealengine.com/en-US/Support/Builds/ReleaseNotes/4_27/index.html).
 
 
