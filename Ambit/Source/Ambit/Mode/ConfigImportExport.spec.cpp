@@ -1028,9 +1028,6 @@ void ConfigImportExportSpec::Define()
             // Create Mode Settings
             GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
 
-            FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
-            check(AmbitMode);
-
             // Generate Exporter
             Exporter = NewObject<UMockableConfigImportExport>();
 
@@ -1066,7 +1063,6 @@ void ConfigImportExportSpec::Define()
         {
             GLevelEditorModeTools().DeactivateMode(FAmbitMode::EM_AmbitModeId);
             Exporter = nullptr;
-            JsonContent = "";
         });
     });
 
@@ -1080,11 +1076,11 @@ void ConfigImportExportSpec::Define()
             // Create Mode Settings
             GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
 
-            FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
-            check(AmbitMode);
-
             // Generate Exporter
             Exporter = NewObject<UMockableConfigImportExport>();
+
+            FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+            AmbitMode->UISettings->ExportPlatforms.SetWindows(true);
 
             auto MockListBuckets = []() -> TSet<FString>
             {
@@ -1113,26 +1109,13 @@ void ConfigImportExportSpec::Define()
             Exporter->OnExportGltf();
         });
 
-        It("Should succeed after test map is loaded", [this]()
+        It("Should succeed after static mesh is present", [this]()
         {
-            // Load the test map.
-            // Loading this map resets some aspects of AmbitMode and the Exporter objects. These need to be reset again
-            // in order for the test to succeed.
-            FAutomationEditorCommonUtils::LoadMap("/Ambit/Test/Maps/ProceduralPlacementTestMap");
-
-            // Create Mode Settings
-            GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
-
-            FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
-            check(AmbitMode);
-
-            // This function has been set in BeforeEach() but loading a new map causes it to be unset. Most likely has
-            // to do with state management in UE. Resetting this function should stop any exceptions from being thrown.
-            auto MockS3FileUpload = [](const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& FilePath) -> bool
-            {
-                return true;
-            };
-            Exporter->SetMockS3FileUpload(MockS3FileUpload);
+            // Add a box to the scene so there is a static mesh to export.
+            const FString SpawnedActorPath = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+            const FSoftClassPath ClassPath(SpawnedActorPath);
+            const TSubclassOf<AActor> ActorToSpawn = ClassPath.TryLoadClass<UObject>();
+            World->SpawnActor(ActorToSpawn.Get());
 
             const FReply Reply = Exporter->OnExportGltf();
 
@@ -1143,7 +1126,6 @@ void ConfigImportExportSpec::Define()
         {
             GLevelEditorModeTools().DeactivateMode(FAmbitMode::EM_AmbitModeId);
             Exporter = nullptr;
-            JsonContent = "";
         });
     });
 }

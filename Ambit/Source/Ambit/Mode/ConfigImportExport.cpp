@@ -553,8 +553,9 @@ FReply UConfigImportExport::OnExportGltf()
     const FString FilePath = FPaths::Combine(OutputDir, Filename);
 
     // Perform the export to glTF.
-    const GltfExport::GltfExportReturnCode ReturnCode = GltfExport::Export(CurrentWorldContext, FilePath);
-    if (ReturnCode == GltfExport::ExporterNotFound)
+    UGltfExport* GltfExporter = NewObject<UGltfExport>();
+    const UGltfExport::GltfExportReturnCode ReturnCode = GltfExporter->Export(CurrentWorldContext, FilePath);
+    if (ReturnCode == UGltfExport::ExporterNotFound)
     {
         ErrorMessage = "glTF Export: glTF Exporter plugin is not installed. \
         Follow the instructions in the User Guide to install the glTF Exporter plugin from the marketplace.";
@@ -562,14 +563,14 @@ FReply UConfigImportExport::OnExportGltf()
 
         return FReply::Handled();
     }
-    if (ReturnCode == GltfExport::WriteToFileError)
+    if (ReturnCode == UGltfExport::WriteToFileError)
     {
         ErrorMessage = "glTF Export: Error writing to file " + FilePath;
         FMenuHelpers::LogErrorAndPopup(ErrorMessage);
 
         return FReply::Handled();
     }
-    if (ReturnCode == GltfExport::Failed)
+    if (ReturnCode == UGltfExport::Failed)
     {
         ErrorMessage = "glTF Export: Error completing export to " + FilePath;
         FMenuHelpers::LogErrorAndPopup(ErrorMessage);

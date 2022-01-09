@@ -14,12 +14,19 @@
 
 #pragma once
 
+#include "Exporters/GLTFLevelExporter.h"
+#include "Serialization/BufferArchive.h"
+
+#include "GltfExport.generated.h"
+
 /**
  * Class dedicated to performing a glTF export using the external GLTFExporter
  * plugin API's.
  */
-class GltfExport
+UCLASS()
+class UGltfExport : public UObject
 {
+    GENERATED_BODY()
 public:
     /**
      * Return codes for GLTF Export.
@@ -40,5 +47,37 @@ public:
      *
      * @return GltfExportReturnCode An enum value describing the return state.
      */
-    static GltfExportReturnCode Export(UWorld* World, const FString& Filename);
+    GltfExportReturnCode Export(UWorld* World, const FString& Filename);
+
+protected:
+    /**
+     * Calls ExportBinary from the GLTF Exporter plugin
+     * Allows for injection of the function to be changed. Should only be used in testing.
+     */
+    TFunction<bool(UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer)> LambdaExportBinary = [this](
+        UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer)-> bool
+    {
+        return this->ExportBinary(Exporter, World, Buffer);
+    };
+
+    /**
+     * Calls a function to write Buffer contents to a file.
+     * Allows for injection of the function to be changed. Should only be used in testing.
+     */
+    TFunction<bool(FBufferArchive& Buffer, const FString& Filename)>
+    LambdaWriteToFile = [this](FBufferArchive& Buffer, const FString& Filename) -> bool
+    {
+        return this->WriteToFile(Buffer,Filename);
+    };
+
+private:
+    /**
+     * Calls ExportBinary() from the GLTF Exporter plugin object.
+     */
+    bool ExportBinary(UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer);
+
+    /**
+     * Writes buffer data to a file.
+     */
+    bool WriteToFile(FBufferArchive& Buffer, const FString& Filename);
 };
