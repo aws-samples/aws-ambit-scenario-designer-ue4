@@ -20,7 +20,7 @@
 
 #include "Ambit/Mode/TestClasses/MockableGltfExport.h"
 
-BEGIN_DEFINE_SPEC(GltfExportSpec, "Ambit.GltfExport",
+BEGIN_DEFINE_SPEC(GltfExportSpec, "Ambit.Unit.GltfExport",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
     FString Filename;
     UMockableGltfExport* Exporter;
