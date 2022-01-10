@@ -1,4 +1,4 @@
-# Individual Scenario Generation
+# Manual Scenario Generation
 
 One of the main functionalities Ambit provides is exporting scenarios that can be used for importing into your own scene. A scenario here is defined as a collection of environment effects and objects spawned by [Ambit Spawners](/spawner-parent/) that allow for small variance in a larger scene.
 
