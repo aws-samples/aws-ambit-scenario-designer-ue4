@@ -47,7 +47,7 @@ public:
      *
      * @return GltfExportReturnCode An enum value describing the return state.
      */
-    GltfExportReturnCode Export(UWorld* World, const FString& Filename);
+    GltfExportReturnCode Export(UWorld* World, const FString& Filename) const;
 
 protected:
     /**
@@ -67,17 +67,28 @@ protected:
     TFunction<bool(FBufferArchive& Buffer, const FString& Filename)>
     LambdaWriteToFile = [this](FBufferArchive& Buffer, const FString& Filename) -> bool
     {
-        return this->WriteToFile(Buffer,Filename);
+        return this->WriteToFile(Buffer, Filename);
     };
 
 private:
     /**
      * Calls ExportBinary() from the GLTF Exporter plugin object.
+     *
+     * @param Exporter The GLTFExporter plugin object.
+     * @param World UObject containing geometry to be exported.
+     * @param Buffer Stores details to be written to file.
+     *
+     * @return True if export process succeeds and object details written to buffer.
      */
     bool ExportBinary(UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer);
 
     /**
      * Writes buffer data to a file.
+     *
+     * @param Buffer Data to be written to a file.
+     * @param Filename The file to be written.
+     *
+     * @return True if write to file succeeds.
      */
-    bool WriteToFile(FBufferArchive& Buffer, const FString& Filename);
+    bool WriteToFile(FBufferArchive& Buffer, const FString& Filename) const;
 };

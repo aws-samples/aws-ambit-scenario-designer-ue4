@@ -22,6 +22,7 @@
 
 BEGIN_DEFINE_SPEC(GltfExportSpec, "Ambit.Unit.GltfExport",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+
     FString Filename;
     UMockableGltfExport* Exporter;
     UWorld* World;
@@ -51,7 +52,7 @@ void GltfExportSpec::Define()
 
             It("Should return error if ExportBinary() fails", [this]()
             {
-                UGltfExport::GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
+                const UGltfExport::GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
 
                 TestEqual("Export should fail", ReturnCode, UGltfExport::Failed);
             });
@@ -61,7 +62,8 @@ void GltfExportSpec::Define()
         {
             BeforeEach([this]()
             {
-                auto MockBinaryFunction = [](UGLTFLevelExporter* LevelExporter, UWorld* World, FBufferArchive& Buffer) -> bool
+                auto MockBinaryFunction = [](UGLTFLevelExporter* LevelExporter, UWorld* World,
+                                             FBufferArchive& Buffer) -> bool
                 {
                     return true;
                 };
@@ -76,7 +78,7 @@ void GltfExportSpec::Define()
 
             It("Should fail if file name is empty", [this]()
             {
-                UGltfExport::GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
+                const UGltfExport::GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
 
                 TestEqual("Write to file should fail", ReturnCode, UGltfExport::WriteToFileError);
             });
@@ -96,7 +98,8 @@ void GltfExportSpec::Define()
 
             Exporter = NewObject<UMockableGltfExport>();
 
-            auto MockBinaryFunction = [](UGLTFLevelExporter* LevelExporter, UWorld* World, FBufferArchive& Buffer) -> bool
+            auto MockBinaryFunction = [](UGLTFLevelExporter* LevelExporter, UWorld* World,
+                                         FBufferArchive& Buffer) -> bool
             {
                 return true;
             };
@@ -111,7 +114,7 @@ void GltfExportSpec::Define()
 
         It("Should return success code on completion", [this]()
         {
-            UGltfExport::GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
+            const UGltfExport::GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
 
             TestEqual("Export should complete successfully", ReturnCode, UGltfExport::Success);
         });

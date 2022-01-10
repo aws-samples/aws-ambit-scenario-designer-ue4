@@ -17,7 +17,7 @@
 #include "CoreGlobals.h"
 #include "Misc/FileHelper.h"
 
-UGltfExport::GltfExportReturnCode UGltfExport::Export(UWorld* World, const FString& Filename)
+UGltfExport::GltfExportReturnCode UGltfExport::Export(UWorld* World, const FString& Filename) const
 {
     // Set the filename for the Exporter to use.
     // This is a global variable used by the UE exporter mechanism and needs to
@@ -37,10 +37,10 @@ UGltfExport::GltfExportReturnCode UGltfExport::Export(UWorld* World, const FStri
 
     // Archive buffer to collect file data and write to file.
     FBufferArchive Buffer;
-    bool IsExportSuccess = LambdaExportBinary(Exporter, World, Buffer);
+    const bool IsExportSuccess = LambdaExportBinary(Exporter, World, Buffer);
     if (IsExportSuccess)
     {
-        bool IsWriteToFileSuccess = LambdaWriteToFile(Buffer, *Filename);
+        const bool IsWriteToFileSuccess = LambdaWriteToFile(Buffer, *Filename);
         if (!IsWriteToFileSuccess)
         {
             ReturnCode = WriteToFileError;
@@ -77,8 +77,7 @@ bool UGltfExport::ExportBinary(UGLTFLevelExporter* Exporter, UWorld* World, FBuf
     return Exporter->ExportBinary(World, Type, Buffer, GWarn, FileIndex, PortFlags);
 }
 
-bool UGltfExport::WriteToFile(FBufferArchive& Buffer, const FString& Filename)
+bool UGltfExport::WriteToFile(FBufferArchive& Buffer, const FString& Filename) const
 {
     return FFileHelper::SaveArrayToFile(Buffer, *Filename);
 }
-
