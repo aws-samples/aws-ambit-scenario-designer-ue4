@@ -116,6 +116,14 @@ protected:
     LambdaPutS3Object = AWSWrapper::PutObject;
 
     /**
+     * Calls AWSWrapper::UploadFile
+     * Allows for injection of the function to be changed. Should only be changed in testing.
+     */
+    TFunction<bool
+        (const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& FilePath)>
+    LambdaS3FileUpload = AWSWrapper::UploadFile;
+
+    /**
      * Calls AmbitFileHelpers::WriteFile
      * Allows for injection of the function to be changed. Should only be changed in testing.
      */

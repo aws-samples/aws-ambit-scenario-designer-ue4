@@ -15,11 +15,9 @@
 #include "GltfExport.h"
 
 #include "CoreGlobals.h"
-#include "GLTFExporter/Public/Exporters/GLTFLevelExporter.h"
 #include "Misc/FileHelper.h"
-#include "Serialization/BufferArchive.h"
 
-GltfExport::GltfExportReturnCode GltfExport::Export(UWorld* World, const FString& Filename)
+UGltfExport::GltfExportReturnCode UGltfExport::Export(UWorld* World, const FString& Filename) const
 {
     // Set the filename for the Exporter to use.
     // This is a global variable used by the UE exporter mechanism and needs to
@@ -37,17 +35,13 @@ GltfExport::GltfExportReturnCode GltfExport::Export(UWorld* World, const FString
 
     GltfExportReturnCode ReturnCode = Success;
 
-    // Type, FileIndex, PortFlags are not used by ExportBinary() so they are
-    // set to basic values.
-    const TCHAR* Type = nullptr;
-    const int32 FileIndex = 0;
-    const int32 PortFlags = 0;
-
     // Archive buffer to collect file data and write to file.
     FBufferArchive Buffer;
-    if (Exporter->ExportBinary(World, Type, Buffer, GWarn, FileIndex, PortFlags))
+    const bool IsExportSuccess = LambdaExportBinary(Exporter, World, Buffer);
+    if (IsExportSuccess)
     {
-        if (!FFileHelper::SaveArrayToFile(Buffer, *Filename))
+        const bool IsWriteToFileSuccess = LambdaWriteToFile(Buffer, *Filename);
+        if (!IsWriteToFileSuccess)
         {
             ReturnCode = WriteToFileError;
         }
@@ -70,4 +64,20 @@ GltfExport::GltfExportReturnCode GltfExport::Export(UWorld* World, const FString
     UExporter::CurrentFilename = TEXT("");
 
     return ReturnCode;
+}
+
+bool UGltfExport::ExportBinary(UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer)
+{
+    // Type, FileIndex, PortFlags are not used by ExportBinary() so they are
+    // set to basic values.
+    const TCHAR* Type = nullptr;
+    const int32 FileIndex = 0;
+    const int32 PortFlags = 0;
+
+    return Exporter->ExportBinary(World, Type, Buffer, GWarn, FileIndex, PortFlags);
+}
+
+bool UGltfExport::WriteToFile(FBufferArchive& Buffer, const FString& Filename) const
+{
+    return FFileHelper::SaveArrayToFile(Buffer, *Filename);
 }

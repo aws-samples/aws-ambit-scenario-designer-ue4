@@ -1017,4 +1017,115 @@ void ConfigImportExportSpec::Define()
             JsonContent = nullptr;
         });
     });
+
+    Describe("OnExportMap()", [this]()
+    {
+        BeforeEach([this]()
+        {
+            // Generate World
+            World = FAutomationEditorCommonUtils::CreateNewMap();
+
+            // Create Mode Settings
+            GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
+
+            // Generate Exporter
+            Exporter = NewObject<UMockableConfigImportExport>();
+
+            auto MockListBuckets = []() -> TSet<FString>
+            {
+                TSet<FString> setBuckets;
+                setBuckets.Add("BucketName");
+                return setBuckets;
+            };
+            Exporter->SetMockS3ListBuckets(MockListBuckets);
+
+            auto MockCreateBucket = [](const FString& Region, const FString& BucketName) -> void
+            {
+                return;
+            };
+            Exporter->SetMockS3CreateBucket(MockCreateBucket);
+
+            auto MockS3FileUpload = [](const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& FilePath) -> bool
+            {
+                return true;
+            };
+            Exporter->SetMockS3FileUpload(MockS3FileUpload);
+        });
+
+        It("Should Return FReply::Handled", [this]()
+        {
+            const FReply Reply = Exporter->OnExportMap();
+
+            TestTrue("Reply should be true on return", Reply.IsEventHandled());
+        });
+
+        AfterEach([this]()
+        {
+            GLevelEditorModeTools().DeactivateMode(FAmbitMode::EM_AmbitModeId);
+            Exporter = nullptr;
+        });
+    });
+
+    Describe("OnExportGltf()", [this]()
+    {
+        BeforeEach([this]()
+        {
+            // Generate World
+            World = FAutomationEditorCommonUtils::CreateNewMap();
+
+            // Create Mode Settings
+            GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
+
+            // Generate Exporter
+            Exporter = NewObject<UMockableConfigImportExport>();
+
+            FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+            AmbitMode->UISettings->ExportPlatforms.SetWindows(true);
+
+            auto MockListBuckets = []() -> TSet<FString>
+            {
+                TSet<FString> setBuckets;
+                setBuckets.Add("BucketName");
+                return setBuckets;
+            };
+            Exporter->SetMockS3ListBuckets(MockListBuckets);
+
+            auto MockCreateBucket = [](const FString& Region, const FString& BucketName) -> void
+            {
+                return;
+            };
+            Exporter->SetMockS3CreateBucket(MockCreateBucket);
+
+            auto MockS3FileUpload = [](const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& FilePath) -> bool
+            {
+                return true;
+            };
+            Exporter->SetMockS3FileUpload(MockS3FileUpload);
+        });
+
+        It("Should fail if no mesh to export", [this]()
+        {
+            AddExpectedError("Cannot find a static mesh to export.", EAutomationExpectedErrorFlags::Exact, 1);
+            Exporter->OnExportGltf();
+        });
+
+        It("Should succeed after static mesh is present", [this]()
+        {
+            // Add a box to the scene so there is a static mesh to export.
+            const FString SpawnedActorPath = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+            const FSoftClassPath ClassPath(SpawnedActorPath);
+            const TSubclassOf<AActor> ActorToSpawn = ClassPath.TryLoadClass<UObject>();
+            World->SpawnActor(ActorToSpawn.Get());
+
+            const FReply Reply = Exporter->OnExportGltf();
+
+            TestTrue("Reply should be true on return", Reply.IsEventHandled());
+        });
+
+        AfterEach([this]()
+        {
+            GLevelEditorModeTools().DeactivateMode(FAmbitMode::EM_AmbitModeId);
+            Exporter = nullptr;
+        });
+    });
 }
