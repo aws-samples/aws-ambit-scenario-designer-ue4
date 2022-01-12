@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Overview - AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</title>
+  <title>Feature Overview - AWS Ambit Scenario Designer for Unreal Engine 4 User Guide</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -19,8 +19,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Overview";
-    var mkdocs_page_input_path = "city-generation.md";
+    var mkdocs_page_name = "Feature Overview";
+    var mkdocs_page_input_path = "concepts-and-features.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -49,10 +49,12 @@
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
                 <p class="caption"><span class="caption-text">Getting Started</span></p>
-                <ul>
+                <ul class="current">
                     <li class="toctree-l1"><a class="reference internal" href="..">Welcome</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../concepts-and-features/">Feature Overview</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Feature Overview</a>
+    <ul class="current">
+    </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
                     </li>
@@ -80,8 +82,8 @@
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">City Generation</span></p>
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Overview</a>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../city-generation/">Overview</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../obtaining-osm/">Obtaining OpenStreetMap Files</a>
                     </li>
@@ -135,11 +137,11 @@
     
       
         
-          <li>City Generation &raquo;</li>
+          <li>Getting Started &raquo;</li>
         
       
     
-    <li>Overview</li>
+    <li>Feature Overview</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -150,14 +152,19 @@
           <div role="main">
             <div class="section">
               
-                <p>Ambit provides two tools which aid in the creation of complex real-world environments - <strong>Ambit Building Generator</strong> and <strong>Ambit Road Generator</strong>. These tools accept any <a href="https://www.openstreetmap.org/#map=17/47.61388/-122.33799">Open Street Map</a> (OSM) file as input and generate 3D geometry that is simulation-ready.</p>
-<blockquote>
-<p>⚠️ <strong>Important:</strong> These tools leverage the Houdini Engine. Be sure you have installed both the Houdini Engine and the Houdini plugin for Unreal before using these tools. See the <a href="../setup">Setup</a> section of this user guide for instructions.</p>
-</blockquote>
-<p>The <strong>Ambit Building Generator</strong> produces stylized buildings based on the building shapes contained in the OSM file.</p>
-<p><img alt="Ambit Building Generator output" src="../images/city-generation/BuildingGeneratorOutput.jpg" /></p>
-<p>The <strong>Ambit Road Generator</strong> produces roadways, complete with road markings, based on the road descriptions contained in the OSM file.</p>
-<p><img alt="Ambit Road Generator output" src="../images/city-generation/RoadGeneratorOutput.jpg" /></p>
+                <h1 id="feature-overview">Feature Overview<a class="headerlink" href="#feature-overview" title="Permanent link">&para;</a></h1>
+<p><strong>World generation:</strong> Automatically generate building and road geometry from <a href="https://www.openstreetmap.org/">Open Street Map</a> data. Use nearly any location in the world as the basis for your 3D environment. Learn more about this feature in the <a href="../city-generation">City Generation</a> section.</p>
+<p><img alt="World generation example" src="../images/concepts-and-features/Ambit_WorldGen.jpg" /></p>
+<p><strong>Obstacle placement:</strong> Quickly populate your 3D worlds with stationary objects and vehicles using simple rules-based tools. Leverage randomness parameters to create endless variations easily. Learn more about obstacle placement in the <a href="../spawner-parent">Static Obstacles</a> and <a href="../spawn-vehicle-path-parent">Dynamic Obstacles</a> sections.</p>
+<figcaption>Below, Ambit’s object placement tools are used to define paths and boundaries (top) for the automatic placement of various objects (bottom.)</figcaption>
+
+<p><img alt="Object placement example" src="../images/concepts-and-features/Ambit_Obstacles.jpg" /></p>
+<p><strong>Environment FX:</strong> Preview how time of day and weather conditions will impact the scenarios you create using Ambit’s drop-in environmental effects system. Learn more in the <a href="../weather">Weather &amp; Time of Day FX</a> section.</p>
+<p><img alt="Environmen FX example" src="../images/concepts-and-features/Ambit_EnvironmentFX.jpg" /></p>
+<p><strong>Scenario generation:</strong> A scenario is the encapsulation of the world, obstacles, time of day, and weather conditions for a single simulation. Scenarios are exported from Ambit as JSON-formatted text files that can be used in your own simulators and pipelines. Export individual scenarios manually, or let Ambit automatically generate hundreds of scenario permutations based on parameters you control. Learn more in the <a href="../individual-scenario-generation">Manual Scenario Generation</a> and <a href="../bulk-scenario-generation">Automated Scenario Generation</a> sections.</p>
+<figcaption>The layout of the construction zone below was created with Ambit’s obstacle placement tools. Then, variations were auto-generated as individual scenarios.</figcaption>
+
+<p><img alt="Scenario permutation example" src="../images/concepts-and-features/Ambit_Scenario_Permutations.gif" /></p>
               
             </div>
           </div>
@@ -165,10 +172,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../obtaining-osm/" class="btn btn-neutral float-right" title="Obtaining OpenStreetMap Files">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../setup/" class="btn btn-neutral float-right" title="Setup">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../spawn-vehicle-path/" class="btn btn-neutral" title="Spawn Vehicle Path"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href=".." class="btn btn-neutral" title="Welcome"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -194,10 +201,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../spawn-vehicle-path/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../obtaining-osm/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../setup/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
