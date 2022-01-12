@@ -1,6 +1,6 @@
 # Automated Scenario Generation
 
-Ambit provides bulk scenario generation functionality. It does this by creating a batch of [individual SDFs](./individual-scenario-generation/) based on making permutations from each setting specified. Alongside those it also has a standalone file called a [Bulk Scenario Configuration (BSC)](#utilizing-bulk-scenario-generation-file) file that indicates how the batch was created. 
+Ambit provides bulk scenario generation functionality. It does this by creating a batch of [individual SDFs](./manual-scenario-generation) based on making permutations from each setting specified. Alongside those it also has a standalone file called a [Bulk Scenario Configuration (BSC)](#utilizing-bulk-scenario-generation-file) file that indicates how the batch was created. 
 
 Before getting started, make sure to have properly set up your [AWS Account](/aws-setup#setup).
 
@@ -87,4 +87,5 @@ AllSpawnerConfigs: A list of spawner configurations by type.
   AmbitSpawner*: An individual type of spawner that has specified values for it. Each spawner has its own settings.
 ```
 
-To find the specification for the SDF, please refer to [this](./individual-scenario-generation.md#utilizing-scenario-definition-file) section.
+To find the specification for the SDF, please refer to [this](../manual-scenario-generation/#scenario-definition-file-specification) section.
+
