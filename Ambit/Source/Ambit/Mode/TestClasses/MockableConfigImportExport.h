@@ -17,6 +17,7 @@
 #include <utility>
 
 #include "Ambit/Mode/ConfigImportExport.h"
+#include "Ambit/Mode/TestClasses/MockableGltfExport.h"
 
 #include "MockableConfigImportExport.generated.h"
 
@@ -80,6 +81,14 @@ public:
     void SetMockS3CreateBucket(TFunction<void(const FString& Region, const FString& BucketName)> MockFunction)
     {
         LambdaS3CreateBucket = std::move(MockFunction);
+    }
+
+    /**
+     * Overrides the default behavior of ExportGltf, the function called to export as gltf.
+     */
+    void SetMockGltfExport(TFunction<UGltfExport::GltfExportReturnCode(UWorld* WorldContext, const FString& FilePath)> MockFunction)
+    {
+        ExportGltf = std::move(MockFunction);
     }
 
     /**

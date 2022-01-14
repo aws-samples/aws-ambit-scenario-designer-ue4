@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "GltfExport.h"
 #include "ScenarioDefinition.h"
 #include "Dom/JsonObject.h"
 #include "Misc/AutomationTest.h"
@@ -39,6 +40,9 @@ class UConfigImportExport : public UObject
 {
     GENERATED_BODY()
 public:
+    //Constructor
+    UConfigImportExport();
+
     // SDF import and export
     /**
      * Starts the process to import an SDF file specified on screen.
@@ -107,6 +111,11 @@ public:
      */
     FReply OnExportGltf();
 
+    /**
+     * Gets a pointer to the UGltfExport object.
+     */
+    UGltfExport* GetGltfExporter() const;
+
 protected:
     /**
      * Calls AWSWrapper::PutObject
@@ -136,6 +145,16 @@ protected:
      */
     TFunction<FString(const FString& FileExtension, const FString& DefaultPath, const FString& Filename)>
     LambdaGetPathFromPopup = AmbitFileHelpers::GetPathForFileFromPopup;
+
+    /**
+     * Calls UGltfExport::Export()
+     * Allows for injection of the function to be changed. Should only be changed in testing.
+     */
+    TFunction<UGltfExport::GltfExportReturnCode(UWorld* WorldContext, const FString& FilePath)> ExportGltf = [this](
+        UWorld* WorldContext, const FString& FilePath)
+    {
+        return this->GetGltfExporter()->Export(WorldContext, FilePath);
+    };
 
     /**
     * For internal testing only. Returns when ProcessSdfForExport() has been completed and there are no more items in queue. 
@@ -254,6 +273,9 @@ private:
     {
         return "GeneratedScenarios-";
     }
+
+private:
+    UGltfExport* GltfExporter;
 };
 
 /**
@@ -316,4 +338,5 @@ static TFunction<TSet<FString>()> LambdaS3ListBuckets = AWSWrapper::ListBuckets;
 * Calls AWSWrapper::CreateBucketWithEncryption
 * Allows for injection of the function so that it can be changed for functional testing purposes.
 */
-static TFunction<void(const FString& Region, const FString& BucketName)> LambdaS3CreateBucket = AWSWrapper::CreateBucketWithEncryption;
+static TFunction<void(const FString& Region, const FString& BucketName)> LambdaS3CreateBucket =
+        AWSWrapper::CreateBucketWithEncryption;

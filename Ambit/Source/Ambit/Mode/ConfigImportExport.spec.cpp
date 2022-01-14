@@ -437,7 +437,6 @@ void ConfigImportExportSpec::Define()
 
             auto MockCreateBucket = [](const FString& Region, const FString& BucketName) -> void
             {
-                return;
             };
 
             Exporter->SetMockS3CreateBucket(MockCreateBucket);
@@ -1041,11 +1040,11 @@ void ConfigImportExportSpec::Define()
 
             auto MockCreateBucket = [](const FString& Region, const FString& BucketName) -> void
             {
-                return;
             };
             Exporter->SetMockS3CreateBucket(MockCreateBucket);
 
-            auto MockS3FileUpload = [](const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& FilePath) -> bool
+            auto MockS3FileUpload = [](const FString& Region, const FString& BucketName, const FString& ObjectName,
+                                       const FString& FilePath) -> bool
             {
                 return true;
             };
@@ -1079,7 +1078,7 @@ void ConfigImportExportSpec::Define()
             // Generate Exporter
             Exporter = NewObject<UMockableConfigImportExport>();
 
-            FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
+            const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
             AmbitMode->UISettings->ExportPlatforms.SetWindows(true);
 
             auto MockListBuckets = []() -> TSet<FString>
@@ -1092,11 +1091,11 @@ void ConfigImportExportSpec::Define()
 
             auto MockCreateBucket = [](const FString& Region, const FString& BucketName) -> void
             {
-                return;
             };
             Exporter->SetMockS3CreateBucket(MockCreateBucket);
 
-            auto MockS3FileUpload = [](const FString& Region, const FString& BucketName, const FString& ObjectName, const FString& FilePath) -> bool
+            auto MockS3FileUpload = [](const FString& Region, const FString& BucketName, const FString& ObjectName,
+                                       const FString& FilePath) -> bool
             {
                 return true;
             };
@@ -1109,8 +1108,68 @@ void ConfigImportExportSpec::Define()
             Exporter->OnExportGltf();
         });
 
+        It("Should fail if exporter is not found", [this]()
+        {
+            auto MockGltfExport = [](UWorld* World, const FString& FilePath)
+            {
+                return UGltfExport::GltfExportReturnCode::ExporterNotFound;
+            };
+            Exporter->SetMockGltfExport(MockGltfExport);
+
+            // Add a box to the scene so there is a static mesh to export.
+            const FString SpawnedActorPath = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+            const FSoftClassPath ClassPath(SpawnedActorPath);
+            const TSubclassOf<AActor> ActorToSpawn = ClassPath.TryLoadClass<UObject>();
+            World->SpawnActor(ActorToSpawn.Get());
+
+            AddExpectedError("glTF Exporter plugin is not installed.", EAutomationExpectedErrorFlags::Contains, 1);
+            Exporter->OnExportGltf();
+        });
+
+        It("Should fail if there is an error when writing to file", [this]()
+        {
+            auto MockGltfExport = [](UWorld* World, const FString& FilePath)
+            {
+                return UGltfExport::GltfExportReturnCode::WriteToFileError;
+            };
+            Exporter->SetMockGltfExport(MockGltfExport);
+
+            // Add a box to the scene so there is a static mesh to export.
+            const FString SpawnedActorPath = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+            const FSoftClassPath ClassPath(SpawnedActorPath);
+            const TSubclassOf<AActor> ActorToSpawn = ClassPath.TryLoadClass<UObject>();
+            World->SpawnActor(ActorToSpawn.Get());
+
+            AddExpectedError("Error writing to file", EAutomationExpectedErrorFlags::Contains, 1);
+            Exporter->OnExportGltf();
+        });
+
+        It("Should fail if export fails", [this]()
+        {
+            auto MockGltfExport = [](UWorld* World, const FString& FilePath)
+            {
+                return UGltfExport::GltfExportReturnCode::Failed;
+            };
+            Exporter->SetMockGltfExport(MockGltfExport);
+
+            // Add a box to the scene so there is a static mesh to export.
+            const FString SpawnedActorPath = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
+            const FSoftClassPath ClassPath(SpawnedActorPath);
+            const TSubclassOf<AActor> ActorToSpawn = ClassPath.TryLoadClass<UObject>();
+            World->SpawnActor(ActorToSpawn.Get());
+
+            AddExpectedError("Error completing export to", EAutomationExpectedErrorFlags::Contains, 1);
+            Exporter->OnExportGltf();
+        });
+
         It("Should succeed after static mesh is present", [this]()
         {
+            auto MockGltfExport = [](UWorld* World, const FString& FilePath)
+            {
+                return UGltfExport::GltfExportReturnCode::Success;
+            };
+            Exporter->SetMockGltfExport(MockGltfExport);
+
             // Add a box to the scene so there is a static mesh to export.
             const FString SpawnedActorPath = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
             const FSoftClassPath ClassPath(SpawnedActorPath);

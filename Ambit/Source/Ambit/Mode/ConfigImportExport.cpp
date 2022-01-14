@@ -15,7 +15,6 @@
 #include "ConfigImportExport.h"
 
 #include "BulkScenarioConfiguration.h"
-#include "GltfExport.h"
 #include "ScenarioDefinition.h"
 #include "WeatherTypes.h"
 #include "Containers/Queue.h"
@@ -56,6 +55,13 @@
   * A queue to keep track of all of the Configs that need exported to SDF.
  */
 TQueue<TSharedPtr<FScenarioDefinition>> QueuedSdfConfigToExport;
+
+//Constructor
+UConfigImportExport::UConfigImportExport()
+{
+    GltfExporter = NewObject<UGltfExport>();
+};
+
 
 FReply UConfigImportExport::OnImportSdf()
 {
@@ -467,7 +473,7 @@ FReply UConfigImportExport::OnExportMap()
                                                                            TargetPlatform);
 
             LambdaS3FileUpload(AwsRegion, BucketName, CompressedFile,
-                                   FPaths::Combine(*FPaths::ProjectIntermediateDir(), *CompressedFile));
+                               FPaths::Combine(*FPaths::ProjectIntermediateDir(), *CompressedFile));
         }
         catch (const std::invalid_argument& Ia)
         {
@@ -553,8 +559,7 @@ FReply UConfigImportExport::OnExportGltf()
     const FString FilePath = FPaths::Combine(OutputDir, Filename);
 
     // Perform the export to glTF.
-    UGltfExport* GltfExporter = NewObject<UGltfExport>();
-    const UGltfExport::GltfExportReturnCode ReturnCode = GltfExporter->Export(CurrentWorldContext, FilePath);
+    const UGltfExport::GltfExportReturnCode ReturnCode = ExportGltf(CurrentWorldContext, FilePath);
     if (ReturnCode == UGltfExport::ExporterNotFound)
     {
         ErrorMessage = "glTF Export: glTF Exporter plugin is not installed. \
@@ -584,13 +589,18 @@ FReply UConfigImportExport::OnExportGltf()
                                                                        FolderName, TargetPlatform);
 
         LambdaS3FileUpload(AwsRegion, BucketName, CompressedFile,
-                               FPaths::Combine(*FPaths::ProjectIntermediateDir(), *CompressedFile));
+                           FPaths::Combine(*FPaths::ProjectIntermediateDir(), *CompressedFile));
     }
 
     const FText NotificationText = NSLOCTEXT("Ambit", "MapUploadComplete", "Successfully uploaded to S3.");
     FAmbitModule::CreateAmbitNotification(NotificationText);
 
     return FReply::Handled();
+}
+
+UGltfExport* UConfigImportExport::GetGltfExporter() const
+{
+    return GltfExporter;
 }
 
 void UConfigImportExport::PrepareAllSpawnersObjectConfigs(bool bToS3)
