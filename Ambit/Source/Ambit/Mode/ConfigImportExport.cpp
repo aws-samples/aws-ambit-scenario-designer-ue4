@@ -559,8 +559,15 @@ FReply UConfigImportExport::OnExportGltf()
     const FString FilePath = FPaths::Combine(OutputDir, Filename);
 
     // Perform the export to glTF.
-    const UGltfExport::GltfExportReturnCode ReturnCode = ExportGltf(CurrentWorldContext, FilePath);
-    if (ReturnCode == UGltfExport::ExporterNotFound)
+    const UGltfExport::GltfExportReturnCode ReturnCode = LambdaExportGltf(CurrentWorldContext, FilePath);
+    if (ReturnCode == UGltfExport::ExporterNotInitialized)
+    {
+        ErrorMessage = "glTF Exporter not initialized.";
+        FMenuHelpers::LogErrorAndPopup(ErrorMessage);
+
+        return FReply::Handled();
+    }
+    if(ReturnCode == UGltfExport::ExporterNotFound)
     {
         ErrorMessage = "glTF Export: glTF Exporter plugin is not installed. \
         Follow the instructions in the User Guide to install the glTF Exporter plugin from the marketplace.";
@@ -919,3 +926,14 @@ void UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler(
         AllSpawnerConfiguration.Empty();
     }
 }
+
+UGltfExport::GltfExportReturnCode UConfigImportExport::ExportGltf(UWorld* World, const FString& FilePath)
+{
+    if(!GltfExporter)
+    {
+        return UGltfExport::ExporterNotInitialized;
+    }
+
+    return GltfExporter->Export(World, FilePath);
+}
+

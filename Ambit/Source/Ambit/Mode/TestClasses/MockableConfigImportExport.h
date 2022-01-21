@@ -88,7 +88,7 @@ public:
      */
     void SetMockGltfExport(TFunction<UGltfExport::GltfExportReturnCode(UWorld* WorldContext, const FString& FilePath)> MockFunction)
     {
-        ExportGltf = std::move(MockFunction);
+        LambdaExportGltf = std::move(MockFunction);
     }
 
     /**

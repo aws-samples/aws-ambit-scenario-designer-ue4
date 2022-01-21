@@ -150,10 +150,10 @@ protected:
      * Calls UGltfExport::Export()
      * Allows for injection of the function to be changed. Should only be changed in testing.
      */
-    TFunction<UGltfExport::GltfExportReturnCode(UWorld* WorldContext, const FString& FilePath)> ExportGltf = [this](
+    TFunction<UGltfExport::GltfExportReturnCode(UWorld* WorldContext, const FString& FilePath)> LambdaExportGltf = [this](
         UWorld* WorldContext, const FString& FilePath)
     {
-        return this->GetGltfExporter()->Export(WorldContext, FilePath);
+        return this->ExportGltf(WorldContext, FilePath);
     };
 
     /**
@@ -273,6 +273,16 @@ private:
     {
         return "GeneratedScenarios-";
     }
+
+    /**
+     * Run the glTF Export process.
+     *
+     * @param World The current World context.
+     * @param FilePath The output file path.
+     *
+     * @return GltfExportReturnCode enum
+     */
+    UGltfExport::GltfExportReturnCode ExportGltf(UWorld* World, const FString& FilePath);
 
 private:
     UGltfExport* GltfExporter;

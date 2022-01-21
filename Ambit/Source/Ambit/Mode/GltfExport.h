@@ -33,6 +33,7 @@ public:
      */
     enum GltfExportReturnCode
     {
+        ExporterNotInitialized,
         ExporterNotFound,
         WriteToFileError,
         Failed,
