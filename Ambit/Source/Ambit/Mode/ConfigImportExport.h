@@ -14,7 +14,6 @@
 
 #pragma once
 
-#include "GltfExport.h"
 #include "ScenarioDefinition.h"
 #include "Dom/JsonObject.h"
 #include "Misc/AutomationTest.h"
@@ -27,21 +26,50 @@
 
 #include "ConfigImportExport.generated.h"
 
+enum GltfExportReturnCode;
+class IGltfExport;
 class FAmbitMode;
 class USpawnedObjectConfig;
 struct FPedestrianTraffic;
 struct FVehicleTraffic;
 
+UINTERFACE()
+class UConfigImportExport : public UInterface
+{
+    GENERATED_BODY()
+};
+
+class IConfigImportExport
+{
+    GENERATED_BODY()
+public:
+    virtual FReply OnImportSdf() = 0;
+
+    virtual FReply OnExportSdf() = 0;
+
+    virtual bool ProcessSdfForExport(const TMap<FString, TSharedPtr<FJsonObject>>& AmbitSpawnerArray, bool bToS3) = 0;
+
+    virtual FReply OnImportBsc() = 0;
+
+    virtual FReply OnGeneratePermutations() = 0;
+
+    virtual FReply OnReadFromS3Bucket() = 0;
+
+    virtual FReply OnExportMap() = 0;
+
+    virtual FReply OnExportGltf() = 0;
+};
+
 /**
  * Class dedicated to controlling the importing and exporting of configuration files for the AmbitSpawners.
  */
 UCLASS()
-class UConfigImportExport : public UObject
+class UConfigImportExportImpl : public UObject, public IConfigImportExport
 {
     GENERATED_BODY()
 public:
     //Constructor
-    UConfigImportExport();
+    UConfigImportExportImpl();
 
     // SDF import and export
     /**
@@ -114,7 +142,62 @@ public:
     /**
      * Gets a pointer to the UGltfExport object.
      */
-    UGltfExport* GetGltfExporter() const;
+    IGltfExport* GetGltfExporter() const;
+
+    /**
+     * Set the glTF exporter to its mocked instance.
+     *
+     * @param MockExporter The mocked instance of the glTF Exporter.
+     */
+    void SetMockObjects(IGltfExport* MockExporter);
+
+public:
+    /**
+     * Overrides the default behavior of LambdaGetPathFromPopup, the function called that creates a popup for writing a file to disk,
+     * to be the function passed in.
+     */
+    void SetMockGetPathFromPopup(TFunction<FString(const FString& FileExtension, const FString& DefaultPath,
+                                                   const FString& FileName)> MockFunction)
+    {
+        LambdaGetPathFromPopup = std::move(MockFunction);
+    };
+
+    /**
+     * Overrides the default behavior of LambdaWriteFileToDisk, the function called when a write to disk is actually happening in ConfigImportExport,
+     * to be the function passed in.
+     */
+    void SetMockWriteFile(TFunction<void(const FString& FilePath, const FString& OutString)> MockFunction)
+    {
+        LambdaWriteFileToDisk = std::move(MockFunction);
+    };
+
+    /**
+     * Overrides the default behavior of LambdaPutS3Object, the function called when uploading an object to Amazon S3 in ConfigImportExport,
+     * to be the function passed in.
+     */
+    void SetMockPutObjectS3(TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName,
+                                           const FString& Content)> MockFunction)
+    {
+        LambdaPutS3Object = std::move(MockFunction);
+    };
+
+    /**
+     * Overrides the default behavior of LambdaS3FileUpload, the function called when uploading a file to an Amazon S3 bucket in ConfigImportExport,
+     * to be the function passed in.
+     */
+    void SetMockS3FileUpload(TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName,
+                                            const FString& FilePath)> MockFunction)
+    {
+        LambdaS3FileUpload = std::move(MockFunction);
+    }
+
+    /**
+     * Sets the DoneDelegate to be the value specified. Used in "Latent" Automation Tests.
+     */
+    void SetSdfProcessDone(FDoneDelegate const& DoneEvent)
+    {
+        SdfProcessDone = DoneEvent;
+    }
 
 protected:
     /**
@@ -145,16 +228,6 @@ protected:
      */
     TFunction<FString(const FString& FileExtension, const FString& DefaultPath, const FString& Filename)>
     LambdaGetPathFromPopup = AmbitFileHelpers::GetPathForFileFromPopup;
-
-    /**
-     * Calls UGltfExport::Export()
-     * Allows for injection of the function to be changed. Should only be changed in testing.
-     */
-    TFunction<UGltfExport::GltfExportReturnCode(UWorld* WorldContext, const FString& FilePath)> LambdaExportGltf = [this](
-        UWorld* WorldContext, const FString& FilePath)
-    {
-        return this->ExportGltf(WorldContext, FilePath);
-    };
 
     /**
     * For internal testing only. Returns when ProcessSdfForExport() has been completed and there are no more items in queue. 
@@ -282,10 +355,10 @@ private:
      *
      * @return GltfExportReturnCode enum
      */
-    UGltfExport::GltfExportReturnCode ExportGltf(UWorld* World, const FString& FilePath);
+    GltfExportReturnCode ExportGltf(UWorld* World, const FString& FilePath) const;
 
 private:
-    UGltfExport* GltfExporter;
+    IGltfExport* GltfExporter;
 };
 
 /**
@@ -312,7 +385,7 @@ public:
      * The parent instance that created this. This must be set on instance creation.
      */
     UPROPERTY()
-    UConfigImportExport* Parent;
+    UConfigImportExportImpl* Parent;
 
     /**
      * Handles the return delegate response from the spawners, and calls ProcessSdfForExport
@@ -350,3 +423,21 @@ static TFunction<TSet<FString>()> LambdaS3ListBuckets = AWSWrapper::ListBuckets;
 */
 static TFunction<void(const FString& Region, const FString& BucketName)> LambdaS3CreateBucket =
         AWSWrapper::CreateBucketWithEncryption;
+
+/**
+* Overrides the default behavior of S3ListBuckets, the function called to list all buckets in an account, to be overwritten with
+* the function passed in.
+*/
+static void SetMockS3ListBuckets(TFunction<TSet<FString>()> MockFunction)
+{
+    LambdaS3ListBuckets = std::move(MockFunction);
+}
+
+/**
+* Overrides the default behavior of S3CreateBucket, the function called to create a new bucket for ____, to be overwritten with
+* the function passed in.
+*/
+static void SetMockS3CreateBucket(TFunction<void(const FString& Region, const FString& BucketName)> MockFunction)
+{
+    LambdaS3CreateBucket = std::move(MockFunction);
+}

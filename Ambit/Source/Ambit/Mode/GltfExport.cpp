@@ -14,10 +14,17 @@
 
 #include "GltfExport.h"
 
-#include "CoreGlobals.h"
+#include "GLTFExporter/Public/Exporters/GLTFLevelExporter.h"
 #include "Misc/FileHelper.h"
 
-UGltfExport::GltfExportReturnCode UGltfExport::Export(UWorld* World, const FString& Filename) const
+#include "Ambit/Mode/GltfExporterExternal.h"
+
+UGltfExportImpl::UGltfExportImpl() : IGltfExport()
+{
+    Exporter = NewObject<UGltfExporterExternalImpl>();
+};
+
+GltfExportReturnCode UGltfExportImpl::Export(UWorld* World, const FString& Filename) const
 {
     // Set the filename for the Exporter to use.
     // This is a global variable used by the UE exporter mechanism and needs to
@@ -25,8 +32,7 @@ UGltfExport::GltfExportReturnCode UGltfExport::Export(UWorld* World, const FStri
     UExporter::CurrentFilename = Filename;
 
     // Find the exporter plugin object created during UE initialization.
-    UGLTFLevelExporter* Exporter = Cast<UGLTFLevelExporter>(UGLTFLevelExporter::StaticClass()->GetDefaultObject(true));
-    if (Exporter == nullptr)
+    if(!Exporter->DoesExporterExist())
     {
         // The chances of this failing are extremely low (almost impossible)
         // since the GLTF plugin is a required dependency for the Ambit plugin.
@@ -37,10 +43,10 @@ UGltfExport::GltfExportReturnCode UGltfExport::Export(UWorld* World, const FStri
 
     // Archive buffer to collect file data and write to file.
     FBufferArchive Buffer;
-    const bool IsExportSuccess = LambdaExportBinary(Exporter, World, Buffer);
+    const bool IsExportSuccess = Exporter->ExportBinary(World, Buffer);
     if (IsExportSuccess)
     {
-        const bool IsWriteToFileSuccess = LambdaWriteToFile(Buffer, *Filename);
+        const bool IsWriteToFileSuccess = Exporter->WriteToFile(Buffer, *Filename);
         if (!IsWriteToFileSuccess)
         {
             ReturnCode = WriteToFileError;
@@ -66,18 +72,7 @@ UGltfExport::GltfExportReturnCode UGltfExport::Export(UWorld* World, const FStri
     return ReturnCode;
 }
 
-bool UGltfExport::ExportBinary(UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer)
+void UGltfExportImpl::SetMockObjects(IGltfExporterExternal* MockExporter)
 {
-    // Type, FileIndex, PortFlags are not used by ExportBinary() so they are
-    // set to basic values.
-    const TCHAR* Type = nullptr;
-    const int32 FileIndex = 0;
-    const int32 PortFlags = 0;
-
-    return Exporter->ExportBinary(World, Type, Buffer, GWarn, FileIndex, PortFlags);
-}
-
-bool UGltfExport::WriteToFile(FBufferArchive& Buffer, const FString& Filename) const
-{
-    return FFileHelper::SaveArrayToFile(Buffer, *Filename);
+    Exporter = MockExporter;
 }

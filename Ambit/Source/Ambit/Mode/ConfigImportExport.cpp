@@ -15,6 +15,7 @@
 #include "ConfigImportExport.h"
 
 #include "BulkScenarioConfiguration.h"
+#include "GltfExport.h"
 #include "ScenarioDefinition.h"
 #include "WeatherTypes.h"
 #include "Containers/Queue.h"
@@ -57,13 +58,13 @@
 TQueue<TSharedPtr<FScenarioDefinition>> QueuedSdfConfigToExport;
 
 //Constructor
-UConfigImportExport::UConfigImportExport()
+UConfigImportExportImpl::UConfigImportExportImpl()
 {
-    GltfExporter = NewObject<UGltfExport>();
+    GltfExporter = NewObject<UGltfExportImpl>();
 };
 
 
-FReply UConfigImportExport::OnImportSdf()
+FReply UConfigImportExportImpl::OnImportSdf()
 {
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
@@ -117,7 +118,7 @@ FReply UConfigImportExport::OnImportSdf()
     return FReply::Handled();
 }
 
-FReply UConfigImportExport::OnExportSdf()
+FReply UConfigImportExportImpl::OnExportSdf()
 {
     PrepareAllSpawnersObjectConfigs(false);
 
@@ -127,8 +128,8 @@ FReply UConfigImportExport::OnExportSdf()
     return FReply::Handled();
 }
 
-bool UConfigImportExport::ProcessSdfForExport(const TMap<FString, TSharedPtr<FJsonObject>>& AmbitSpawnerArray,
-                                              bool bToS3)
+bool UConfigImportExportImpl::ProcessSdfForExport(const TMap<FString, TSharedPtr<FJsonObject>>& AmbitSpawnerArray,
+                                                  bool bToS3)
 {
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
@@ -182,7 +183,7 @@ bool UConfigImportExport::ProcessSdfForExport(const TMap<FString, TSharedPtr<FJs
     return bWriteSuccess;
 }
 
-FReply UConfigImportExport::OnImportBsc()
+FReply UConfigImportExportImpl::OnImportBsc()
 {
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
@@ -224,7 +225,7 @@ FReply UConfigImportExport::OnImportBsc()
     return FReply::Handled();
 }
 
-FReply UConfigImportExport::OnGeneratePermutations()
+FReply UConfigImportExportImpl::OnGeneratePermutations()
 {
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
@@ -318,7 +319,7 @@ FReply UConfigImportExport::OnGeneratePermutations()
     return FReply::Handled();
 }
 
-FReply UConfigImportExport::OnReadFromS3Bucket()
+FReply UConfigImportExportImpl::OnReadFromS3Bucket()
 {
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
@@ -415,7 +416,7 @@ FReply UConfigImportExport::OnReadFromS3Bucket()
     return FReply::Handled();
 }
 
-FReply UConfigImportExport::OnExportMap()
+FReply UConfigImportExportImpl::OnExportMap()
 {
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
@@ -490,7 +491,7 @@ FReply UConfigImportExport::OnExportMap()
     return FReply::Handled();
 }
 
-FReply UConfigImportExport::OnExportGltf()
+FReply UConfigImportExportImpl::OnExportGltf()
 {
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
@@ -559,15 +560,15 @@ FReply UConfigImportExport::OnExportGltf()
     const FString FilePath = FPaths::Combine(OutputDir, Filename);
 
     // Perform the export to glTF.
-    const UGltfExport::GltfExportReturnCode ReturnCode = LambdaExportGltf(CurrentWorldContext, FilePath);
-    if (ReturnCode == UGltfExport::ExporterNotInitialized)
+    const GltfExportReturnCode ReturnCode = ExportGltf(CurrentWorldContext, FilePath);
+    if (ReturnCode == ExporterNotInitialized)
     {
         ErrorMessage = "glTF Exporter not initialized.";
         FMenuHelpers::LogErrorAndPopup(ErrorMessage);
 
         return FReply::Handled();
     }
-    if(ReturnCode == UGltfExport::ExporterNotFound)
+    if (ReturnCode == ExporterNotFound)
     {
         ErrorMessage = "glTF Export: glTF Exporter plugin is not installed. \
         Follow the instructions in the User Guide to install the glTF Exporter plugin from the marketplace.";
@@ -575,14 +576,14 @@ FReply UConfigImportExport::OnExportGltf()
 
         return FReply::Handled();
     }
-    if (ReturnCode == UGltfExport::WriteToFileError)
+    if (ReturnCode == WriteToFileError)
     {
         ErrorMessage = "glTF Export: Error writing to file " + FilePath;
         FMenuHelpers::LogErrorAndPopup(ErrorMessage);
 
         return FReply::Handled();
     }
-    if (ReturnCode == UGltfExport::Failed)
+    if (ReturnCode == Failed)
     {
         ErrorMessage = "glTF Export: Error completing export to " + FilePath;
         FMenuHelpers::LogErrorAndPopup(ErrorMessage);
@@ -605,12 +606,12 @@ FReply UConfigImportExport::OnExportGltf()
     return FReply::Handled();
 }
 
-UGltfExport* UConfigImportExport::GetGltfExporter() const
+IGltfExport* UConfigImportExportImpl::GetGltfExporter() const
 {
     return GltfExporter;
 }
 
-void UConfigImportExport::PrepareAllSpawnersObjectConfigs(bool bToS3)
+void UConfigImportExportImpl::PrepareAllSpawnersObjectConfigs(bool bToS3)
 {
     TArray<AActor*> AllActorsToSerialize;
     // Further reading: https://exiin.com/blog/unreal-c-interface-and-what-to-do-with-it/
@@ -658,7 +659,7 @@ void UConfigImportExport::PrepareAllSpawnersObjectConfigs(bool bToS3)
     }
 }
 
-void UConfigImportExport::CreateAmbitSpawnersFromJson(const TSharedPtr<FJsonObject>& JsonObject)
+void UConfigImportExportImpl::CreateAmbitSpawnersFromJson(const TSharedPtr<FJsonObject>& JsonObject)
 {
     UWorld* World = GEngine->GetWorldContexts()[0].World();
 
@@ -682,8 +683,8 @@ void UConfigImportExport::CreateAmbitSpawnersFromJson(const TSharedPtr<FJsonObje
 }
 
 template <typename ClassType, typename StructType>
-void UConfigImportExport::ConfigureSpawnersByType(const TSharedPtr<FJsonObject>& Spawners, const FString& TypeKey,
-                                                  UWorld*& World)
+void UConfigImportExportImpl::ConfigureSpawnersByType(const TSharedPtr<FJsonObject>& Spawners, const FString& TypeKey,
+                                                      UWorld*& World)
 {
     if (Spawners->HasField(TypeKey))
     {
@@ -701,7 +702,8 @@ void UConfigImportExport::ConfigureSpawnersByType(const TSharedPtr<FJsonObject>&
 }
 
 template <typename ClassType, typename StructType>
-void UConfigImportExport::SerializeSpawnerConfigs(TSharedPtr<FJsonObject>& SpawnersJson, const FString& SpawnerTypeKey)
+void UConfigImportExportImpl::SerializeSpawnerConfigs(TSharedPtr<FJsonObject>& SpawnersJson,
+                                                      const FString& SpawnerTypeKey)
 {
     TArray<TSharedPtr<FJsonValue>> SpawnerTypeSpecificArray;
     TArray<AActor*> AllActors;
@@ -720,7 +722,7 @@ void UConfigImportExport::SerializeSpawnerConfigs(TSharedPtr<FJsonObject>& Spawn
     }
 }
 
-TSharedPtr<FScenarioDefinition> UConfigImportExport::DequeueOrDefaultNextSdfConfigToProcess() const
+TSharedPtr<FScenarioDefinition> UConfigImportExportImpl::DequeueOrDefaultNextSdfConfigToProcess() const
 {
     const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
 
@@ -751,8 +753,8 @@ TSharedPtr<FScenarioDefinition> UConfigImportExport::DequeueOrDefaultNextSdfConf
     return SharedScenario;
 }
 
-bool UConfigImportExport::WriteJsonFile(const TSharedPtr<FJsonObject>& OutputContents, const FString& FileName,
-                                        const FString& FileExtension, bool bToS3)
+bool UConfigImportExportImpl::WriteJsonFile(const TSharedPtr<FJsonObject>& OutputContents, const FString& FileName,
+                                            const FString& FileExtension, bool bToS3)
 {
     const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
 
@@ -825,7 +827,7 @@ bool UConfigImportExport::WriteJsonFile(const TSharedPtr<FJsonObject>& OutputCon
     return true;
 }
 
-bool UConfigImportExport::GetAwsSettings(FString& OutAwsRegion, FString& OutAwsBucketName, bool bCreateBucketOnGet)
+bool UConfigImportExportImpl::GetAwsSettings(FString& OutAwsRegion, FString& OutAwsBucketName, bool bCreateBucketOnGet)
 {
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
@@ -840,7 +842,7 @@ bool UConfigImportExport::GetAwsSettings(FString& OutAwsRegion, FString& OutAwsB
     return !(bCreateBucketOnGet && !CreateBucket(OutAwsRegion, OutAwsBucketName));
 }
 
-bool UConfigImportExport::CreateBucket(const FString& AwsRegion, const FString& BucketName)
+bool UConfigImportExportImpl::CreateBucket(const FString& AwsRegion, const FString& BucketName)
 {
     // List all buckets for this account, save them into Set, check whether this bucket is in the set.
     TSet<FString> BucketsSet;
@@ -927,13 +929,17 @@ void UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler(
     }
 }
 
-UGltfExport::GltfExportReturnCode UConfigImportExport::ExportGltf(UWorld* World, const FString& FilePath)
+GltfExportReturnCode UConfigImportExportImpl::ExportGltf(UWorld* World, const FString& FilePath) const
 {
-    if(!GltfExporter)
+    if (!GltfExporter)
     {
-        return UGltfExport::ExporterNotInitialized;
+        return ExporterNotInitialized;
     }
 
     return GltfExporter->Export(World, FilePath);
 }
 
+void UConfigImportExportImpl::SetMockObjects(IGltfExport* MockExporter)
+{
+    GltfExporter = MockExporter;
+}

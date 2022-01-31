@@ -18,14 +18,15 @@
 
 #include "Tests/AutomationEditorCommon.h"
 
-#include "Ambit/Mode/TestClasses/MockableGltfExport.h"
+#include "Ambit/Mode/TestClasses/MockableGltfExporterExternal.h"
 
 BEGIN_DEFINE_SPEC(GltfExportSpec, "Ambit.Unit.GltfExport",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     FString Filename;
-    UMockableGltfExport* Exporter;
     UWorld* World;
+    UGltfExportImpl* Exporter;
+    UGltfExporterExternalMock* ExternalExporter;
 END_DEFINE_SPEC(GltfExportSpec)
 
 void GltfExportSpec::Define()
@@ -36,25 +37,39 @@ void GltfExportSpec::Define()
         {
             World = FAutomationEditorCommonUtils::CreateNewMap();
 
-            Exporter = NewObject<UMockableGltfExport>();
+            ExternalExporter = NewObject<UGltfExporterExternalMock>();
+
+            Exporter = NewObject<UGltfExportImpl>();
+            Exporter->SetMockObjects(ExternalExporter);
+        });
+
+        Describe("Test GLTFExporter plugin not installed", [this]()
+        {
+            BeforeEach([this]()
+            {
+                ExternalExporter->SetOutputs(false, false, false);
+            });
+
+            It("Should return error if Exporter doesn't exist", [this]()
+            {
+                const GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
+
+                TestEqual("Export should fail", ReturnCode, ExporterNotFound);
+            });
         });
 
         Describe("Test GLTFExporter plugin failure", [this]()
         {
             BeforeEach([this]()
             {
-                auto MockFunction = [](UGLTFLevelExporter* LevelExporter, UWorld* World, FBufferArchive& Buffer) -> bool
-                {
-                    return false;
-                };
-                Exporter->SetExportBinary(MockFunction);
+                ExternalExporter->SetOutputs(true, false, false);
             });
 
             It("Should return error if ExportBinary() fails", [this]()
             {
-                const UGltfExport::GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
+                const GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
 
-                TestEqual("Export should fail", ReturnCode, UGltfExport::Failed);
+                TestEqual("Export should fail", ReturnCode, Failed);
             });
         });
 
@@ -62,25 +77,14 @@ void GltfExportSpec::Define()
         {
             BeforeEach([this]()
             {
-                auto MockBinaryFunction = [](UGLTFLevelExporter* LevelExporter, UWorld* World,
-                                             FBufferArchive& Buffer) -> bool
-                {
-                    return true;
-                };
-                Exporter->SetExportBinary(MockBinaryFunction);
-
-                auto MockWriteFunction = [](FBufferArchive& Buffer, const FString& Filename) -> bool
-                {
-                    return false;
-                };
-                Exporter->SetWriteToFile(MockWriteFunction);
+                ExternalExporter->SetOutputs(true, true, false);
             });
 
             It("Should fail if file name is empty", [this]()
             {
-                const UGltfExport::GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
+                const GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
 
-                TestEqual("Write to file should fail", ReturnCode, UGltfExport::WriteToFileError);
+                TestEqual("Write to file should fail", ReturnCode, WriteToFileError);
             });
         });
 
@@ -96,27 +100,18 @@ void GltfExportSpec::Define()
         {
             World = FAutomationEditorCommonUtils::CreateNewMap();
 
-            Exporter = NewObject<UMockableGltfExport>();
+            ExternalExporter = NewObject<UGltfExporterExternalMock>();
+            ExternalExporter->SetOutputs(true, true, true);
 
-            auto MockBinaryFunction = [](UGLTFLevelExporter* LevelExporter, UWorld* World,
-                                         FBufferArchive& Buffer) -> bool
-            {
-                return true;
-            };
-            Exporter->SetExportBinary(MockBinaryFunction);
-
-            auto MockWriteFunction = [](FBufferArchive& Buffer, const FString& Filename) -> bool
-            {
-                return true;
-            };
-            Exporter->SetWriteToFile(MockWriteFunction);
+            Exporter = NewObject<UGltfExportImpl>();
+            Exporter->SetMockObjects(ExternalExporter);
         });
 
         It("Should return success code on completion", [this]()
         {
-            const UGltfExport::GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
+            const GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
 
-            TestEqual("Export should complete successfully", ReturnCode, UGltfExport::Success);
+            TestEqual("Export should complete successfully", ReturnCode, Success);
         });
 
         AfterEach([this]()

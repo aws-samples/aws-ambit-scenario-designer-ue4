@@ -21,81 +21,62 @@
 
 #include "MockableConfigImportExport.generated.h"
 
+/**
+ * Mock class for ConfigImportExport.h
+ *
+ * Currently the Lambda implementation is being used for unit tests. This needs to be updated in the future under a new
+ * story.
+ */
 UCLASS()
-class UMockableConfigImportExport : public UConfigImportExport
+class UConfigImportExportMock : public UObject, public IConfigImportExport
 {
     GENERATED_BODY()
 public:
-    /**
-     * Overrides the default behavior of LambdaGetPathFromPopup, the function called that creates a popup for writing a file to disk,
-     * to be the function passed in.
-     */
-    void SetMockGetPathFromPopup(TFunction<FString(const FString& FileExtension, const FString& DefaultPath,
-                                                   const FString& FileName)> MockFunction)
+    FReply OnImportSdf() override
     {
-        LambdaGetPathFromPopup = std::move(MockFunction);
-    };
-
-    /**
-     * Overrides the default behavior of LambdaWriteFileToDisk, the function called when a write to disk is actually happening in ConfigImportExport,
-     * to be the function passed in.
-     */
-    void SetMockWriteFile(TFunction<void(const FString& FilePath, const FString& OutString)> MockFunction)
-    {
-        LambdaWriteFileToDisk = std::move(MockFunction);
-    };
-
-    /**
-     * Overrides the default behavior of LambdaPutS3Object, the function called when uploading an object to Amazon S3 in ConfigImportExport,
-     * to be the function passed in.
-     */
-    void SetMockPutObjectS3(TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName,
-                                           const FString& Content)> MockFunction)
-    {
-        LambdaPutS3Object = std::move(MockFunction);
-    };
-
-    /**
-     * Overrides the default behavior of LambdaS3FileUpload, the function called when uploading a file to an Amazon S3 bucket in ConfigImportExport,
-     * to be the function passed in.
-     */
-    void SetMockS3FileUpload(TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName,
-                                            const FString& FilePath)> MockFunction)
-    {
-        LambdaS3FileUpload = std::move(MockFunction);
+        return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
 
-    /**
-    * Overrides the default behavior of S3ListBuckets, the function called to list all buckets in an account, to be overwritten with
-    * the function passed in.
-    */
-    void SetMockS3ListBuckets(TFunction<TSet<FString>()> MockFunction)
+    FReply OnExportSdf() override
     {
-        LambdaS3ListBuckets = std::move(MockFunction);
+        return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
 
-    /**
-    * Overrides the default behavior of S3CreateBucket, the function called to create a new bucket for ____, to be overwritten with
-    * the function passed in.
-    */
-    void SetMockS3CreateBucket(TFunction<void(const FString& Region, const FString& BucketName)> MockFunction)
+    bool ProcessSdfForExport(const TMap<FString, TSharedPtr<FJsonObject>>& AmbitSpawnerArray, bool bToS3) override
     {
-        LambdaS3CreateBucket = std::move(MockFunction);
+        return bHandled;
     }
 
-    /**
-     * Overrides the default behavior of ExportGltf, the function called to export as gltf.
-     */
-    void SetMockGltfExport(TFunction<UGltfExport::GltfExportReturnCode(UWorld* WorldContext, const FString& FilePath)> MockFunction)
+    FReply OnImportBsc() override
     {
-        LambdaExportGltf = std::move(MockFunction);
+        return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
 
-    /**
-     * Sets the DoneDelegate to be the value specified. Used in "Latent" Automation Tests.
-     */
-    void SetSdfProcessDone(FDoneDelegate const& DoneEvent)
+    FReply OnGeneratePermutations() override
     {
-        SdfProcessDone = DoneEvent;
+        return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
+
+    FReply OnReadFromS3Bucket() override
+    {
+        return bHandled ? FReply::Handled() : FReply::Unhandled();
+    }
+
+    FReply OnExportMap() override
+    {
+        return bHandled ? FReply::Handled() : FReply::Unhandled();
+    }
+
+    FReply OnExportGltf() override
+    {
+        return bHandled ? FReply::Handled() : FReply::Unhandled();
+    }
+
+    void SetOutputs(bool Handled)
+    {
+        bHandled = Handled;
+    }
+
+private:
+    bool bHandled;
 };

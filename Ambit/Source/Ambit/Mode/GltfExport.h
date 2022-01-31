@@ -14,31 +14,45 @@
 
 #pragma once
 
-#include "Exporters/GLTFLevelExporter.h"
-#include "Serialization/BufferArchive.h"
-
 #include "GltfExport.generated.h"
+
+class IGltfExporterExternal;
+
+/**
+ * Return codes for GLTF Export.
+ */
+enum GltfExportReturnCode
+{
+    ExporterNotInitialized,
+    ExporterNotFound,
+    WriteToFileError,
+    Failed,
+    Success
+};
+
+UINTERFACE()
+class UGltfExport : public UInterface
+{
+    GENERATED_BODY()
+};
+
+class IGltfExport
+{
+    GENERATED_BODY()
+public:
+    virtual GltfExportReturnCode Export(UWorld* World, const FString& Filename) const = 0;
+};
 
 /**
  * Class dedicated to performing a glTF export using the external GLTFExporter
  * plugin API's.
  */
 UCLASS()
-class UGltfExport : public UObject
+class UGltfExportImpl : public UObject, public IGltfExport
 {
     GENERATED_BODY()
 public:
-    /**
-     * Return codes for GLTF Export.
-     */
-    enum GltfExportReturnCode
-    {
-        ExporterNotInitialized,
-        ExporterNotFound,
-        WriteToFileError,
-        Failed,
-        Success
-    };
+    UGltfExportImpl();
 
     /**
      * Performs the export of the whole scene.
@@ -48,48 +62,10 @@ public:
      *
      * @return GltfExportReturnCode An enum value describing the return state.
      */
-    GltfExportReturnCode Export(UWorld* World, const FString& Filename) const;
+    GltfExportReturnCode Export(UWorld* World, const FString& Filename) const override;
 
-protected:
-    /**
-     * Calls ExportBinary from the GLTF Exporter plugin
-     * Allows for injection of the function to be changed. Should only be used in testing.
-     */
-    TFunction<bool(UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer)> LambdaExportBinary = [this](
-        UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer)-> bool
-    {
-        return this->ExportBinary(Exporter, World, Buffer);
-    };
-
-    /**
-     * Calls a function to write Buffer contents to a file.
-     * Allows for injection of the function to be changed. Should only be used in testing.
-     */
-    TFunction<bool(FBufferArchive& Buffer, const FString& Filename)>
-    LambdaWriteToFile = [this](FBufferArchive& Buffer, const FString& Filename) -> bool
-    {
-        return this->WriteToFile(Buffer, Filename);
-    };
+    void SetMockObjects(IGltfExporterExternal* MockExporter);
 
 private:
-    /**
-     * Calls ExportBinary() from the GLTF Exporter plugin object.
-     *
-     * @param Exporter The GLTFExporter plugin object.
-     * @param World UObject containing geometry to be exported.
-     * @param Buffer Stores details to be written to file.
-     *
-     * @return True if export process succeeds and object details written to buffer.
-     */
-    bool ExportBinary(UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer);
-
-    /**
-     * Writes buffer data to a file.
-     *
-     * @param Buffer Data to be written to a file.
-     * @param Filename The file to be written.
-     *
-     * @return True if write to file succeeds.
-     */
-    bool WriteToFile(FBufferArchive& Buffer, const FString& Filename) const;
+    IGltfExporterExternal* Exporter;
 };
