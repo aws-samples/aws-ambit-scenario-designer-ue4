@@ -18,28 +18,33 @@
 #include "Misc/FileHelper.h"
 
 #include "Ambit/Mode/GltfExporterExternal.h"
+#include "AmbitUtils/MenuHelpers.h"
 
-UGltfExportImpl::UGltfExportImpl() : IGltfExport()
+UGltfExport::UGltfExport() : IGltfExportInterface()
 {
-    Exporter = NewObject<UGltfExporterExternalImpl>();
+    Exporter = NewObject<UGltfExporterExternal>();
 };
 
-GltfExportReturnCode UGltfExportImpl::Export(UWorld* World, const FString& Filename) const
+bool UGltfExport::Export(UWorld* World, const FString& Filename) const
 {
     // Set the filename for the Exporter to use.
     // This is a global variable used by the UE exporter mechanism and needs to
     // be manually assigned.
     UExporter::CurrentFilename = Filename;
 
+    FString ErrorMessage;
+
     // Find the exporter plugin object created during UE initialization.
-    if(!Exporter->DoesExporterExist())
+    if (!Exporter->DoesExporterExist())
     {
         // The chances of this failing are extremely low (almost impossible)
         // since the GLTF plugin is a required dependency for the Ambit plugin.
-        return ExporterNotFound;
-    }
+        ErrorMessage = "glTF Export: glTF Exporter plugin is not installed. \
+        Follow the instructions in the User Guide to install the glTF Exporter plugin from the marketplace.";
+        FMenuHelpers::LogErrorAndPopup(ErrorMessage);
 
-    GltfExportReturnCode ReturnCode = Success;
+        return false;
+    }
 
     // Archive buffer to collect file data and write to file.
     FBufferArchive Buffer;
@@ -49,7 +54,10 @@ GltfExportReturnCode UGltfExportImpl::Export(UWorld* World, const FString& Filen
         const bool IsWriteToFileSuccess = Exporter->WriteToFile(Buffer, *Filename);
         if (!IsWriteToFileSuccess)
         {
-            ReturnCode = WriteToFileError;
+            ErrorMessage = "glTF Export: Error writing to file " + Filename;
+            FMenuHelpers::LogErrorAndPopup(ErrorMessage);
+
+            return false;
         }
     }
     else
@@ -62,17 +70,20 @@ GltfExportReturnCode UGltfExportImpl::Export(UWorld* World, const FString& Filen
         // There is no straightforward way to determine which reason causes the
         // ExportBinary function to fail so a generic failure error code is
         // returned.
-        ReturnCode = Failed;
+        ErrorMessage = "glTF Export: Error completing export to " + Filename;
+        FMenuHelpers::LogErrorAndPopup(ErrorMessage);
+
+        return false;
     }
 
     // Reset the UExporter filename to empty, to not clash with other export
     // mechanisms.
     UExporter::CurrentFilename = TEXT("");
 
-    return ReturnCode;
+    return true;
 }
 
-void UGltfExportImpl::SetMockObjects(IGltfExporterExternal* MockExporter)
+void UGltfExport::SetDependencies(IGltfExporterExternalInterface* MockExporter)
 {
     Exporter = MockExporter;
 }

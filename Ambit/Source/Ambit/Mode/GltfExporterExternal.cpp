@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,17 +16,17 @@
 
 #include "Misc/FileHelper.h"
 
-UGltfExporterExternalImpl::UGltfExporterExternalImpl()
+UGltfExporterExternal::UGltfExporterExternal()
 {
     Exporter = Cast<UGLTFLevelExporter>(UGLTFLevelExporter::StaticClass()->GetDefaultObject(true));
 }
 
-bool UGltfExporterExternalImpl::DoesExporterExist()
+bool UGltfExporterExternal::DoesExporterExist()
 {
     return Exporter ? true : false;
 }
 
-bool UGltfExporterExternalImpl::ExportBinary(UWorld* World, FBufferArchive& Buffer)
+bool UGltfExporterExternal::ExportBinary(UWorld* World, FBufferArchive& Buffer)
 {
     // Type, FileIndex, PortFlags are not used by ExportBinary() so they are
     // set to basic values.
@@ -37,7 +37,7 @@ bool UGltfExporterExternalImpl::ExportBinary(UWorld* World, FBufferArchive& Buff
     return Exporter->ExportBinary(World, Type, Buffer, GWarn, FileIndex, PortFlags);
 }
 
-bool UGltfExporterExternalImpl::WriteToFile(FBufferArchive& Buffer, const FString& Filename)
+bool UGltfExporterExternal::WriteToFile(FBufferArchive& Buffer, const FString& Filename)
 {
     return FFileHelper::SaveArrayToFile(Buffer, *Filename);
 }

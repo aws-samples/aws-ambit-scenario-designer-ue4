@@ -14,58 +14,33 @@
 
 #pragma once
 
+#include "Ambit/Mode/GltfExportInterface.h"
+
 #include "GltfExport.generated.h"
 
-class IGltfExporterExternal;
-
-/**
- * Return codes for GLTF Export.
- */
-enum GltfExportReturnCode
-{
-    ExporterNotInitialized,
-    ExporterNotFound,
-    WriteToFileError,
-    Failed,
-    Success
-};
-
-UINTERFACE()
-class UGltfExport : public UInterface
-{
-    GENERATED_BODY()
-};
-
-class IGltfExport
-{
-    GENERATED_BODY()
-public:
-    virtual GltfExportReturnCode Export(UWorld* World, const FString& Filename) const = 0;
-};
+class IGltfExporterExternalInterface;
 
 /**
  * Class dedicated to performing a glTF export using the external GLTFExporter
  * plugin API's.
  */
 UCLASS()
-class UGltfExportImpl : public UObject, public IGltfExport
+class UGltfExport : public UObject, public IGltfExportInterface
 {
     GENERATED_BODY()
 public:
-    UGltfExportImpl();
+    UGltfExport();
+
+    /** @inheritDoc */
+    bool Export(UWorld* World, const FString& Filename) const override;
 
     /**
-     * Performs the export of the whole scene.
+     * Set dependencies to be used when running unit tests.
      *
-     * @param World A UObject containing objects to be added to the export.
-     * @param Filename The file (gltf or glb) to be written.
-     *
-     * @return GltfExportReturnCode An enum value describing the return state.
+     * @param MockExporter The mock glTF Exporter to be used.
      */
-    GltfExportReturnCode Export(UWorld* World, const FString& Filename) const override;
-
-    void SetMockObjects(IGltfExporterExternal* MockExporter);
+    void SetDependencies(IGltfExporterExternalInterface* MockExporter);
 
 private:
-    IGltfExporterExternal* Exporter;
+    IGltfExporterExternalInterface* Exporter;
 };

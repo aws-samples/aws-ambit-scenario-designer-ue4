@@ -14,65 +14,72 @@
 
 #pragma once
 
-#include <utility>
+#include "Ambit/Mode/ConfigImportExportInterface.h"
 
-#include "Ambit/Mode/ConfigImportExport.h"
-#include "Ambit/Mode/TestClasses/MockableGltfExport.h"
-
-#include "MockableConfigImportExport.generated.h"
+#include "ConfigImportExportMock.generated.h"
 
 /**
  * Mock class for ConfigImportExport.h
- *
  * Currently the Lambda implementation is being used for unit tests. This needs to be updated in the future under a new
  * story.
  */
 UCLASS()
-class UConfigImportExportMock : public UObject, public IConfigImportExport
+class UConfigImportExportMock : public UObject, public IConfigImportExportInterface
 {
     GENERATED_BODY()
 public:
+    /** @inheritDoc */
     FReply OnImportSdf() override
     {
         return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
 
+    /** @inheritDoc */
     FReply OnExportSdf() override
     {
         return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
 
+    /** @inheritDoc */
     bool ProcessSdfForExport(const TMap<FString, TSharedPtr<FJsonObject>>& AmbitSpawnerArray, bool bToS3) override
     {
         return bHandled;
     }
 
+    /** @inheritDoc */
     FReply OnImportBsc() override
     {
         return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
 
+    /** @inheritDoc */
     FReply OnGeneratePermutations() override
     {
         return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
 
+    /** @inheritDoc */
     FReply OnReadFromS3Bucket() override
     {
         return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
 
+    /** @inheritDoc */
     FReply OnExportMap() override
     {
         return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
 
+    /** @inheritDoc */
     FReply OnExportGltf() override
     {
         return bHandled ? FReply::Handled() : FReply::Unhandled();
     }
 
-    void SetOutputs(bool Handled)
+    /**
+     * Sets the output values.
+     */
+    void SetOutputs(const bool Handled)
     {
         bHandled = Handled;
     }

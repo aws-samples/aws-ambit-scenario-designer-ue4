@@ -18,14 +18,14 @@
 
 #include "Tests/AutomationEditorCommon.h"
 
-#include "Ambit/Mode/TestClasses/MockableGltfExporterExternal.h"
+#include "Ambit/Mode/TestClasses/GltfExporterExternalMock.h"
 
 BEGIN_DEFINE_SPEC(GltfExportSpec, "Ambit.Unit.GltfExport",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
     FString Filename;
     UWorld* World;
-    UGltfExportImpl* Exporter;
+    UGltfExport* Exporter;
     UGltfExporterExternalMock* ExternalExporter;
 END_DEFINE_SPEC(GltfExportSpec)
 
@@ -39,53 +39,34 @@ void GltfExportSpec::Define()
 
             ExternalExporter = NewObject<UGltfExporterExternalMock>();
 
-            Exporter = NewObject<UGltfExportImpl>();
-            Exporter->SetMockObjects(ExternalExporter);
+            Exporter = NewObject<UGltfExport>();
+            Exporter->SetDependencies(ExternalExporter);
+
+            Filename = "";
         });
 
-        Describe("Test GLTFExporter plugin not installed", [this]()
+        It("Should return error if Exporter doesn't exist", [this]()
         {
-            BeforeEach([this]()
-            {
-                ExternalExporter->SetOutputs(false, false, false);
-            });
+            ExternalExporter->SetOutputs(false, false, false);
 
-            It("Should return error if Exporter doesn't exist", [this]()
-            {
-                const GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
-
-                TestEqual("Export should fail", ReturnCode, ExporterNotFound);
-            });
+            AddExpectedError("glTF Exporter plugin is not installed.", EAutomationExpectedErrorFlags::Contains);
+            Exporter->Export(World, Filename);
         });
 
-        Describe("Test GLTFExporter plugin failure", [this]()
+        It("Should return error if ExportBinary() fails", [this]()
         {
-            BeforeEach([this]()
-            {
-                ExternalExporter->SetOutputs(true, false, false);
-            });
+            ExternalExporter->SetOutputs(true, false, false);
 
-            It("Should return error if ExportBinary() fails", [this]()
-            {
-                const GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
-
-                TestEqual("Export should fail", ReturnCode, Failed);
-            });
+            AddExpectedError("Error completing export to", EAutomationExpectedErrorFlags::Contains);
+            Exporter->Export(World, Filename);
         });
 
-        Describe("Test write to file", [this]()
+         It("Should fail if file name is empty", [this]()
         {
-            BeforeEach([this]()
-            {
-                ExternalExporter->SetOutputs(true, true, false);
-            });
+             ExternalExporter->SetOutputs(true, true, false);
 
-            It("Should fail if file name is empty", [this]()
-            {
-                const GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
-
-                TestEqual("Write to file should fail", ReturnCode, WriteToFileError);
-            });
+             AddExpectedError("Error writing to file", EAutomationExpectedErrorFlags::Contains);
+             Exporter->Export(World, Filename);
         });
 
         AfterEach([this]()
@@ -103,15 +84,14 @@ void GltfExportSpec::Define()
             ExternalExporter = NewObject<UGltfExporterExternalMock>();
             ExternalExporter->SetOutputs(true, true, true);
 
-            Exporter = NewObject<UGltfExportImpl>();
-            Exporter->SetMockObjects(ExternalExporter);
+            Exporter = NewObject<UGltfExport>();
+            Exporter->SetDependencies(ExternalExporter);
         });
 
         It("Should return success code on completion", [this]()
         {
-            const GltfExportReturnCode ReturnCode = Exporter->Export(World, Filename);
-
-            TestEqual("Export should complete successfully", ReturnCode, Success);
+            const bool IsSuccess = Exporter->Export(World, Filename);
+            TestTrue("Export Succeeds", IsSuccess);
         });
 
         AfterEach([this]()

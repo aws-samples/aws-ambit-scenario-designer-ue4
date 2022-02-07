@@ -1,11 +1,11 @@
 //   Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
+//  
 //   Licensed under the Apache License, Version 2.0 (the "License").
 //   You may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+//  
 //       http://www.apache.org/licenses/LICENSE-2.0
-//
+//  
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,45 +14,33 @@
 
 #pragma once
 
-#include <utility>
+#include "Ambit/Mode/GltfExportInterface.h"
 
-#include "Ambit/Mode/GltfExporterExternal.h"
-
-#include "MockableGltfExporterExternal.generated.h"
+#include "GltfExportMock.generated.h"
 
 /**
  * Mock class for GltfExport.h
  * To be used only during testing.
  */
 UCLASS()
-class UGltfExporterExternalMock : public UObject, public IGltfExporterExternal
+class UGltfExportMock : public UObject, public IGltfExportInterface
 {
     GENERATED_BODY()
 public:
-    bool DoesExporterExist() override
+    /** @inheritDoc */
+    bool Export(UWorld* World, const FString& Filename) const override
     {
-        return bExporterExists;
+        return IsSuccess;
     }
 
-    bool ExportBinary(UWorld* World, FBufferArchive& Buffer) override
+    /**
+     * Set the output values.
+     */
+    void SetOutput(const bool Success)
     {
-        return bExportResult;
-    }
-
-    bool WriteToFile(FBufferArchive& Buffer, const FString& Filename) override
-    {
-        return bWriteResult;
-    }
-
-    void SetOutputs(bool ExporterExists, bool ExportResult, bool WriteResult)
-    {
-        bExporterExists = ExporterExists;
-        bExportResult = ExportResult;
-        bWriteResult = WriteResult;
+        IsSuccess = Success;
     }
 
 private:
-    bool bExporterExists;
-    bool bExportResult;
-    bool bWriteResult;
+    bool IsSuccess;
 };

@@ -39,7 +39,7 @@
 // If you are adding Slate code, you may need to manually format it.
 
 // INFO: Replace with inline static in header file once available in Unreal.
-static UConfigImportExportImpl* ConfigExporter;
+static UConfigImportExport* ConfigExporter;
 
 TSharedRef<IDetailCustomization> FAmbitDetailCustomization::MakeInstance()
 {
@@ -68,7 +68,7 @@ void FAmbitDetailCustomization::CustomizeDetails(IDetailLayoutBuilder& DetailBui
         }
     }
 
-    ConfigExporter = NewObject<UConfigImportExportImpl>();
+    ConfigExporter = NewObject<UConfigImportExport>();
 
     // The padding setting for Check boxes
     const FMargin KStandardPadding(6.f, 3.f);
@@ -111,7 +111,7 @@ void FAmbitDetailCustomization::CustomizeDetails(IDetailLayoutBuilder& DetailBui
                 SNew(SButton)
                 .ContentPadding(FMargin(4, 0))
                 .Text(NSLOCTEXT("UnrealEd", "GenericOpenDialog", "..."))
-                .OnClicked_UObject(ConfigExporter, &UConfigImportExportImpl::OnImportSdf)
+                .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnImportSdf)
             ]
         ];
 
@@ -253,7 +253,7 @@ void FAmbitDetailCustomization::CustomizeDetails(IDetailLayoutBuilder& DetailBui
                 SNew(SButton)
                 .ContentPadding(FMargin(4, 0))
                 .Text(FText::FromString("Export Scenario"))
-                .OnClicked_UObject(ConfigExporter, &UConfigImportExportImpl::OnExportSdf)
+                .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnExportSdf)
                 .ToolTipText(FText::FromString(KHintTextExportButton))
             ]
         ];
@@ -342,7 +342,7 @@ void FAmbitDetailCustomization::CustomizeDetails(IDetailLayoutBuilder& DetailBui
                 SNew(SButton)
                 .ContentPadding(FMargin(4, 0))
                 .Text(NSLOCTEXT("UnrealEd", "GenericOpenDialog", "..."))
-                .OnClicked_UObject(ConfigExporter, &UConfigImportExportImpl::OnReadFromS3Bucket)
+                .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnReadFromS3Bucket)
             ]
          ];
     
@@ -734,7 +734,7 @@ void FAmbitDetailCustomization::CustomizeDetails(IDetailLayoutBuilder& DetailBui
             SNew(SButton)
             .ContentPadding(FMargin(4, 0))
             .Text(FText::FromString("Generate Permutations"))
-            .OnClicked_UObject(ConfigExporter, &UConfigImportExportImpl::OnGeneratePermutations)
+            .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnGeneratePermutations)
             .ToolTipText(FText::FromString(KHintTextGeneratePermutations))
         ]
     ];
@@ -813,7 +813,7 @@ void FAmbitDetailCustomization::CustomizeDetails(IDetailLayoutBuilder& DetailBui
                 SNew(SButton)
                 .ContentPadding(FMargin(4, 0))
                 .Text(FText::FromString("Export Map"))
-                .OnClicked_UObject(ConfigExporter, &UConfigImportExportImpl::OnExportMap)
+                .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnExportMap)
                 .ToolTipText(FText::FromString(KHintTextExportMap))
                 .IsEnabled_Static(&GetExportButtonEnabled)
             ]
@@ -868,7 +868,7 @@ void FAmbitDetailCustomization::CustomizeDetails(IDetailLayoutBuilder& DetailBui
                 SNew(SButton)
                 .ContentPadding(FMargin(4, 0))
                 .Text(FText::FromString(GltfExportButtonText))
-                .OnClicked_UObject(ConfigExporter, &UConfigImportExportImpl::OnExportGltf)
+                .OnClicked_UObject(ConfigExporter, &UConfigImportExport::OnExportGltf)
                 .IsEnabled_Static(&GetExportButtonEnabled)
             ]
         ];

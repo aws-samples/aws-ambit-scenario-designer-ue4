@@ -14,30 +14,28 @@
 
 #pragma once
 
-#include <utility>
-
-#include "Ambit/Mode/GltfExport.h"
-
-#include "MockableGltfExport.generated.h"
+#include "GltfExportInterface.generated.h"
 
 /**
- * Mock class for GltfExport.h
- * To be used only during testing.
+ * Interface for GltfExport and GltfExportMock
  */
-UCLASS()
-class UGltfExportMock : public UObject, public IGltfExport
+UINTERFACE()
+class UGltfExportInterface : public UInterface
+{
+    GENERATED_BODY()
+};
+
+class IGltfExportInterface
 {
     GENERATED_BODY()
 public:
-    GltfExportReturnCode Export(UWorld* World, const FString& Filename) const override
-    {
-        return ReturnCode;
-    }
-
-    void SetOutput(GltfExportReturnCode Code)
-    {
-        ReturnCode = Code;
-    }
-private:
-    GltfExportReturnCode ReturnCode;
+    /**
+     * Performs the export of the whole scene.
+     *
+     * @param World A UObject containing objects to be added to the export.
+     * @param Filename The file (gltf or glb) to be written.
+     *
+     * @return True If export succeeds.
+     */
+    virtual bool Export(UWorld* World, const FString& Filename) const = 0;
 };
