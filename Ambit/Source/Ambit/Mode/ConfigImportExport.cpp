@@ -922,9 +922,9 @@ void UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler(
     }
 }
 
-void UConfigImportExport::SetDependencies(IGltfExportInterface* MockExporter)
+void UConfigImportExport::SetDependencies(IGltfExportInterface* Exporter)
 {
-    GltfExporter = MockExporter;
+    GltfExporter = Exporter;
 }
 
 void UConfigImportExport::SetMockGetPathFromPopup(TFunction<FString(const FString& FileExtension,

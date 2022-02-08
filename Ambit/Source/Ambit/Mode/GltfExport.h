@@ -35,12 +35,12 @@ public:
     bool Export(UWorld* World, const FString& Filename) const override;
 
     /**
-     * Set dependencies to be used when running unit tests.
+     * Assign new dependency instance for use by this GltfExport object.
      *
-     * @param MockExporter The mock glTF Exporter to be used.
+     * @param Exporter The glTF Exporter to be used.
      */
-    void SetDependencies(IGltfExporterExternalInterface* MockExporter);
+    void SetDependencies(IGltfExporterExternalInterface* Exporter);
 
 private:
-    IGltfExporterExternalInterface* Exporter;
+    IGltfExporterExternalInterface* ExternalExporter;
 };

@@ -69,13 +69,11 @@ public:
     FReply OnExportGltf();
 
     /**
-     * Set the glTF exporter to its mocked instance.
+     * Assign new dependency instances for use by this ConfigImportExport object.
      *
-     * @param MockExporter The mocked instance of the glTF Exporter.
+     * @param Exporter The glTF Exporter to be used.
      */
-    void SetDependencies(IGltfExportInterface* MockExporter);
-
-public:
+    void SetDependencies(IGltfExportInterface* Exporter);
 
     /**
     * Overrides the default behavior of S3ListBuckets, the function called to list all buckets in an account, to be overwritten with

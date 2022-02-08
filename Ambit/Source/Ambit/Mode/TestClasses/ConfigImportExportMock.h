@@ -78,6 +78,8 @@ public:
 
     /**
      * Sets the output values.
+     *
+     * @param Handled The return value for all functions.
      */
     void SetOutputs(const bool Handled)
     {

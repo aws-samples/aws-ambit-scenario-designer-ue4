@@ -35,6 +35,8 @@ public:
 
     /**
      * Set the output values.
+     *
+     * @param Success The return value for Export().
      */
     void SetOutput(const bool Success)
     {

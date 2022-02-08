@@ -22,7 +22,7 @@
 
 UGltfExport::UGltfExport() : IGltfExportInterface()
 {
-    Exporter = NewObject<UGltfExporterExternal>();
+    ExternalExporter = NewObject<UGltfExporterExternal>();
 };
 
 bool UGltfExport::Export(UWorld* World, const FString& Filename) const
@@ -35,7 +35,7 @@ bool UGltfExport::Export(UWorld* World, const FString& Filename) const
     FString ErrorMessage;
 
     // Find the exporter plugin object created during UE initialization.
-    if (!Exporter->DoesExporterExist())
+    if (!ExternalExporter->DoesExporterExist())
     {
         // The chances of this failing are extremely low (almost impossible)
         // since the GLTF plugin is a required dependency for the Ambit plugin.
@@ -48,10 +48,10 @@ bool UGltfExport::Export(UWorld* World, const FString& Filename) const
 
     // Archive buffer to collect file data and write to file.
     FBufferArchive Buffer;
-    const bool IsExportSuccess = Exporter->ExportBinary(World, Buffer);
+    const bool IsExportSuccess = ExternalExporter->ExportBinary(World, Buffer);
     if (IsExportSuccess)
     {
-        const bool IsWriteToFileSuccess = Exporter->WriteToFile(Buffer, *Filename);
+        const bool IsWriteToFileSuccess = ExternalExporter->WriteToFile(Buffer, *Filename);
         if (!IsWriteToFileSuccess)
         {
             ErrorMessage = "glTF Export: Error writing to file " + Filename;
@@ -83,7 +83,7 @@ bool UGltfExport::Export(UWorld* World, const FString& Filename) const
     return true;
 }
 
-void UGltfExport::SetDependencies(IGltfExporterExternalInterface* MockExporter)
+void UGltfExport::SetDependencies(IGltfExporterExternalInterface* Exporter)
 {
-    Exporter = MockExporter;
+    ExternalExporter = Exporter;
 }
