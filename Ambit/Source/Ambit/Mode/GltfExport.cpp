@@ -14,36 +14,50 @@
 
 #include "GltfExport.h"
 
-#include "CoreGlobals.h"
+#include "GLTFExporter/Public/Exporters/GLTFLevelExporter.h"
 #include "Misc/FileHelper.h"
 
-UGltfExport::GltfExportReturnCode UGltfExport::Export(UWorld* World, const FString& Filename) const
+#include "Ambit/Mode/GltfExporterExternal.h"
+#include "AmbitUtils/MenuHelpers.h"
+
+UGltfExport::UGltfExport() : IGltfExportInterface()
+{
+    ExternalExporter = NewObject<UGltfExporterExternal>();
+};
+
+bool UGltfExport::Export(UWorld* World, const FString& Filename) const
 {
     // Set the filename for the Exporter to use.
     // This is a global variable used by the UE exporter mechanism and needs to
     // be manually assigned.
     UExporter::CurrentFilename = Filename;
 
+    FString ErrorMessage;
+
     // Find the exporter plugin object created during UE initialization.
-    UGLTFLevelExporter* Exporter = Cast<UGLTFLevelExporter>(UGLTFLevelExporter::StaticClass()->GetDefaultObject(true));
-    if (Exporter == nullptr)
+    if (!ExternalExporter->DoesExporterExist())
     {
         // The chances of this failing are extremely low (almost impossible)
         // since the GLTF plugin is a required dependency for the Ambit plugin.
-        return ExporterNotFound;
-    }
+        ErrorMessage = "glTF Export: glTF Exporter plugin is not installed. \
+        Follow the instructions in the User Guide to install the glTF Exporter plugin from the marketplace.";
+        FMenuHelpers::LogErrorAndPopup(ErrorMessage);
 
-    GltfExportReturnCode ReturnCode = Success;
+        return false;
+    }
 
     // Archive buffer to collect file data and write to file.
     FBufferArchive Buffer;
-    const bool IsExportSuccess = LambdaExportBinary(Exporter, World, Buffer);
+    const bool IsExportSuccess = ExternalExporter->ExportBinary(World, Buffer);
     if (IsExportSuccess)
     {
-        const bool IsWriteToFileSuccess = LambdaWriteToFile(Buffer, *Filename);
+        const bool IsWriteToFileSuccess = ExternalExporter->WriteToFile(Buffer, *Filename);
         if (!IsWriteToFileSuccess)
         {
-            ReturnCode = WriteToFileError;
+            ErrorMessage = "glTF Export: Error writing to file " + Filename;
+            FMenuHelpers::LogErrorAndPopup(ErrorMessage);
+
+            return false;
         }
     }
     else
@@ -56,28 +70,20 @@ UGltfExport::GltfExportReturnCode UGltfExport::Export(UWorld* World, const FStri
         // There is no straightforward way to determine which reason causes the
         // ExportBinary function to fail so a generic failure error code is
         // returned.
-        ReturnCode = Failed;
+        ErrorMessage = "glTF Export: Error completing export to " + Filename;
+        FMenuHelpers::LogErrorAndPopup(ErrorMessage);
+
+        return false;
     }
 
     // Reset the UExporter filename to empty, to not clash with other export
     // mechanisms.
     UExporter::CurrentFilename = TEXT("");
 
-    return ReturnCode;
+    return true;
 }
 
-bool UGltfExport::ExportBinary(UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer)
+void UGltfExport::SetDependencies(IGltfExporterExternalInterface* Exporter)
 {
-    // Type, FileIndex, PortFlags are not used by ExportBinary() so they are
-    // set to basic values.
-    const TCHAR* Type = nullptr;
-    const int32 FileIndex = 0;
-    const int32 PortFlags = 0;
-
-    return Exporter->ExportBinary(World, Type, Buffer, GWarn, FileIndex, PortFlags);
-}
-
-bool UGltfExport::WriteToFile(FBufferArchive& Buffer, const FString& Filename) const
-{
-    return FFileHelper::SaveArrayToFile(Buffer, *Filename);
+    ExternalExporter = Exporter;
 }

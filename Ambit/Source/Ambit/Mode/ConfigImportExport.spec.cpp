@@ -29,7 +29,7 @@
 #include "Ambit/Actors/Spawners/SpawnWithHoudini.h"
 #include "Ambit/Actors/Spawners/TestClasses/MockableSpawner.h"
 #include "Ambit/Mode/AmbitMode.h"
-#include "Ambit/Mode/TestClasses/MockableConfigImportExport.h"
+#include "Ambit/Mode/TestClasses/GltfExportMock.h"
 #include "AmbitUtils/JsonHelpers.h"
 
 BEGIN_DEFINE_SPEC(ConfigImportExportSpec, "Ambit.Unit.ConfigImportExport",
@@ -41,8 +41,8 @@ BEGIN_DEFINE_SPEC(ConfigImportExportSpec, "Ambit.Unit.ConfigImportExport",
     AStaticMeshActor* SurfaceActor;
     FString SurfaceActorName;
     FString Tag;
-    UMockableConfigImportExport* Exporter;
-
+    UConfigImportExport* Exporter;
+    UGltfExportMock* GltfExporter;
     FString JsonContent;
 
 END_DEFINE_SPEC(ConfigImportExportSpec)
@@ -62,7 +62,7 @@ void ConfigImportExportSpec::Define()
             World = FAutomationEditorCommonUtils::CreateNewMap();
 
             // Generate Exporter
-            Exporter = NewObject<UMockableConfigImportExport>();
+            Exporter = NewObject<UConfigImportExport>();
 
             auto MockWrite = [](const FString& FilePath, const FString& OutString) -> bool
             {
@@ -104,7 +104,7 @@ void ConfigImportExportSpec::Define()
             World = FAutomationEditorCommonUtils::CreateNewMap();
 
             // Generate Exporter
-            Exporter = NewObject<UMockableConfigImportExport>();
+            Exporter = NewObject<UConfigImportExport>();
         });
 
         Describe("When DequeueOrDefaultNextSdfConfigToProcess() Defaults", [this]()
@@ -112,7 +112,7 @@ void ConfigImportExportSpec::Define()
             BeforeEach([this]()
             {
                 // Generate Exporter
-                Exporter = NewObject<UMockableConfigImportExport>();
+                Exporter = NewObject<UConfigImportExport>();
 
                 const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
                 AmbitMode->UISettings->TimeOfDay = 0.1;
@@ -180,7 +180,7 @@ void ConfigImportExportSpec::Define()
             World = FAutomationEditorCommonUtils::CreateNewMap();
 
             // Generate Exporter
-            Exporter = NewObject<UMockableConfigImportExport>();
+            Exporter = NewObject<UConfigImportExport>();
 
             auto MockWrite = [this](const FString& FilePath, const FString& OutString) -> bool
             {
@@ -296,7 +296,7 @@ void ConfigImportExportSpec::Define()
             GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
 
             // Generate Exporter
-            Exporter = NewObject<UMockableConfigImportExport>();
+            Exporter = NewObject<UConfigImportExport>();
 
             // Generate World
             World = FAutomationEditorCommonUtils::CreateNewMap();
@@ -307,7 +307,7 @@ void ConfigImportExportSpec::Define()
             BeforeEach([this]()
             {
                 // Generate Exporter
-                Exporter = NewObject<UMockableConfigImportExport>();
+                Exporter = NewObject<UConfigImportExport>();
 
                 auto MockWrite = [this](const FString& FilePath, const FString& OutString) -> bool
                 {
@@ -416,7 +416,7 @@ void ConfigImportExportSpec::Define()
             World = FAutomationEditorCommonUtils::CreateNewMap();
 
             // Generate Exporter
-            Exporter = NewObject<UMockableConfigImportExport>();
+            Exporter = NewObject<UConfigImportExport>();
 
             auto MockWrite = [this](const FString& FilePath, const FString& OutString) -> bool
             {
@@ -432,13 +432,11 @@ void ConfigImportExportSpec::Define()
                 setBuckets.Add("BucketName");
                 return setBuckets;
             };
-
             Exporter->SetMockS3ListBuckets(MockListBuckets);
 
             auto MockCreateBucket = [](const FString& Region, const FString& BucketName) -> void
             {
             };
-
             Exporter->SetMockS3CreateBucket(MockCreateBucket);
         });
 
@@ -509,7 +507,7 @@ void ConfigImportExportSpec::Define()
                 BeforeEach([this]()
                 {
                     // Generate Exporter
-                    Exporter = NewObject<UMockableConfigImportExport>();
+                    Exporter = NewObject<UConfigImportExport>();
 
                     const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
                     AmbitMode->UISettings->AwsRegion = Aws::Region::US_EAST_1;
@@ -671,7 +669,7 @@ void ConfigImportExportSpec::Define()
             GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
 
             // Generate Exporter
-            Exporter = NewObject<UMockableConfigImportExport>();
+            Exporter = NewObject<UConfigImportExport>();
 
             auto MockWrite = [this](const FString& FilePath, const FString& OutString) -> bool
             {
@@ -712,7 +710,7 @@ void ConfigImportExportSpec::Define()
                 World = FAutomationEditorCommonUtils::CreateNewMap();
 
                 // Generate Exporter
-                Exporter = NewObject<UMockableConfigImportExport>();
+                Exporter = NewObject<UConfigImportExport>();
 
                 auto MockWrite = [this](const FString& FilePath, const FString& OutString) -> bool
                 {
@@ -811,7 +809,7 @@ void ConfigImportExportSpec::Define()
             World = FAutomationEditorCommonUtils::CreateNewMap();
 
             // Generate Exporter
-            Exporter = NewObject<UMockableConfigImportExport>();
+            Exporter = NewObject<UConfigImportExport>();
 
             auto MockWrite = [this](const FString& FilePath, const FString& OutString) -> bool
             {
@@ -1028,7 +1026,7 @@ void ConfigImportExportSpec::Define()
             GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
 
             // Generate Exporter
-            Exporter = NewObject<UMockableConfigImportExport>();
+            Exporter = NewObject<UConfigImportExport>();
 
             auto MockListBuckets = []() -> TSet<FString>
             {
@@ -1075,8 +1073,12 @@ void ConfigImportExportSpec::Define()
             // Create Mode Settings
             GLevelEditorModeTools().ActivateMode(FAmbitMode::EM_AmbitModeId);
 
+            // Generate glTF Exporter
+            GltfExporter = NewObject<UGltfExportMock>();
+
             // Generate Exporter
-            Exporter = NewObject<UMockableConfigImportExport>();
+            Exporter = NewObject<UConfigImportExport>();
+            Exporter->SetDependencies(GltfExporter);
 
             const FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
             AmbitMode->UISettings->ExportPlatforms.SetWindows(true);
@@ -1108,49 +1110,23 @@ void ConfigImportExportSpec::Define()
             Exporter->OnExportGltf();
         });
 
-        It("Should fail if exporter is not found", [this]()
+        It("Should fail if no exporter is initialized.", [this]()
         {
-            auto MockGltfExport = [](UWorld* World, const FString& FilePath)
-            {
-                return UGltfExport::GltfExportReturnCode::ExporterNotFound;
-            };
-            Exporter->SetMockGltfExport(MockGltfExport);
-
             // Add a box to the scene so there is a static mesh to export.
             const FString SpawnedActorPath = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
             const FSoftClassPath ClassPath(SpawnedActorPath);
             const TSubclassOf<AActor> ActorToSpawn = ClassPath.TryLoadClass<UObject>();
             World->SpawnActor(ActorToSpawn.Get());
 
-            AddExpectedError("glTF Exporter plugin is not installed.", EAutomationExpectedErrorFlags::Contains, 1);
-            Exporter->OnExportGltf();
-        });
+            Exporter->SetDependencies(nullptr);
 
-        It("Should fail if there is an error when writing to file", [this]()
-        {
-            auto MockGltfExport = [](UWorld* World, const FString& FilePath)
-            {
-                return UGltfExport::GltfExportReturnCode::WriteToFileError;
-            };
-            Exporter->SetMockGltfExport(MockGltfExport);
-
-            // Add a box to the scene so there is a static mesh to export.
-            const FString SpawnedActorPath = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
-            const FSoftClassPath ClassPath(SpawnedActorPath);
-            const TSubclassOf<AActor> ActorToSpawn = ClassPath.TryLoadClass<UObject>();
-            World->SpawnActor(ActorToSpawn.Get());
-
-            AddExpectedError("Error writing to file", EAutomationExpectedErrorFlags::Contains, 1);
+            AddExpectedError("glTF Exporter not initialized.", EAutomationExpectedErrorFlags::Exact, 1);
             Exporter->OnExportGltf();
         });
 
         It("Should fail if export fails", [this]()
         {
-            auto MockGltfExport = [](UWorld* World, const FString& FilePath)
-            {
-                return UGltfExport::GltfExportReturnCode::Failed;
-            };
-            Exporter->SetMockGltfExport(MockGltfExport);
+            GltfExporter->SetOutput(false);
 
             // Add a box to the scene so there is a static mesh to export.
             const FString SpawnedActorPath = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
@@ -1158,17 +1134,13 @@ void ConfigImportExportSpec::Define()
             const TSubclassOf<AActor> ActorToSpawn = ClassPath.TryLoadClass<UObject>();
             World->SpawnActor(ActorToSpawn.Get());
 
-            AddExpectedError("Error completing export to", EAutomationExpectedErrorFlags::Contains, 1);
+            AddExpectedError("glTF Export Failed.", EAutomationExpectedErrorFlags::Exact, 1);
             Exporter->OnExportGltf();
         });
 
-        It("Should succeed after static mesh is present", [this]()
+        It("Should succeed after static mesh is present and export succeeds", [this]()
         {
-            auto MockGltfExport = [](UWorld* World, const FString& FilePath)
-            {
-                return UGltfExport::GltfExportReturnCode::Success;
-            };
-            Exporter->SetMockGltfExport(MockGltfExport);
+            GltfExporter->SetOutput(true);
 
             // Add a box to the scene so there is a static mesh to export.
             const FString SpawnedActorPath = "/Ambit/Test/Props/BP_Box01.BP_Box01_C";
@@ -1184,6 +1156,7 @@ void ConfigImportExportSpec::Define()
         AfterEach([this]()
         {
             GLevelEditorModeTools().DeactivateMode(FAmbitMode::EM_AmbitModeId);
+            GltfExporter = nullptr;
             Exporter = nullptr;
         });
     });

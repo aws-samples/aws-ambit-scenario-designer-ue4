@@ -14,7 +14,6 @@
 
 #pragma once
 
-#include "GltfExport.h"
 #include "ScenarioDefinition.h"
 #include "Dom/JsonObject.h"
 #include "Misc/AutomationTest.h"
@@ -22,11 +21,13 @@
 #include "UObject/Object.h"
 
 #include "Ambit/Actors/SpawnedObjectConfigs/SpawnedObjectConfig.h"
+#include "Ambit/Mode/ConfigImportExportInterface.h"
 #include "Ambit/Utils/AmbitFileHelpers.h"
 #include "Ambit/Utils/AWSWrapper.h"
 
 #include "ConfigImportExport.generated.h"
 
+class IGltfExportInterface;
 class FAmbitMode;
 class USpawnedObjectConfig;
 struct FPedestrianTraffic;
@@ -36,85 +37,87 @@ struct FVehicleTraffic;
  * Class dedicated to controlling the importing and exporting of configuration files for the AmbitSpawners.
  */
 UCLASS()
-class UConfigImportExport : public UObject
+class UConfigImportExport : public UObject, public IConfigImportExportInterface
 {
     GENERATED_BODY()
 public:
     //Constructor
     UConfigImportExport();
 
-    // SDF import and export
-    /**
-     * Starts the process to import an SDF file specified on screen.
-     *
-     * @return FReply When the process has finished.
-     */
+    /** @inheritDoc */
     FReply OnImportSdf();
 
-    /**
-     * Starts the process to export the SDF file specified. This process triggers asynchronous functions
-     * to handle the exporting, and does not actually export itself.
-     *
-     * @return FReply::Finished When the process has been started for the asynchronous handlings.
-     */
+    /** @inheritDoc */
     FReply OnExportSdf();
 
-    /**
-     * Based on the config settings from screen or the queued config settings from QueuedSdfConfigToExport,
-     * will combine those with the passed AmbitSpawnerArray into a standardized SDF format, and then
-     * writes the file.
-     * This function will attempt to create the S3 bucket, if bToS3 is selected.
-     * At the end of this function, if there are any more items in QueuedSdfConfigToExport, it will call
-     * PrepareAllSpawnersObjectConfigs to continue to the process of the queue.
-     *
-     *
-     * @param AmbitSpawnerArray A Mapping of FJsonValue (coming from SpawnerObjects), and the name of their JSON
-     * format to output for their location in the array.
-     * @param bToS3 Specifies whether the file should attempt to upload to S3 or save to disk.
-     *
-     * @return Boolean to indicate if the write was successful or not.
-     */
+    /** @inheritDoc */
     bool ProcessSdfForExport(const TMap<FString, TSharedPtr<FJsonObject>>& AmbitSpawnerArray, bool bToS3);
 
-    // Generate Permutations
-    /**
-     * Imports on a BSC file on disk.
-     *
-     * @return FReply::Finished When the process has finished.
-     */
+    /** @inheritDoc */
     FReply OnImportBsc();
 
-    /**
-     * Starts the process to export a BSC file and all permutations of
-     * it to a SDF into the on-screen specified S3 bucket location. The BSC
-     * process is synchronous, but the SDF process is asynchronous.
-     *
-     * @return FReply When the process has either finished (through error)
-     * or when the process was successful and the SDF has started.
-     */
+    /** @inheritDoc */
     FReply OnGeneratePermutations();
 
-    /**
-     * Imports on a BSC file in the specified Amazon S3.
-     *
-     * @return FReply::Finished when the process has finished (success or failure).
-     */
+    /** @inheritDoc */
     FReply OnReadFromS3Bucket();
 
-    /**
-     * Exports the current map into the Amazon S3 account specified.
-     */
+    /** @inheritDoc */
     FReply OnExportMap();
 
-    /**
-     * Exports the current scene as a glTF file (*.gltf or *.glb) into the Amazon S3 account specified.
-     */
+    /** @inheritDoc */
     FReply OnExportGltf();
 
     /**
-     * Gets a pointer to the UGltfExport object.
+     * Assign new dependency instances for use by this ConfigImportExport object.
+     *
+     * @param Exporter The glTF Exporter to be used.
      */
-    UGltfExport* GetGltfExporter() const;
+    void SetDependencies(IGltfExportInterface* Exporter);
+
+    /**
+    * Overrides the default behavior of S3ListBuckets, the function called to list all buckets in an account, to be overwritten with
+    * the function passed in.
+    */
+    static void SetMockS3ListBuckets(TFunction<TSet<FString>()> MockFunction);
+
+    /**
+    * Overrides the default behavior of S3CreateBucket, the function called to create a new bucket for ____, to be overwritten with
+    * the function passed in.
+    */
+    static void SetMockS3CreateBucket(TFunction<void(const FString& Region, const FString& BucketName)> MockFunction);
+
+    /**
+     * Overrides the default behavior of LambdaGetPathFromPopup, the function called that creates a popup for writing a file to disk,
+     * to be the function passed in.
+     */
+    void SetMockGetPathFromPopup(TFunction<FString(const FString& FileExtension, const FString& DefaultPath,
+                                                   const FString& FileName)> MockFunction);
+
+    /**
+     * Overrides the default behavior of LambdaWriteFileToDisk, the function called when a write to disk is actually happening in ConfigImportExport,
+     * to be the function passed in.
+     */
+    void SetMockWriteFile(TFunction<void(const FString& FilePath, const FString& OutString)> MockFunction);
+
+    /**
+     * Overrides the default behavior of LambdaPutS3Object, the function called when uploading an object to Amazon S3 in ConfigImportExport,
+     * to be the function passed in.
+     */
+    void SetMockPutObjectS3(TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName,
+                                           const FString& Content)> MockFunction);
+
+    /**
+     * Overrides the default behavior of LambdaS3FileUpload, the function called when uploading a file to an Amazon S3 bucket in ConfigImportExport,
+     * to be the function passed in.
+     */
+    void SetMockS3FileUpload(TFunction<bool(const FString& Region, const FString& BucketName, const FString& ObjectName,
+                                            const FString& FilePath)> MockFunction);
+
+    /**
+     * Sets the DoneDelegate to be the value specified. Used in "Latent" Automation Tests.
+     */
+    void SetSdfProcessDone(FDoneDelegate const& DoneEvent);
 
 protected:
     /**
@@ -145,16 +148,6 @@ protected:
      */
     TFunction<FString(const FString& FileExtension, const FString& DefaultPath, const FString& Filename)>
     LambdaGetPathFromPopup = AmbitFileHelpers::GetPathForFileFromPopup;
-
-    /**
-     * Calls UGltfExport::Export()
-     * Allows for injection of the function to be changed. Should only be changed in testing.
-     */
-    TFunction<UGltfExport::GltfExportReturnCode(UWorld* WorldContext, const FString& FilePath)> LambdaExportGltf = [this](
-        UWorld* WorldContext, const FString& FilePath)
-    {
-        return this->ExportGltf(WorldContext, FilePath);
-    };
 
     /**
     * For internal testing only. Returns when ProcessSdfForExport() has been completed and there are no more items in queue. 
@@ -274,18 +267,8 @@ private:
         return "GeneratedScenarios-";
     }
 
-    /**
-     * Run the glTF Export process.
-     *
-     * @param World The current World context.
-     * @param FilePath The output file path.
-     *
-     * @return GltfExportReturnCode enum
-     */
-    UGltfExport::GltfExportReturnCode ExportGltf(UWorld* World, const FString& FilePath);
-
 private:
-    UGltfExport* GltfExporter;
+    IGltfExportInterface* GltfExporter;
 };
 
 /**
@@ -337,16 +320,3 @@ private:
      */
     TMap<FString, TSharedPtr<FJsonObject>> AllSpawnerConfiguration;
 };
-
-/**
-* Calls AWSWrapper::ListBuckets
-* Allows for injection of the function so that it can be changed for functional testing purposes.
-*/
-static TFunction<TSet<FString>()> LambdaS3ListBuckets = AWSWrapper::ListBuckets;
-
-/**
-* Calls AWSWrapper::CreateBucketWithEncryption
-* Allows for injection of the function so that it can be changed for functional testing purposes.
-*/
-static TFunction<void(const FString& Region, const FString& BucketName)> LambdaS3CreateBucket =
-        AWSWrapper::CreateBucketWithEncryption;

@@ -14,33 +14,28 @@
 
 #pragma once
 
-#include "Ambit/Mode/GltfExportInterface.h"
-
-#include "GltfExport.generated.h"
-
-class IGltfExporterExternalInterface;
+#include "GltfExportInterface.generated.h"
 
 /**
- * Class dedicated to performing a glTF export using the external GLTFExporter
- * plugin API's.
+ * Interface for GltfExport and GltfExportMock
  */
-UCLASS()
-class UGltfExport : public UObject, public IGltfExportInterface
+UINTERFACE()
+class UGltfExportInterface : public UInterface
+{
+    GENERATED_BODY()
+};
+
+class IGltfExportInterface
 {
     GENERATED_BODY()
 public:
-    UGltfExport();
-
-    /** @inheritDoc */
-    bool Export(UWorld* World, const FString& Filename) const override;
-
     /**
-     * Assign new dependency instance for use by this GltfExport object.
+     * Performs the export of the whole scene.
      *
-     * @param Exporter The glTF Exporter to be used.
+     * @param World A UObject containing objects to be added to the export.
+     * @param Filename The file (gltf or glb) to be written.
+     *
+     * @return True If export succeeds.
      */
-    void SetDependencies(IGltfExporterExternalInterface* Exporter);
-
-private:
-    IGltfExporterExternalInterface* ExternalExporter;
+    virtual bool Export(UWorld* World, const FString& Filename) const = 0;
 };

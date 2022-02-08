@@ -14,35 +14,35 @@
 
 #pragma once
 
-#include <utility>
+#include "Ambit/Mode/GltfExportInterface.h"
 
-#include "Ambit/Mode/GltfExport.h"
-
-#include "MockableGltfExport.generated.h"
+#include "GltfExportMock.generated.h"
 
 /**
  * Mock class for GltfExport.h
  * To be used only during testing.
  */
 UCLASS()
-class UMockableGltfExport : public UGltfExport
+class UGltfExportMock : public UObject, public IGltfExportInterface
 {
     GENERATED_BODY()
 public:
-    /**
-     * Overrides the default behavior of LambdaExportBinary, the function that is called to export data as glTF.
-     */
-    void SetExportBinary(
-        TFunction<bool(UGLTFLevelExporter* Exporter, UWorld* World, FBufferArchive& Buffer)> MockFunction)
+    /** @inheritDoc */
+    bool Export(UWorld* World, const FString& Filename) const override
     {
-        LambdaExportBinary = std::move(MockFunction);
+        return IsSuccess;
     }
 
     /**
-     * Overrides the default behavior of LambdaWriteToFile, the function that is called to write Buffer data to a file.
+     * Set the output values.
+     *
+     * @param Success The return value for Export().
      */
-    void SetWriteToFile(TFunction<bool(FBufferArchive& Buffer, const FString& Filename)> MockFunction)
+    void SetOutput(const bool Success)
     {
-        LambdaWriteToFile = std::move(MockFunction);
+        IsSuccess = Success;
     }
+
+private:
+    bool IsSuccess;
 };

@@ -15,6 +15,7 @@
 #include "ConfigImportExport.h"
 
 #include "BulkScenarioConfiguration.h"
+#include "GltfExport.h"
 #include "ScenarioDefinition.h"
 #include "WeatherTypes.h"
 #include "Containers/Queue.h"
@@ -43,6 +44,7 @@
 #include "Ambit/Actors/Spawners/SpawnOnSurface.h"
 #include "Ambit/Actors/Spawners/SpawnVehiclePath.h"
 #include "Ambit/Actors/Spawners/SpawnWithHoudini.h"
+#include "Ambit/Mode/GltfExportInterface.h"
 #include "Ambit/Utils/AmbitFileHelpers.h"
 #include "Ambit/Utils/AWSWrapper.h"
 #include "Ambit/Utils/UserMetricsSubsystem.h"
@@ -55,6 +57,17 @@
   * A queue to keep track of all of the Configs that need exported to SDF.
  */
 TQueue<TSharedPtr<FScenarioDefinition>> QueuedSdfConfigToExport;
+
+// Static member handling.
+//
+// Calls AWSWrapper::ListBuckets
+// Allows for injection of the function so that it can be changed for functional testing purposes.
+static TFunction<TSet<FString>()> LambdaS3ListBuckets = AWSWrapper::ListBuckets;
+
+// Calls AWSWrapper::CreateBucketWithEncryption
+// Allows for injection of the function so that it can be changed for functional testing purposes. 
+static TFunction<void(const FString& Region, const FString& BucketName)> LambdaS3CreateBucket =
+        AWSWrapper::CreateBucketWithEncryption;
 
 //Constructor
 UConfigImportExport::UConfigImportExport()
@@ -492,6 +505,15 @@ FReply UConfigImportExport::OnExportMap()
 
 FReply UConfigImportExport::OnExportGltf()
 {
+    FString ErrorMessage;
+    if (GltfExporter == nullptr)
+    {
+        ErrorMessage = "glTF Exporter not initialized.";
+        FMenuHelpers::LogErrorAndPopup(ErrorMessage);
+
+        return FReply::Handled();
+    }
+
     FAmbitMode* AmbitMode = FAmbitMode::GetEditorMode();
     check(AmbitMode);
 
@@ -540,7 +562,6 @@ FReply UConfigImportExport::OnExportGltf()
         }
     }
 
-    FString ErrorMessage;
     if (!bFoundWorld)
     {
         ErrorMessage = "Cannot find a static mesh to export.";
@@ -559,32 +580,10 @@ FReply UConfigImportExport::OnExportGltf()
     const FString FilePath = FPaths::Combine(OutputDir, Filename);
 
     // Perform the export to glTF.
-    const UGltfExport::GltfExportReturnCode ReturnCode = LambdaExportGltf(CurrentWorldContext, FilePath);
-    if (ReturnCode == UGltfExport::ExporterNotInitialized)
+    const bool IsExportSuccess = GltfExporter->Export(CurrentWorldContext, FilePath);
+    if (!IsExportSuccess)
     {
-        ErrorMessage = "glTF Exporter not initialized.";
-        FMenuHelpers::LogErrorAndPopup(ErrorMessage);
-
-        return FReply::Handled();
-    }
-    if(ReturnCode == UGltfExport::ExporterNotFound)
-    {
-        ErrorMessage = "glTF Export: glTF Exporter plugin is not installed. \
-        Follow the instructions in the User Guide to install the glTF Exporter plugin from the marketplace.";
-        FMenuHelpers::LogErrorAndPopup(ErrorMessage);
-
-        return FReply::Handled();
-    }
-    if (ReturnCode == UGltfExport::WriteToFileError)
-    {
-        ErrorMessage = "glTF Export: Error writing to file " + FilePath;
-        FMenuHelpers::LogErrorAndPopup(ErrorMessage);
-
-        return FReply::Handled();
-    }
-    if (ReturnCode == UGltfExport::Failed)
-    {
-        ErrorMessage = "glTF Export: Error completing export to " + FilePath;
+        ErrorMessage = "glTF Export Failed.";
         FMenuHelpers::LogErrorAndPopup(ErrorMessage);
 
         return FReply::Handled();
@@ -603,11 +602,6 @@ FReply UConfigImportExport::OnExportGltf()
     FAmbitModule::CreateAmbitNotification(NotificationText);
 
     return FReply::Handled();
-}
-
-UGltfExport* UConfigImportExport::GetGltfExporter() const
-{
-    return GltfExporter;
 }
 
 void UConfigImportExport::PrepareAllSpawnersObjectConfigs(bool bToS3)
@@ -701,7 +695,8 @@ void UConfigImportExport::ConfigureSpawnersByType(const TSharedPtr<FJsonObject>&
 }
 
 template <typename ClassType, typename StructType>
-void UConfigImportExport::SerializeSpawnerConfigs(TSharedPtr<FJsonObject>& SpawnersJson, const FString& SpawnerTypeKey)
+void UConfigImportExport::SerializeSpawnerConfigs(TSharedPtr<FJsonObject>& SpawnersJson,
+                                                  const FString& SpawnerTypeKey)
 {
     TArray<TSharedPtr<FJsonValue>> SpawnerTypeSpecificArray;
     TArray<AActor*> AllActors;
@@ -927,13 +922,50 @@ void UAmbitExporterDelegateWatcher::SpawnedObjectConfigCompleted_Handler(
     }
 }
 
-UGltfExport::GltfExportReturnCode UConfigImportExport::ExportGltf(UWorld* World, const FString& FilePath)
+void UConfigImportExport::SetDependencies(IGltfExportInterface* Exporter)
 {
-    if(!GltfExporter)
-    {
-        return UGltfExport::ExporterNotInitialized;
-    }
-
-    return GltfExporter->Export(World, FilePath);
+    GltfExporter = Exporter;
 }
 
+void UConfigImportExport::SetMockGetPathFromPopup(TFunction<FString(const FString& FileExtension,
+                                                                    const FString& DefaultPath,
+                                                                    const FString& FileName)> MockFunction)
+{
+    LambdaGetPathFromPopup = std::move(MockFunction);
+};
+
+void UConfigImportExport::SetMockWriteFile(
+    TFunction<void(const FString& FilePath, const FString& OutString)> MockFunction)
+{
+    LambdaWriteFileToDisk = std::move(MockFunction);
+};
+
+void UConfigImportExport::SetMockPutObjectS3(TFunction<bool(const FString& Region, const FString& BucketName,
+                                                            const FString& ObjectName,
+                                                            const FString& Content)> MockFunction)
+{
+    LambdaPutS3Object = std::move(MockFunction);
+};
+
+void UConfigImportExport::SetMockS3FileUpload(TFunction<bool(const FString& Region, const FString& BucketName,
+                                                             const FString& ObjectName,
+                                                             const FString& FilePath)> MockFunction)
+{
+    LambdaS3FileUpload = std::move(MockFunction);
+}
+
+void UConfigImportExport::SetSdfProcessDone(FDoneDelegate const& DoneEvent)
+{
+    SdfProcessDone = DoneEvent;
+}
+
+void UConfigImportExport::SetMockS3ListBuckets(TFunction<TSet<FString>()> MockFunction)
+{
+    LambdaS3ListBuckets = std::move(MockFunction);
+}
+
+void UConfigImportExport::SetMockS3CreateBucket(
+    TFunction<void(const FString& Region, const FString& BucketName)> MockFunction)
+{
+    LambdaS3CreateBucket = std::move(MockFunction);
+}

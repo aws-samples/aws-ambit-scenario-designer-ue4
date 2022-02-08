@@ -14,33 +14,33 @@
 
 #pragma once
 
-#include "Ambit/Mode/GltfExportInterface.h"
+#include "Exporters/GLTFLevelExporter.h"
+#include "Serialization/BufferArchive.h"
 
-#include "GltfExport.generated.h"
+#include "Ambit/Mode/GltfExporterExternalInterface.h"
 
-class IGltfExporterExternalInterface;
+#include "GltfExporterExternal.generated.h"
+
 
 /**
- * Class dedicated to performing a glTF export using the external GLTFExporter
- * plugin API's.
+ * Class that forwards all Ambit function calls to the external GLTF Exporter plugin.
  */
 UCLASS()
-class UGltfExport : public UObject, public IGltfExportInterface
+class UGltfExporterExternal : public UObject, public IGltfExporterExternalInterface
 {
     GENERATED_BODY()
 public:
-    UGltfExport();
+    UGltfExporterExternal();
 
     /** @inheritDoc */
-    bool Export(UWorld* World, const FString& Filename) const override;
+    bool DoesExporterExist() override;
 
-    /**
-     * Assign new dependency instance for use by this GltfExport object.
-     *
-     * @param Exporter The glTF Exporter to be used.
-     */
-    void SetDependencies(IGltfExporterExternalInterface* Exporter);
+    /** @inheritDoc */
+    bool ExportBinary(UWorld* World, FBufferArchive& Buffer) override;
+
+    /** @inheritDoc */
+    bool WriteToFile(FBufferArchive& Buffer, const FString& Filename) override;
 
 private:
-    IGltfExporterExternalInterface* ExternalExporter;
+    UGLTFLevelExporter* Exporter;
 };
