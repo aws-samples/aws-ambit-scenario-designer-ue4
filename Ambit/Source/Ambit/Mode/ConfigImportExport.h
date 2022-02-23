@@ -101,6 +101,12 @@ public:
     void SetMockWriteFile(TFunction<void(const FString& FilePath, const FString& OutString)> MockFunction);
 
     /**
+     * Overrides the default behavior of LambdaCompressFile, the function called when a compress file is actually happening in ConfigImportExport,
+     * to be the function passed in.
+     */
+    void SetMockCompressFile(TFunction<FString(const FString& SourceDirectory, const FString& TargetDirectory, const FString& FileName, const FString& TargetPlatform)> MockFunction);
+
+    /**
      * Overrides the default behavior of LambdaPutS3Object, the function called when uploading an object to Amazon S3 in ConfigImportExport,
      * to be the function passed in.
      */
@@ -141,6 +147,13 @@ protected:
      */
     TFunction<void(const FString& FilePath, const FString& OutString)> LambdaWriteFileToDisk =
             AmbitFileHelpers::WriteFile;
+
+    /**
+     * Calls AmbitFileHelpers::CompressFile
+     * Allows for injection of the function to be changed. Should only be changed in testing.
+     */
+    TFunction<FString(const FString& SourceDirectory, const FString& TargetDirectory, const FString& FileName, const FString& TargetPlatform)> LambdaCompressFile =
+        AmbitFileHelpers::CompressFile;
 
     /**
      * Calls AmbitFileHelpers::GetPathForFileFromPopup
