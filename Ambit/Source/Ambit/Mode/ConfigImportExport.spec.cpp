@@ -1107,7 +1107,8 @@ void ConfigImportExportSpec::Define()
                 return true;
             };
             Exporter->SetMockWriteFile(MockWrite);
-            auto MockCompress = [](const FString& SourceDirectory, const FString& TargetDirectory, const FString& FileName, const FString& TargetPlatform) -> FString
+            auto MockCompress = [](const FString& SourceDirectory, const FString& TargetDirectory,
+                                   const FString& FileName, const FString& TargetPlatform) -> FString
             {
                 return "FileName";
             };

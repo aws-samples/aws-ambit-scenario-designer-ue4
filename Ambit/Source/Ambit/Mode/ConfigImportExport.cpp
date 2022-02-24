@@ -941,7 +941,8 @@ void UConfigImportExport::SetMockWriteFile(
 };
 
 void UConfigImportExport::SetMockCompressFile(
-    TFunction<FString(const FString& SourceDirectory, const FString& TargetDirectory, const FString& FileName, const FString& TargetPlatform)> MockFunction)
+    TFunction<FString(const FString& SourceDirectory, const FString& TargetDirectory, const FString& FileName,
+                      const FString& TargetPlatform)> MockFunction)
 {
     LambdaCompressFile = std::move(MockFunction);
 };
