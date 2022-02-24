@@ -1102,6 +1102,17 @@ void ConfigImportExportSpec::Define()
                 return true;
             };
             Exporter->SetMockS3FileUpload(MockS3FileUpload);
+            auto MockWrite = [](const FString& FilePath, const FString& OutString) -> bool
+            {
+                return true;
+            };
+            Exporter->SetMockWriteFile(MockWrite);
+            auto MockCompress = [](const FString& SourceDirectory, const FString& TargetDirectory,
+                                   const FString& FileName, const FString& TargetPlatform) -> FString
+            {
+                return "FileName";
+            };
+            Exporter->SetMockCompressFile(MockCompress);
         });
 
         It("Should fail if no mesh to export", [this]()

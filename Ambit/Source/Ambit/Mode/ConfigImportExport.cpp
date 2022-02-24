@@ -591,7 +591,7 @@ FReply UConfigImportExport::OnExportGltf()
 
     for (const FString& TargetPlatform : TargetPlatforms)
     {
-        const FString& CompressedFile = AmbitFileHelpers::CompressFile(OutputDir, FPaths::ProjectIntermediateDir(),
+        const FString& CompressedFile = LambdaCompressFile(OutputDir, FPaths::ProjectIntermediateDir(),
                                                                        FolderName, TargetPlatform);
 
         LambdaS3FileUpload(AwsRegion, BucketName, CompressedFile,
@@ -938,6 +938,13 @@ void UConfigImportExport::SetMockWriteFile(
     TFunction<void(const FString& FilePath, const FString& OutString)> MockFunction)
 {
     LambdaWriteFileToDisk = std::move(MockFunction);
+};
+
+void UConfigImportExport::SetMockCompressFile(
+    TFunction<FString(const FString& SourceDirectory, const FString& TargetDirectory, const FString& FileName,
+                      const FString& TargetPlatform)> MockFunction)
+{
+    LambdaCompressFile = std::move(MockFunction);
 };
 
 void UConfigImportExport::SetMockPutObjectS3(TFunction<bool(const FString& Region, const FString& BucketName,
