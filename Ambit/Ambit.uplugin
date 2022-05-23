@@ -1,14 +1,14 @@
 {
   "FileVersion": 3,
   "Version": 1,
-  "VersionName": "v1.0.0",
+  "VersionName": "v1.0.1",
   "FriendlyName": "AWS Ambit Scenario Designer for Unreal Engine 4",
   "Description": "AWS Ambit Scenario Designer for Unreal Engine 4 (Ambit) is a suite of tools to streamline content creation at scale for autonomous vehicle and robotics simulation applications.",
   "Category": "Other",
   "CreatedBy": "Amazon Web Services, Inc",
   "CreatedByURL": "https://aws.amazon.com/",
   "DocsURL": "https://aws-samples.github.io/aws-ambit-scenario-designer-ue4/",
-  "MarketplaceURL": "",
+  "MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/cb1034a325c94e52b3ed08f6eb9ae4a0",
   "SupportURL": "https://github.com/aws-samples/aws-ambit-scenario-designer-ue4/issues",
   "EngineVersion": "4.27.0",
   "CanContainContent": true,
@@ -19,12 +19,18 @@
     {
       "Name": "Ambit",
       "Type": "Editor",
-      "LoadingPhase": "PostEngineInit"
+      "LoadingPhase": "PostEngineInit",
+      "WhitelistPlatforms": [
+        "Win64"
+      ]
     },
     {
       "Name": "AmbitUtils",
       "Type": "Editor",
-      "LoadingPhase": "Default"
+      "LoadingPhase": "Default",
+      "WhitelistPlatforms": [
+        "Win64"
+      ]
     },
     {
       "Name": "AWSUE4Module",
